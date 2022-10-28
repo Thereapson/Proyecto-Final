@@ -14,7 +14,7 @@ const getAllProducts = async (req, res, next) => {
                     price: p.price,
                     weight: p.weight,
                     description: p.description,
-                    thubnail: p. thumbnail,
+                    thubnail: p.thumbnail,
                     image: p.image,
                     category: p.category.name,
                     createDate: p.create_date,
@@ -36,23 +36,28 @@ const addProduct = async (req, res, next) => {
     try {
         const productData = req.body
         const { sku, name, price, weight, description, thumbnail, image, category, stock } = productData
-        const newProduct = await productModel.create({
-            sku, 
-            name,
-            price,
-            weight,
-            description,
-            thumbnail,
-            image,
-            category,
-            create_date: new Date(),
-            stock,
-        })
-
-        if(!newProduct) {
-            res.status(400).send("The New Product can't be created")
+        const foundProduct = await productModel.findOne({ sku: sku })
+        if(foundProduct) {
+            res.status(400).send("The New Product can't be created, it SKU already exists")
         } else {
-            res.status(200).send({ msg: "New Product Added", newProduct })
+            const newProduct = await productModel.create({
+                sku, 
+                name,
+                price,
+                weight,
+                description,
+                thumbnail,
+                image,
+                category,
+                create_date: new Date(),
+                stock,
+            })
+    
+            if(!newProduct) {
+                res.status(400).send("The New Product can't be created")
+            } else {
+                res.status(200).send({ msg: "New Product Added", newProduct })
+            }
         }
 
     } catch(error) {
@@ -61,7 +66,35 @@ const addProduct = async (req, res, next) => {
     }
 }
 
+const editProduct = async (req, res, next) => {
+    try {
+        const productData = req.body
+        console.log("edit...",productData)
+        const { id, sku, name, price, weight, description, thumbnail, image, category, stock } = productData
+        const editProduct = await productModel.findByIdAndUpdate(id, {
+            sku, 
+            name,
+            price,
+            weight,
+            description,
+            thumbnail,
+            image,
+            category,
+            stock,
+        }, { new: true })
+        console.log(editProduct)
+        if(editProduct) {
+            res.status(200).send("Product Successfully Updated")
+        } else res.status(400).send("Product can't be created")
+
+    } catch (error) {
+        console.error(error);
+        next(error)
+    }
+}
+
 module.exports = {
     getAllProducts,
     addProduct,
+    editProduct,
 }

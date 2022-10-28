@@ -18,6 +18,6 @@ const categorySchema = new Schema({
     versionKey: false,
 });
 
-const categoryModel = model("Product", categorySchema);
+const categoryModel = model("Category", categorySchema);
 
 module.exports = categoryModel;
