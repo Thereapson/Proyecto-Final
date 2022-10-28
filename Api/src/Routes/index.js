@@ -3,9 +3,10 @@ const express = require("express");
 const router = express.Router();
 
 const products = require('./products')
-console.log(products)
+const categorys = require('./categorys')
 
 router.use('/products', products)
+router.use('/categorys', categorys)
 
 router.get('/', (req, res) => {
     res.status(200).send({ message: 'Server Up' })
