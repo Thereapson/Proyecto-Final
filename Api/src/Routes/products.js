@@ -7,6 +7,7 @@ const {
   addProduct,
   getProductById,
   getProductByName,
+  editProduct,
 } = require("../Controllers/productController");
 
 // configuramos las rutas
@@ -15,5 +16,9 @@ router.get("/:id", getProductById);
 router.get("/search/:key", getProductByName);
 
 router.post("/add", addProduct);
+
+router.put("/update", editProduct);
+
+router.put("/update", editProduct);
 
 module.exports = router;

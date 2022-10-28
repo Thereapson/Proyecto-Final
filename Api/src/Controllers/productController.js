@@ -25,20 +25,6 @@ const getAllProducts = async (req, res, next) => {
     } else {
       res.status(400).send("There's no Products to show right now");
     }
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
-
-// product por id
-const getProductById = async (req, res, next) => {
-  try {
-    const product = await productModel.findById(req.params.id);
-
-    res.status(200).json({
-      product,
-    });
 
     next();
   } catch (error) {
@@ -102,9 +88,48 @@ const addProduct = async (req, res, next) => {
   }
 };
 
+const editProduct = async (req, res, next) => {
+  try {
+    const productData = req.body;
+    console.log("edit...", productData);
+    const {
+      id,
+      sku,
+      name,
+      price,
+      weight,
+      description,
+      thumbnail,
+      image,
+      category,
+      stock,
+    } = productData;
+    const editProduct = await productModel.findByIdAndUpdate(
+      id,
+      {
+        sku,
+        name,
+        price,
+        weight,
+        description,
+        thumbnail,
+        image,
+        category,
+        stock,
+      },
+      { new: true }
+    );
+    console.log(editProduct);
+    if (editProduct) {
+      res.status(200).send("Product Successfully Updated");
+    } else res.status(400).send("Product can't be created");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 module.exports = {
   getAllProducts,
-  getProductById,
-  getProductByName,
   addProduct,
 };
