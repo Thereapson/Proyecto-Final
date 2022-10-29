@@ -14,6 +14,7 @@ const getAllProducts = async (req, res, next) => {
                     weight: p.weight,
                     description: p.description,
                     image: p.image,
+                    brand: p.brand,
                     category: p.category?.name,
                     createDate: p.create_date,
                     stock: p.stock
