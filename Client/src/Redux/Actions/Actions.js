@@ -2,6 +2,7 @@ import axios from "axios";
 
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const GET_PRODUCTS_BY_SEARCH = "GET_PRODUCTS_BY_SEARCH";
+export const GET_PRODUCT_BY_ID = "GER_PRODUCT_BY_ID";
 
 const apiFake = [
     {
@@ -93,3 +94,14 @@ export const getProductsBySearch = (search) => {
         payload: search,
     };
 };
+
+export const getProductById =(id)=>{
+    return async (dispatch)=>{
+        await axios.get(`http://localhost:3001/products/detail/${id}`)
+        .then((response)=>{
+            let respuesta = response.data.product
+            dispatch({type:GET_PRODUCT_BY_ID, payload:respuesta})
+        })
+    }
+
+}

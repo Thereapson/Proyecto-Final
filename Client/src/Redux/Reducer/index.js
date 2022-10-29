@@ -1,7 +1,8 @@
-import { GET_PRODUCTS, GET_PRODUCTS_BY_SEARCH } from '../Actions/Actions';
+import { GET_PRODUCTS, GET_PRODUCTS_BY_SEARCH, GET_PRODUCT_BY_ID } from '../Actions/Actions';
 const initialState = {
     products: [],
     filteredProducts: [],
+    DetailProduct:[]
 };
 
 // {
@@ -33,6 +34,8 @@ const rootReducer = (state = initialState, action) => {
                     return product.brand.toLowerCase().includes(search);
                 }),
             };
+            case GET_PRODUCT_BY_ID:
+                return{...state, DetailProduct:{...action.payload}}
         default:
             return { ...state };
     }

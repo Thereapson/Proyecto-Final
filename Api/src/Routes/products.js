@@ -5,11 +5,14 @@ const router = Router();
 const {
     getAllProducts,
     addProduct,
+    getProductById
 } = require('../Controllers/productController')
 
 // configuramos las rutas
 router.get('/', getAllProducts)
 
 router.post('/add', addProduct)
+
+router.get('/detail/:id', getProductById)
 
 module.exports = router;

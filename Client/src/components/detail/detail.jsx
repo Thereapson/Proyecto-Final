@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-// import { getComponentId } from '../../redux/actions';
+import { getProductById } from '../../Redux/Actions/Actions.js';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-// import NavBar from '../NavBar/NavBar';
-import procesador from './Components/procesadorimg.png'
-import './DetailCard.css';
+import procesador from './procesadorimg.png'
+import './detail.css';
 
 function DetailCard() {
 
@@ -16,53 +15,49 @@ function DetailCard() {
     imagen: procesador,
     descripcion: "El procesador está formado por un conjunto de registros que almacenen datos, una unidad aritmético-lógica que realiza operaciones con ellos y una unidad de control que se encarga de coordinar a todos los componentes. Un reloj interno determina la velocidad de trabajo de estos elementos internos."
   }
-  //PLANTILLA PARA HACER LA CONEXION CON REDUX
-  // const dispatch = useDispatch();
+
+  const dispatch = useDispatch();
   const { id } = useParams();
-  console.log(id)
-  // const details = useSelector((state) => state.ComponentDetail)
-  // useEffect(() => {
-  //   // dispatch(getComponentId(id))
-  // }, [])
+  const details = useSelector((state) => state.DetailProduct)
+  useEffect(() => {
+    dispatch(getProductById(id))
+  }, [])
 
   return (
     <div className="DetailCard">
-      {/* <div>
-                <NavBar></NavBar>
-            </div> */}
       <section className="bg-white dark:bg-gray-900">
         <div className="container px-6 py-10 mx-auto">
           <div className="lg:-mx-6 lg:flex lg:items-center">
-            <img className="object-cover object-center lg:w-1/2 lg:mx-6 w-full h-96 rounded-lg lg:h-[31rem]" src={hardcode.imagen} alt="NOIMG" />
+            <img className="espaciado object-cover object-center lg:h-[31rem]" src={details.image} alt="NOIMG" />
 
             <div className="mt-8 lg:w-1/2 lg:px-6 lg:mt-0">
-              <p className="text-3xl font-semibold text-blue-500" >{hardcode.nombre} ({hardcode.tipo})</p>
+            {details.name?<p className="text-3xl font-semibold text-blue-500" > {details.name} (Aca va el tipo)</p>:null}
 
               <p className="max-w-lg mt-6 text-gray-500 dark:text-gray-400 ">
-                {hardcode.descripcion}
+                {details.description}
               </p>
               <div className='espec'>
-                <h3 className="mt-6 text-lg font-medium text-blue-500">Frecuencia</h3>
+                <h3 className="mt-6 text-lg font-medium text-blue-500">Frecuencia (Falta)</h3>
                 <p className="text-gray-600 dark:text-gray-300">{hardcode.Especificaciones[0]}</p>
 
-                <h3 className="mt-6 text-lg font-medium text-blue-500">Nucleos</h3>
+                <h3 className="mt-6 text-lg font-medium text-blue-500">Nucleos/Hilos (Falta) </h3>
                 <p className="text-gray-600 dark:text-gray-300">{hardcode.Especificaciones[1]}</p>
 
-                <h3 className="mt-6 text-lg font-medium text-blue-500">Hilos</h3>
-                <p className="text-gray-600 dark:text-gray-300">{hardcode.Especificaciones[2]}</p>
+                <h3 className="mt-6 text-lg font-medium text-blue-500">En stock:</h3>
+                <p className="text-gray-600 dark:text-gray-300">{details.stock}</p>
 
               </div>
 
 
               <div className="flex items-center justify-between mt-12 lg:justify-start">
-                <button class="padd1 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">
+                <button className="espacio padd1 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">
                   Añadir al carrito
                 </button>
-                <button class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                <button className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                   Compra Rapida
                 </button>
-                <p className="max-w-lg mt-6 text-gray-500 dark:text-gray-400 padd ">
-                  {hardcode.costo}
+                <p className=" padding max-w-lg mt-6 text-gray-500 dark:text-gray-400 padd ">
+                  {details.price}USD
                 </p>
 
               </div>
