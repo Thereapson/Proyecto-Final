@@ -1,85 +1,113 @@
 import axios from "axios";
 
 export const GET_PRODUCTS = "GET_PRODUCTS";
+export const GET_PRODUCTS_BY_CATEGORY = "GET_PRODUCTS_BY_CATEGORY";
 export const GET_PRODUCTS_BY_SEARCH = "GET_PRODUCTS_BY_SEARCH";
+export const SHORT_BY_PRICE = "SHORT_BY_PRICE";
 
 const apiFake = [
     {
-        id: 1,
-        name: "AMD Ryzen 5 3600",
+        id: "635ad2a356d5ff1c0esadsad93e083",
+        sku: "sku-test12345",
+        name: "i7 10700k",
+        brand: "Intel",
         price: 200,
-        image: "https://www.amd.com/system/files/2018-11/10788-ryzen-chip-left-angle-960x548.png",
-        category: "cpu",
-        brand: "amd",
+        weight: 1,
+        description: "Producto de prueba",
+        image: "https://katech.com.ar/wp-content/uploads/CPU019.jpg",
+        category: "CPU",
+        createDate: "2021-03-01T00:00:00.000Z",
+        stock: 10,
     },
     {
-        id: 2,
-        name: "AMD Ryzen 5 5600X",
+        id: "635a93e083",
+        sku: "sku-test1234DS5",
+        name: "i3 10100",
+        brand: "Intel",
+        price: 100,
+        weight: 1,
+        description: "Producto de prueba",
+        image: "https://katech.com.ar/wp-content/uploads/CPU014.jpg",
+        category: "CPU",
+        createDate: "2021-03-01T00:00:00.000Z",
+        stock: 10,
+    },
+    {
+        id: "635a9sdds3e083",
+        sku: "sku-test123sd4DS5",
+        name: "ryzen 5 3600",
+        brand: "AMD",
+        price: 150,
+        weight: 1,
+        description: "Producto de prueba",
+        image: "https://katech.com.ar/wp-content/uploads/CPU061.jpg",
+        category: "CPU",
+        createDate: "2021-03-01T00:00:00.000Z",
+        stock: 10,
+    },
+    {
+        id: "635a9sdds3e083ddsad34",
+        sku: "sku-test123sd4DsdS5",
+        name: "rtx 2060",
+        brand: "Nvidia",
         price: 300,
-        image: "https://www.amd.com/system/files/2018-11/10788-ryzen-chip-left-angle-960x548.png",
-        category: "cpu",
-        brand: "amd",
+        weight: 1,
+        description: "Producto de prueba",
+        image: "https://katech.com.ar/wp-content/uploads/RTX183.jpg",
+        category: "GPU",
+        createDate: "2021-03-01T00:00:00.000Z",
+        stock: 10,
     },
     {
-        id: 3,
-        name: "AMD Ryzen 7 5800X",
-        price: 400,
-        image: "https://www.amd.com/system/files/2018-11/10788-ryzen-chip-left-angle-960x548.png",
-        category: "cpu",
-        brand: "amd",
+        // hdd
+        id: "635a9sdds3e083ddsad34",
+        sku: "sku-test123sd4DsdS5",
+        name: "hard disk 1tb",
+        brand: "Seagate",
+        price: 100,
+        weight: 1,
+        description: "Producto de prueba",
+        image: "https://katech.com.ar/wp-content/uploads/DIS017.jpg",
+        category: "HDD",
+        createDate: "2021-03-01T00:00:00.000Z",
+        stock: 10,
     },
     {
-        id: 4,
-        name: "AMD Ryzen 9 5900X",
-        price: 500,
-        image: "https://www.amd.com/system/files/2018-11/10788-ryzen-chip-left-angle-960x548.png",
-        category: "cpu",
-        brand: "amd",
-    },
-    {
-        id: 5,
-        name: "Intel Core i3 10100",
+        // ssd
+        id: "635a9sdds3e083ddsad34",
+        sku: "sku-test123sd4DsdS5",
+        name: "ssd 1tb",
+        brand: "Samsung",
         price: 200,
-        image: "https://www.enfasys.net/wp-content/uploads/2021/10/Intel-Overcluster.jpg",
-        category: "cpu",
-        brand: "intel",
+        weight: 1,
+        description: "Producto de prueba",
+        image: "https://katech.com.ar/wp-content/uploads/DIS465.jpg",
+        category: "SSD",
+        createDate: "2021-03-01T00:00:00.000Z",
+        stock: 10,
     },
     {
-        id: 6,
-        name: "Intel Core i5 10400",
-        price: 300,
-        image: "https://www.enfasys.net/wp-content/uploads/2021/10/Intel-Overcluster.jpg",
-        category: "cpu",
-        brand: "intel",
-    },
-    {
-        id: 7,
-        name: "Intel Core i7 10700",
-        price: 400,
-        image: "https://www.enfasys.net/wp-content/uploads/2021/10/Intel-Overcluster.jpg",
-        category: "cpu",
-        brand: "intel",
-    },
-    {
-        id: 8,
-        name: "Intel Core i9 10900",
-        price: 500,
-        image: "https://www.enfasys.net/wp-content/uploads/2021/10/Intel-Overcluster.jpg",
-        category: "cpu",
-        brand: "intel",
-    },
-    {
-        id: 9,
-        name: "AMD Radeon RX 5500 XT",
-        price: 200,
-        image: "https://http2.mlstatic.com/D_NQ_NP_614255-MLA42737554766_072020-O.webp",
-        category: "gpu",
+        // ram
+        id: "635a9sdds3e083ddsad34",
+        sku: "sku-test123sd4DsdS5",
+        name: "ram 16gb",
+        brand: "Kingston",
+        price: 100,
+        weight: 1,
+        description: "Producto de prueba",
+        image: "https://katech.com.ar/wp-content/uploads/MEM424.jpg",
+        category: "RAM",
+        createDate: "2021-03-01T00:00:00.000Z",
+        stock: 10,
     }
+
 ];
+
 
 export const getProducts = () => {
     return async (dispatch) => {
         const response = apiFake;
+        console.log("response: ", response);
         return dispatch({
             type: GET_PRODUCTS,
             payload: response,
@@ -87,9 +115,23 @@ export const getProducts = () => {
     };
 };
 
+export const getProductsByCategory = (category) => {
+    return {
+        type: GET_PRODUCTS_BY_CATEGORY,
+        payload: category,
+    };
+};
+
 export const getProductsBySearch = (search) => {
     return {
         type: GET_PRODUCTS_BY_SEARCH,
         payload: search,
+    };
+};
+
+export const shortByPrice = (short) => {
+    return {
+        type: SHORT_BY_PRICE,
+        payload: short,
     };
 };
