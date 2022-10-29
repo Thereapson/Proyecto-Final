@@ -1,60 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProducts, getProductsBySearch } from "../../Redux/Actions/Actions";
-import { useSearchParams } from "react-router-dom";
-
+import { getProducts } from "../../Redux/Actions/Actions";
+import Card from '../Card/Card';
+import Noproductsfound from '../noproductsfound/noproductsfound';
 
 const Products = () => {
-    const products = useSelector(state => state.products);
-    const filteredProducts = useSelector(state => state.filteredProducts);
+    const productsRender = useSelector(state => state.productsRender);
+    const allProducts = useSelector(state => state.products);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getProducts());
     }, [dispatch]);
-
-    const [searchParams] = useSearchParams();
-    const search = searchParams.get("search");
-
-    useEffect(() => {
-        if (search) {
-            console.log('search', search);
-            dispatch(getProductsBySearch(search));
-        } else {
-            dispatch(getProducts());
-        }
-    }, [dispatch, search]);
-
-
-
+    // if (filteredProducts.length > 0) {
+    //     return {
+    //         ...state,
+    //         productsRender: filteredProducts,
+    //     };
+    // } else {
+    //     return {
+    //         ...state,
+    //         productsRender: ["No Products Found"],
+    //     };
+    // }
     return (
-        <div className="bg-white">
-            <div className="container mx-auto">
-                <div className="grid grid-cols-4 gap-4">
-                    {
-                        (search ? filteredProducts.map((product) => (
-                            <div key={product.id} className="bg-gray-100">
-                                <div className="p-4">
-                                    <img src={product.image} alt={product.name} />
-                                </div>
-                                <div className="p-4">
-                                    <h3 className="text-lg font-bold">{product.name}</h3>
-                                    <p className="text-gray-500">${product.price}</p>
-                                </div>
-                            </div>
-                        )) : products.map((product) => (
-                            <div key={product.id} className="bg-gray-100">
-                                <div className="p-4">
-                                    <img src={product.image} alt={product.name} />
-                                </div>
-                                <div className="p-4">
-                                    <h3 className="text-lg font-bold">{product.name}</h3>
-                                    <p className="text-gray-500">${product.price}</p>
-                                </div>
-                            </div>
-                        )))
-                    }
-                </div>
+        <div className="container mx-auto px-4">
+            <div className="flex flex-wrap -mx-1 lg:-mx-4 justify-center gap-4">
+                {
+                    productsRender[0] === "No Products Found" ? <Noproductsfound /> // no products found
+                        :
+                        productsRender.length > 0 ? productsRender.map((product) => <Card key={product._id} product={product} />) // products with filter
+                            :
+                            allProducts.map((product) => <Card key={product._id} product={product} />)  // all products
+                }
             </div>
         </div>
     )

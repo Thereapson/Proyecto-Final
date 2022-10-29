@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { getProductsByCategory, getProductsBySearch } from "../../Redux/Actions/Actions";
 
 const menu = [
     {
@@ -9,60 +10,34 @@ const menu = [
     },
     {
         name: "Products",
+        link: "/products",
         submenu: true,
-        sublinks: [
+        isProducts: true,
+        subMenuItems: [
             {
                 Head: "CPU",
-                sublink: [
-                    {
-                        name: "AMD",
-                        link: "/products/cpu/amd",
-                    },
-                    {
-                        name: "INTEL",
-                        link: "/products/cpu/intel",
-                    },
-                ],
             },
             {
                 Head: "GPU",
-                sublink: [
-                    {
-                        name: "AMD",
-                        link: "/products/gpu/amd",
-                    },
-                    {
-                        name: "NVIDIA",
-                        link: "/products/gpu/nvidia",
-                    },
-                ],
+
             },
             {
                 Head: "RAM",
+            },
+            {
+                Head: "HDD",
                 sublink: [
                     {
-                        name: "DDR4",
-                        link: "/products/ram/ddr4",
+                        name: "1TB",
                     },
                     {
-                        name: "DDR3",
-                        link: "/products/ram/ddr3",
+                        name: "2TB",
                     },
                 ],
             },
             {
-                Head: "Disk",
-                sublink: [
-                    {
-                        name: "SSD",
-                        link: "/products/disk/ssd",
-                    },
-                    {
-                        name: "HDD",
-                        link: "/products/disk/hdd",
-                    },
-                ],
-            },
+                Head: "SSD",
+            }
         ],
     },
     {
@@ -82,31 +57,32 @@ const menu = [
 
 const Navbar = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [search, setSearch] = useState("");
     const [isLogin, setIsLogin] = useState(true);
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
 
-    const submitSearch = () => {
-        if (search === "cpu") {
-            window.location.href = "/products/cpu";
-        } else if (search === "gpu") {
-            window.location.href = "/products/gpu";
-        } else if (search === "ram") {
-            window.location.href = "/products/ram";
-        } else if (search === "disk") {
-            window.location.href = "/products/disk";
-        } else {
-            window.location.href = `/products?search=${search}`;
-        }
+    const submitSearch = (e) => {
+        e.preventDefault();
+        dispatch(getProductsBySearch(search));
+        setSearch("");
+        navigate("/products");
     };
 
     const handleLogin = () => {
         setIsLogin(!isLogin);
     };
 
+    const handleCategory = (e) => {
+        const category = e.target.value;
+        dispatch(getProductsByCategory(category));
+    };
 
+    const handleGetAllProducts = () => {
+        dispatch(getProductsByCategory(""));
+    };
 
     return (
         <div className="bg-white">
@@ -115,7 +91,7 @@ const Navbar = () => {
                     <div className="flex items-center">
                         <span className="text-xl font-bold text-gray-700 ml-2">LOGO</span>
                         <div className="text-xl font-bold text-gray-700 ml-2">
-                            <Link to="/">Hardware</Link>
+                            <NavLink to="/">E-Commerce</NavLink>
                         </div>
                     </div>
                     {/* menu and filters */}
@@ -124,33 +100,26 @@ const Navbar = () => {
                             <ul className="flex items-center">
                                 {menu.map((link) => (
                                     <li className="px-3 text-left md:cursor-pointer group">
-                                        <h1
-                                            className="py-7 flex justify-between items-center md:pr-0 pr-5 group"
-                                        >
-                                            <NavLink to={link.link} className={link.submenu ? "group-hover:text-primary" : ""}> {link.name}</NavLink>
-                                            <span className="text-xl md:mt-1 md:ml-2  md:block hidden group-hover:rotate-180 group-hover:-mt-2">
-                                                <ion-icon name="chevron-down"></ion-icon>
-                                            </span>
-                                        </h1>
+
+                                        {link.isProducts ? (
+                                            <NavLink to={link.link} className="text-gray-700" onClick={handleGetAllProducts}>
+                                                {link.name}
+                                            </NavLink>
+                                        ) : (
+                                            <NavLink to={link.link} className="text-gray-700">
+                                                {link.name}
+                                            </NavLink>
+                                        )}
+
                                         {link.submenu && (
                                             <div>
                                                 <div className="absolute top-30 hidden group-hover:md:block hover:md:block bg-white z-10 w-64 rounded-md shadow-lg">
                                                     <div className="py-3 px-5 flex justify-between items-center">
-                                                        {link.sublinks.map((sublink) => (
+                                                        {link.subMenuItems.map((sublink) => (
                                                             <div className="flex flex-col">
-                                                                <h1 className="text-gray-700 font-bold text-lg">
-                                                                    {sublink.Head}
-                                                                </h1>
-                                                                <div className="flex flex-col">
-                                                                    {sublink.sublink.map((sub) => (
-                                                                        <Link
-                                                                            to={sub.link}
-                                                                            className="text-gray-500 text-sm py-2"
-                                                                        >
-                                                                            {sub.name}
-                                                                        </Link>
-                                                                    ))}
-                                                                </div>
+                                                                <Link to={"/products"} >
+                                                                    <button className="text-gray-700 font-bold text-lg" onClick={handleCategory} value={sublink.Head}>{sublink.Head}</button>
+                                                                </Link>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -166,15 +135,19 @@ const Navbar = () => {
                     <div className="md:block">
                         <div className="flex items-center">
                             <div className="relative">
-                                <input type="text" className="bg-gray-100 rounded-full w-64 px-4 py-2 pl-8 focus:outline-none focus:shadow-outline text-center" placeholder="Search" value={search} onChange={handleSearch} />
+                                <form onSubmit={submitSearch}>
+                                    <input type="text" className="bg-gray-100 rounded-full w-64 px-4 py-2 pl-8 focus:outline-none focus:shadow-outline text-center" placeholder="Search" value={search} onChange={handleSearch} />
+                                </form>
                                 <div className="absolute top-0 flex items-center h-full ml-2 cursor-pointer">
-                                    <button onClick={submitSearch}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <circle cx="10" cy="10" r="7"></circle>
-                                            <line x1="21" y1="21" x2="15" y2="15"></line>
-                                        </svg>
-                                    </button>
+                                    <Link to={"/products"} >
+                                        <button type="submit" className="text-gray-700 focus:outline-none focus:shadow-outline">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <circle cx="10" cy="10" r="7"></circle>
+                                                <line x1="21" y1="21" x2="15" y2="15"></line>
+                                            </svg>
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +168,7 @@ const Navbar = () => {
                     </div>
                     {/* user */}
                     <div className="flex items-center">
-                        <Link to={isLogin ? "/" : "/login"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={handleLogin}>
+                        <Link to={isLogin ? "/products" : "/login"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={handleLogin}>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <circle cx="12" cy="12" r="9"></circle>
@@ -204,8 +177,6 @@ const Navbar = () => {
                             </svg>
                             {isLogin ? "Logout" : "Login"}</Link>
                     </div>
-
-
                 </div>
             </div>
         </div>
