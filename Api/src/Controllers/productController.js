@@ -4,8 +4,7 @@ const { productModel } = require('../Models/index')
 // Metodos del controller
 const getAllProducts = async (req, res, next) => {
     try {
-        const response = await productModel.find({})//.populate("category")
-        console.log(response)
+        const response = await productModel.find({}).populate("category")
         if(response.flat().length > 0) {
             const Products = response?.map(p => {
                 return {
