@@ -1,4 +1,4 @@
-import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCTS_BY_SEARCH, SHORT_BY_PRICE } from '../Actions/Actions';
+import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY,GET_PRODUCT_BY_ID, GET_PRODUCTS_BY_SEARCH, SHORT_BY_PRICE } from '../Actions/Actions';
 const initialState = {
     products: [],
     filteredProducts: [],

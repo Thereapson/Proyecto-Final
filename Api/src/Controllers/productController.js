@@ -108,7 +108,7 @@ const getProductById = async (req, res, next) => {
     const id = req.params.id
     try {
         //tienen que mandar un id como este 635ad2a356d5ff1c0e93e083
-        const product = await productModel.findById(id);
+        const product = await productModel.findById(id).populate("category");
 
         res.status(200).json({
             product,
@@ -124,5 +124,6 @@ module.exports = {
     getAllProducts,
     addProduct,
     getProductById,
+    editProduct
 
 }
