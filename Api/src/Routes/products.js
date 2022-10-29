@@ -5,6 +5,7 @@ const router = Router();
 const {
     getAllProducts,
     addProduct,
+    getProductById,
     editProduct,
 } = require('../Controllers/productController')
 
@@ -12,6 +13,8 @@ const {
 router.get('/', getAllProducts)
 
 router.post('/add', addProduct)
+
+router.get('/detail/:id', getProductById)
 
 router.put('/update', editProduct)
 

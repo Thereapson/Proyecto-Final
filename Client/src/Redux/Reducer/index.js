@@ -3,6 +3,7 @@ const initialState = {
     products: [],
     filteredProducts: [],
     productsRender: [],
+    DetailProduct:[]
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -55,6 +56,9 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 productsRender: shortByPrice,
             };
+
+        case GET_PRODUCT_BY_ID:
+            return{...state, DetailProduct:{...action.payload}}
 
         default:
             return { ...state };
