@@ -4,19 +4,21 @@ const { productModel } = require('../Models/index')
 // Metodos del controller
 const getAllProducts = async (req, res, next) => {
     try {
-        const response = await productModel.find({}).populate("category")
+        const response = await productModel.find({})//.populate("category")
+        console.log(response)
         if(response.flat().length > 0) {
             const Products = response?.map(p => {
                 return {
                     id: p._id,
                     sku: p.sku,
-                    name: p.name,
+                    name: p.name || "No-Name",
                     price: p.price,
                     weight: p.weight,
                     description: p.description,
-                    thubnail: p.thumbnail,
+                    status: p.status,
                     image: p.image,
-                    category: p.category.name,
+                    brand: p.brand,
+                    category: p.category?.name,
                     createDate: p.create_date,
                     stock: p.stock
                 }
@@ -35,19 +37,20 @@ const getAllProducts = async (req, res, next) => {
 const addProduct = async (req, res, next) => {
     try {
         const productData = req.body
-        const { sku, name, price, weight, description, thumbnail, image, category, stock } = productData
+        const { sku, name, price, weight, description, status, image, brand, category, stock } = productData
         const foundProduct = await productModel.findOne({ sku: sku })
         if(foundProduct) {
             res.status(400).send("The New Product can't be created, it SKU already exists")
-        } else {
+        } else if( sku && name && price && image && brand && category && stock ) {
             const newProduct = await productModel.create({
                 sku, 
                 name,
                 price,
-                weight,
-                description,
-                thumbnail,
+                weight: weight || 0,
+                description: description || name,
+                status: true,
                 image,
+                brand,
                 category,
                 create_date: new Date(),
                 stock,
@@ -58,6 +61,9 @@ const addProduct = async (req, res, next) => {
             } else {
                 res.status(200).send({ msg: "New Product Added", newProduct })
             }
+        } else {
+            res.status(400).send("The New Product can't be created. Missing required data")
+
         }
 
     } catch(error) {

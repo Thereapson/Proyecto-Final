@@ -19,10 +19,13 @@ const productSchema = new Schema({
     description: {
         type: String,
     },
-    thumbnail: {
+    status: {
         type: Boolean,
     },
     image: {
+        type: String,
+    },
+    brand:  {
         type: String,
     },
     category: {
