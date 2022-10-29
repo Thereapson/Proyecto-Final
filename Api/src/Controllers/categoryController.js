@@ -11,7 +11,6 @@ const getAllCategorys = async (req, res, next) => {
                     id: c._id,
                     name: c.name,
                     description: c.description,
-                    thubnail: c.thumbnail,
                 }
             })
             res.status(200).send(Categorys)
@@ -28,17 +27,20 @@ const getAllCategorys = async (req, res, next) => {
 const addCategory = async (req, res, next) => {
     try {
         const categoryData = req.body
-        const { name, description, thumbnail } = categoryData
-        const newCategory = await categoryModel.create({
-            name,
-            description,
-            thumbnail,
-        })
+        const { name, description } = categoryData
+        if( name && description) {
+            const newCategory = await categoryModel.create({
+                name,
+                description,
+            })
 
-        if(!newCategory) {
-            res.status(400).send("The New Category can't be created")
+            if(!newCategory) {
+                res.status(400).send("The New Category can't be created")
+            } else {
+                res.status(200).send({ msg: "New Category Added", newCategory })
+            }
         } else {
-            res.status(200).send({ msg: "New Category Added", newCategory })
+            res.status(400).send("The New Category can't be created, missing required data")
         }
 
     } catch(error) {
