@@ -16,7 +16,7 @@ const getAllProducts = async (req, res, next) => {
           description: p.description,
           thubnail: p.thumbnail,
           image: p.image,
-          category: p.category.name,
+          category: p.category?.name,
           createDate: p.create_date,
           stock: p.stock,
         };
@@ -32,16 +32,33 @@ const getAllProducts = async (req, res, next) => {
   }
 };
 
+// product por id
+const getProductById = async (req, res, next) => {
+  try {
+    const product = await productModel
+      .findById(req.params.id)
+      .populate("category");
+
+    res.status(200).json({
+      product,
+    });
+
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // product por name
 const getProductByName = async (req, res) => {
   try {
-    let products = await productModel.find();
+    let products = await productModel.find().populate("category");
 
     if (req.params.key)
       products = products.filter((p) =>
-        p.name.toLowerCase().startsWith(req.params.key.toLowerCase())
+        p.name.toLowerCase().includes(req.params.key.toLowerCase())
       );
-
+    console.log(products);
     res
       .status(200)
       .json({ status: "success", count: products.length, products });
@@ -131,5 +148,8 @@ const editProduct = async (req, res, next) => {
 
 module.exports = {
   getAllProducts,
+  getProductById,
+  getProductByName,
+  editProduct,
   addProduct,
 };
