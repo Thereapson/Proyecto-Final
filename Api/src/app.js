@@ -10,6 +10,7 @@ const cors = require('cors');
 
 const routes = require('./Routes/index')
 //const { getAllData } = require('./Helpers/categoryLoader')
+//const { idProductsToUpdate } =require('./Helpers/productsLoader')
 const { dbConn } = require("./db.js")
 //coneccion a la DB
 
@@ -37,3 +38,4 @@ app.listen(PORT, () =>
 
 dbConn();
 //getAllData();
+//idProductsToUpdate()

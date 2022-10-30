@@ -28,6 +28,9 @@ const productSchema = new Schema({
     brand:  {
         type: String,
     },
+    benchmark: {
+        type: Number,
+    },
     category: {
         type: Schema.Types.ObjectId,
         ref: 'Category'

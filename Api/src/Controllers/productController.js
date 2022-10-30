@@ -10,13 +10,14 @@ const getAllProducts = async (req, res, next) => {
                 return {
                     id: p._id,
                     sku: p.sku,
-                    name: p.name || "No-Name",
+                    name: p.name,
                     price: p.price,
                     weight: p.weight,
                     description: p.description,
                     status: p.status,
                     image: p.image,
                     brand: p.brand,
+                    benchmark: p.benchmark,
                     category: p.category?.name,
                     createDate: p.create_date,
                     stock: p.stock
@@ -36,7 +37,7 @@ const getAllProducts = async (req, res, next) => {
 const addProduct = async (req, res, next) => {
     try {
         const productData = req.body
-        const { sku, name, price, weight, description, status, image, brand, category, stock } = productData
+        const { sku, name, price, weight, description, status, image, brand, benchmark, category, stock } = productData
         const foundProduct = await productModel.findOne({ sku: sku })
         if(foundProduct) {
             res.status(400).send("The New Product can't be created, it SKU already exists")
@@ -50,6 +51,7 @@ const addProduct = async (req, res, next) => {
                 status: true,
                 image,
                 brand,
+                benchmark: benchmark || 0,
                 category,
                 create_date: new Date(),
                 stock,
@@ -75,15 +77,17 @@ const editProduct = async (req, res, next) => {
     try {
         const productData = req.body
         console.log("edit...",productData)
-        const { id, sku, name, price, weight, description, thumbnail, image, category, stock } = productData
+        const { id, sku, name, price, weight, description, status, image, brand, benchmark, category, stock } = productData
         const editProduct = await productModel.findByIdAndUpdate(id, {
             sku, 
             name,
             price,
             weight,
             description,
-            thumbnail,
+            status,
             image,
+            brand,
+            benchmark,
             category,
             stock,
         }, { new: true })
