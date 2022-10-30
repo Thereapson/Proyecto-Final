@@ -1,18 +1,26 @@
 // Rutas de products
-const { Router } = require('express')
+const { Router } = require("express");
 const router = Router();
 // Importamos los controllers de products
 const {
-    getAllProducts,
-    addProduct,
-    editProduct,
-} = require('../Controllers/productController')
+  getAllProducts,
+  addProduct,
+  getProductById,
+  getProductByName,
+  editProduct,
+} = require("../Controllers/productController");
 
 // configuramos las rutas
-router.get('/', getAllProducts)
+router.get("/", getAllProducts);
 
-router.post('/add', addProduct)
+router.get("/search/:key", getProductByName);
 
-router.put('/update', editProduct)
+router.post("/add", addProduct);
+
+router.put("/update", editProduct);
+
+router.get("/detail/:id", getProductById);
+
+router.put("/update", editProduct);
 
 module.exports = router;
