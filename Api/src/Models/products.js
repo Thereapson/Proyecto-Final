@@ -19,11 +19,17 @@ const productSchema = new Schema({
     description: {
         type: String,
     },
-    thumbnail: {
+    status: {
         type: Boolean,
     },
     image: {
         type: String,
+    },
+    brand:  {
+        type: String,
+    },
+    benchmark: {
+        type: Number,
     },
     category: {
         type: Schema.Types.ObjectId,

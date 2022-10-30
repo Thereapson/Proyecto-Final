@@ -1,0 +1,19 @@
+.espacio {
+    margin-right: 150px;
+}
+
+.padding {
+    margin-bottom: 25px;
+}
+
+.espaciado {
+    margin-right: 100px;
+}
+
+.padd {
+    margin-left: 25px;
+    color:black;
+}
+.cap{
+    text-transform: capitalize;
+}
