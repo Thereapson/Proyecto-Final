@@ -1,11 +1,10 @@
 // Controller de Products
 const { productModel } = require('../Models/index')
 
-// Metodos del controller
 const getAllProducts = async (req, res, next) => {
     try {
         const response = await productModel.find({}).populate("category")
-        if(response.flat().length > 0) {
+        if (response.flat().length > 0) {
             const Products = response?.map(p => {
                 return {
                     id: p._id,
@@ -14,8 +13,8 @@ const getAllProducts = async (req, res, next) => {
                     price: p.price,
                     weight: p.weight,
                     description: p.description,
-                    status: p.status,
                     image: p.image,
+                    status: p.status,
                     brand: p.brand,
                     benchmark: p.benchmark,
                     category: p.category?.name,
@@ -39,11 +38,11 @@ const addProduct = async (req, res, next) => {
         const productData = req.body
         const { sku, name, price, weight, description, status, image, brand, benchmark, category, stock } = productData
         const foundProduct = await productModel.findOne({ sku: sku })
-        if(foundProduct) {
+        if (foundProduct) {
             res.status(400).send("The New Product can't be created, it SKU already exists")
         } else if( sku && name && price && image && brand && category && stock ) {
             const newProduct = await productModel.create({
-                sku, 
+                sku,
                 name,
                 price,
                 weight: weight || 0,
@@ -56,8 +55,8 @@ const addProduct = async (req, res, next) => {
                 create_date: new Date(),
                 stock,
             })
-    
-            if(!newProduct) {
+
+            if (!newProduct) {
                 res.status(400).send("The New Product can't be created")
             } else {
                 res.status(200).send({ msg: "New Product Added", newProduct })
@@ -67,7 +66,7 @@ const addProduct = async (req, res, next) => {
 
         }
 
-    } catch(error) {
+    } catch (error) {
         console.error(error);
         next(error)
     }
@@ -79,7 +78,7 @@ const editProduct = async (req, res, next) => {
         console.log("edit...",productData)
         const { id, sku, name, price, weight, description, status, image, brand, benchmark, category, stock } = productData
         const editProduct = await productModel.findByIdAndUpdate(id, {
-            sku, 
+            sku,
             name,
             price,
             weight,
@@ -92,9 +91,16 @@ const editProduct = async (req, res, next) => {
             stock,
         }, { new: true })
         console.log(editProduct)
-        if(editProduct) {
+        if (editProduct) {
             res.status(200).send("Product Successfully Updated")
         } else res.status(400).send("Product can't be created")
+
+
+        if (!newProduct) {
+            res.status(400).send("The New Product can't be created")
+        } else {
+            res.status(200).send({ msg: "New Product Added", newProduct })
+        }
 
     } catch (error) {
         console.error(error);
@@ -102,8 +108,26 @@ const editProduct = async (req, res, next) => {
     }
 }
 
+const getProductById = async (req, res, next) => {
+    const id = req.params.id
+    try {
+        //tienen que mandar un id como este 635ad2a356d5ff1c0e93e083
+        const product = await productModel.findById(id).populate("category");
+
+        res.status(200).json({
+            product,
+        });
+
+        next();
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 module.exports = {
     getAllProducts,
     addProduct,
-    editProduct,
+    getProductById,
+    editProduct
+
 }
