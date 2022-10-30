@@ -12,7 +12,7 @@ const {
 
 // configuramos las rutas
 router.get("/", getAllProducts);
-router.get("/:id", getProductById);
+
 router.get("/search/:key", getProductByName);
 
 router.post("/add", addProduct);
