@@ -54,6 +54,7 @@ export const getProductById = (id) => {
 };
 
 export const getCategories = () => {
+    console.log("pasé actions")
     return async (dispatch) => {
         const response = await axios.get("http://localhost:3001/categorys");
         console.log("response: ", response);
