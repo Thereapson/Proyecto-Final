@@ -1,9 +1,10 @@
-import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY,GET_PRODUCT_BY_ID, GET_PRODUCTS_BY_SEARCH, SHORT_BY_PRICE } from '../Actions/Actions';
+import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCT_BY_ID, GET_PRODUCTS_BY_SEARCH, SHORT_BY_PRICE, GET_CATEGORIES } from '../Actions/Actions';
 const initialState = {
     products: [],
     filteredProducts: [],
     productsRender: [],
-    DetailProduct:[]
+    DetailProduct: [],
+    categories: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -16,11 +17,11 @@ const rootReducer = (state = initialState, action) => {
         case GET_PRODUCTS_BY_SEARCH:
             let search = action.payload;
             console.log("search: ", search);
-            let filteredByName = state.products.filter((product) => product.name.toLowerCase().includes(search.toLowerCase()));
-            let filteredByBrand = state.products.filter((product) => product.brand.toLowerCase().includes(search.toLowerCase()));
-            let filteredByCategory = state.products.filter((product) => product.category.toLowerCase().includes(search.toLowerCase()));
+            let filteredByName = state.products.filter((product) => product.name?.toLowerCase().includes(search.toLowerCase()));
+            let filteredByBrand = state.products.filter((product) => product.brand?.toLowerCase().includes(search.toLowerCase()));
+            let filteredByCategory = state.products.filter((product) => product.category?.toLowerCase().includes(search.toLowerCase()));
 
-            let filteredProducts = [...filteredByName, ...filteredByBrand, ...filteredByCategory];
+            let filteredProducts = [...filteredByName, ...filteredByCategory, ...filteredByBrand];
             if (filteredProducts.length > 0) {
                 return {
                     ...state,
@@ -58,8 +59,13 @@ const rootReducer = (state = initialState, action) => {
             };
 
         case GET_PRODUCT_BY_ID:
-            return{...state, DetailProduct:{...action.payload}}
+            return { ...state, DetailProduct: { ...action.payload } }
 
+        case GET_CATEGORIES:
+            return {
+                ...state,
+                categories: action.payload,
+            };
         default:
             return { ...state };
     }
