@@ -6,12 +6,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/Register/Register';
 import DetailCard from './components/detail/detail';
 import Formaddcomp from './components/Formaddcomp/Formaddcomp'
+import { LandingPage } from './components/Landing/landing';
 
 function App() {
   return (
     <div className="App container">
       <BrowserRouter>
         <Routes>
+          <Route path='/' element={<LandingPage />} />
           <Route path="/product/:id" element={<DetailCard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/login" element={<Login />} />
