@@ -4,7 +4,7 @@ import { GET_PRODUCTS,
         GET_PRODUCTS_BY_SEARCH, 
         SHORT_BY_PRICE,
         ADD_PRODUCT, 
-        GET_TYPE_PRODUCTS    
+        GET_CATEGORIES    
     } from '../Actions/Actions';
 const initialState = {
     products: [],
@@ -75,11 +75,11 @@ const rootReducer = (state = initialState, action) => {
                 lastAdd: action.payload
             }
 
-        case GET_TYPE_PRODUCTS:
+        case GET_CATEGORIES:
             return {
                 ...state,
-                typeProducts: action.payload
-            }
+                categories: action.payload,
+            };
 
         default:
             return { ...state };

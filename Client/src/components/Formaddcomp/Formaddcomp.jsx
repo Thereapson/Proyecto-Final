@@ -8,10 +8,10 @@ import {addProduct} from "../../Redux/Actions/Actions"
 export default function FormAddComp() {
 
   //const categoryArrow = ['CPU','GPU','MEMORY','SSD','USB']
-  let typeProducts = useSelector((state) => state.typeProducts)
+  let typeProducts = useSelector((state) => state.categories)
   let lastProduct = useSelector((state) => state.lastAdd)
 
-  const categoryArrow = typeProducts.map((elm) => {
+  const categoryArrow = typeProducts?.map((elm) => {
     return elm.name
   })
 
@@ -286,7 +286,7 @@ export default function FormAddComp() {
                         >
                           <option> </option>
                           {
-                            categoryArrow && categoryArrow.map(function(elm, index) {
+                            categoryArrow && categoryArrow?.map(function(elm, index) {
                               return (
                                 <option key={index}> {elm} </option>
                               )
@@ -344,9 +344,13 @@ export default function FormAddComp() {
                 {lastProduct?.msg? 
                 <h1> The product was store with id {`${lastProduct.newProduct._id}`} </h1>
               :
-              <h1 className="text-orange-600"> The product was not stored, review the information</h1>}
-
-
+              <>
+                  {lastProduct?.stack?  
+                   <h1 className="text-orange-600"> The product was not stored, review the information</h1>:
+                   <></>
+                   }
+              </>         
+              }
               </div>
             </div>
           </div>

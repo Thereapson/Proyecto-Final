@@ -6,6 +6,7 @@ export const GET_PRODUCTS_BY_SEARCH = "GET_PRODUCTS_BY_SEARCH";
 export const SHORT_BY_PRICE = "SHORT_BY_PRICE";
 export const GET_PRODUCT_BY_ID = "GER_PRODUCT_BY_ID";
 export const ADD_PRODUCT = "ADD_PRODUCT";
+export const GET_CATEGORIES = "GET_CATEGORIES";
 
 
 const apiFake = [
@@ -167,4 +168,13 @@ export const addProduct = (part) => {
     }
 }
 
-
+export const getCategories = () => {
+    return async (dispatch) => {
+        const response = await axios.get("http://localhost:3001/categorys");
+        console.log("response: ", response);
+        return dispatch({
+            type: GET_CATEGORIES,
+            payload: response.data,
+        });
+    };
+};
