@@ -14,10 +14,10 @@ const Navbar = ({ setCurrentPage }) => {
     const dispatch = useDispatch();
     const categories = useSelector(state => state.categories);
     const menu = [
-        {
-            name: "Home",
-            link: "/",
-        },
+        // {
+        //     name: "Home",
+        //     link: "/",
+        // },
         {
             name: "Products",
             link: "/products",
@@ -29,14 +29,14 @@ const Navbar = ({ setCurrentPage }) => {
                 }
             })
         },
-        {
-            name: "About",
-            link: "/about",
-        },
-        {
-            name: "Contact",
-            link: "/contact",
-        },
+        // {
+        //     name: "About",
+        //     link: "/about",
+        // },
+        // {
+        //     name: "Contact",
+        //     link: "/contact",
+        // },
     ];
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
@@ -78,7 +78,7 @@ const Navbar = ({ setCurrentPage }) => {
                     <div className="flex items-center">
                         <span className="text-xl font-bold text-gray-700 ml-2">LOGO</span>
                         <div className="text-xl font-bold text-gray-700 ml-2">
-                            <NavLink to="/">E-Commerce</NavLink>
+                            <NavLink to="/products">E-Commerce</NavLink>
                         </div>
                     </div>
                     {/* menu and filters */}

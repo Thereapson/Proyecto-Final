@@ -1,4 +1,4 @@
-import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCT_BY_ID, GET_PRODUCTS_BY_SEARCH, SHORT_BY_PRICE, GET_CATEGORIES, ADD_PRODUCT,  } from '../Actions/Actions';
+import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCT_BY_ID, GET_PRODUCTS_BY_SEARCH, SHORT_BY_PRICE, GET_CATEGORIES, ADD_PRODUCT, CLEAN_DETAILS } from '../Actions/Actions';
 const initialState = {
     products: [],
     filteredProducts: [],
@@ -72,6 +72,13 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 lastAdd: action.payload
             }
+
+        case CLEAN_DETAILS:
+            return {
+                ...state,
+                DetailProduct: []
+            }
+        
         default:
             return { ...state };
     }
