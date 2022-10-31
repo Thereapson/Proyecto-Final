@@ -37,12 +37,14 @@ function Card({ product }) {
             ></path>
           </svg>
         </button>
+        <a href={`http://localhost:3000/detail/${product.id}`}>
+          <img
+            alt="Toy"
+            src={product.image}
+            className="h-56 w-full object-contain"
+          />
+        </a>
 
-        <img
-          alt="Toy"
-          src={product.image}
-          className="h-56 w-full object-contain"
-        />
 
         <div className="p-6">
           {/* price with symol usd */}

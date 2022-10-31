@@ -107,12 +107,14 @@ const apiFake = [
 
 export const getProducts = () => {
     return async (dispatch) => {
-        const response = apiFake;
-        console.log("response: ", response);
-        return dispatch({
-            type: GET_PRODUCTS,
-            payload: response,
-        });
+        await axios.get('http://localhost:3001/products')
+            .then((response) => {
+                let respuesta = response.data
+                dispatch({
+                    type: GET_PRODUCTS,
+                    payload: respuesta,
+                });
+            })
     };
 };
 
@@ -137,13 +139,13 @@ export const shortByPrice = (short) => {
     };
 };
 
-export const getProductById =(id)=>{
-    return async (dispatch)=>{
+export const getProductById = (id) => {
+    return async (dispatch) => {
         await axios.get(`http://localhost:3001/products/detail/${id}`)
-        .then((response)=>{
-            let respuesta = response.data.product
-            dispatch({type:GET_PRODUCT_BY_ID, payload:respuesta})
-        })
+            .then((response) => {
+                let respuesta = response.data.product
+                dispatch({ type: GET_PRODUCT_BY_ID, payload: respuesta })
+            })
     }
 
 }
