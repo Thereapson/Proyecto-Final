@@ -11,7 +11,7 @@ function App() {
     <div className="App container">
       <BrowserRouter>
         <Routes>
-          <Route path="/detail/:id" element={<DetailCard />} />
+          <Route path="/product/:id" element={<DetailCard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

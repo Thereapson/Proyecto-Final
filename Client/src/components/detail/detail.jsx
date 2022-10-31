@@ -4,8 +4,6 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import procesador from './procesadorimg.png'
 import './detail.css';
-import Navbar from '../navbar/navbar';
-
 
 function DetailCard() {
   function getRandomArbitrary(min, max) {
@@ -30,7 +28,6 @@ function DetailCard() {
 
   return (
     <div className="DetailCard">
-      <Navbar />
       <section className="bg-white dark:bg-gray-900">
         <div className="container px-6 py-10 mx-auto">
           <div className="lg:-mx-6 lg:flex lg:items-center">
