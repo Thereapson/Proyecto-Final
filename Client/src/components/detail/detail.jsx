@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { getProductById } from '../../Redux/Actions/Actions.js';
+import { getProductById, cleanDetails } from '../../Redux/Actions/Actions.js';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import procesador from './procesadorimg.png'
+import Navbar from '../navbar/navbar'
 import './detail.css';
 
 function DetailCard() {
@@ -23,11 +24,13 @@ function DetailCard() {
   const { id } = useParams();
   const details = useSelector((state) => state.DetailProduct)
   useEffect(() => {
+    dispatch(cleanDetails())
     dispatch(getProductById(id))
   }, [])
 
   return (
     <div className="DetailCard">
+    <Navbar/>
       <section className="bg-white dark:bg-gray-900">
         <div className="container px-6 py-10 mx-auto">
           <div className="lg:-mx-6 lg:flex lg:items-center">

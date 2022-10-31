@@ -7,6 +7,7 @@ export const SHORT_BY_PRICE = "SHORT_BY_PRICE";
 export const GET_PRODUCT_BY_ID = "GER_PRODUCT_BY_ID";
 export const GET_CATEGORIES = "GET_CATEGORIES";
 export const ADD_PRODUCT = "ADD_PRODUCT";
+export const CLEAN_DETAILS = "CLEAN _DETAILS"
 
 
 
@@ -46,7 +47,7 @@ export const getProductById = (id) => {
     return async (dispatch) => {
         await axios.get(`http://localhost:3001/products/detail/${id}`)
             .then((response) => {
-                let respuesta = response.data.product
+                let respuesta = response.data
                 dispatch({ type: GET_PRODUCT_BY_ID, payload: respuesta })
             })
     }
@@ -54,6 +55,7 @@ export const getProductById = (id) => {
 };
 
 export const getCategories = () => {
+    console.log("pasé actions")
     return async (dispatch) => {
         const response = await axios.get("http://localhost:3001/categorys");
         console.log("response: ", response);
@@ -80,3 +82,9 @@ export const addProduct = (part) => {
         } 
     }
 }
+
+export const cleanDetails = () => {
+    return {
+        type: CLEAN_DETAILS
+    };
+};

@@ -1,12 +1,19 @@
-import React, {useState} from "react"
+import { useState, useEffect } from "react"
 import {useSelector, useDispatch} from "react-redux"
+import { useNavigate } from 'react-router-dom'
 import s from "./Register.module.css";
 import validate from "../../utils/validateForms"
-import {addProduct} from "../../Redux/Actions/Actions"
+import {addProduct, getCategories } from "../../Redux/Actions/Actions"
+import Navbar from '../navbar/navbar'
 // Estados locales para controlar el formulario
 
 export default function FormAddComp() {
 
+  const dispatch = useDispatch()
+  const Navigate = useNavigate()
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
   //const categoryArrow = ['CPU','GPU','MEMORY','SSD','USB']
   let typeProducts = useSelector((state) => state.categories)
   let lastProduct = useSelector((state) => state.lastAdd)
@@ -17,7 +24,6 @@ export default function FormAddComp() {
 
   //const categoryArrow = typeProducts?.map((elm) => {return elm.name})
 
-  const dispatch = useDispatch()
   const [product, setProduct] = useState({
     sku: "",
     name: "",
@@ -100,6 +106,7 @@ export default function FormAddComp() {
         stock: true, 
       })
     }
+    Navigate("/products")
     //e.target.reset()
     //dispatch(addProduct(product))
   };
@@ -114,6 +121,7 @@ export default function FormAddComp() {
 
     return (
       <>  
+        <Navbar/>
         <div className="hidden sm:block" aria-hidden="true">
           <div className="py-5">
             <div className="border-t border-gray-200" />
