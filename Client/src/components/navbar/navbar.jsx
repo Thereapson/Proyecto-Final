@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { getProductsByCategory, getProductsBySearch } from "../../Redux/Actions/Actions";
-import {getTypeProducts} from "../../Redux/Actions/Actions"
+import {getCategories} from "../../Redux/Actions/Actions"
 
 
 
@@ -91,7 +91,7 @@ const Navbar = () => {
     useEffect(() => {
         if (typeProducts.length > 0) {  
         } 
-        dispatch(getTypeProducts())       
+        dispatch(getCategories())       
     },[])
 
     return (

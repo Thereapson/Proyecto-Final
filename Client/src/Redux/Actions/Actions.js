@@ -6,7 +6,7 @@ export const GET_PRODUCTS_BY_SEARCH = "GET_PRODUCTS_BY_SEARCH";
 export const SHORT_BY_PRICE = "SHORT_BY_PRICE";
 export const GET_PRODUCT_BY_ID = "GER_PRODUCT_BY_ID";
 export const ADD_PRODUCT = "ADD_PRODUCT";
-export const GET_TYPE_PRODUCTS = "GET_TYPE_PRODUCTS"
+
 
 const apiFake = [
     {
@@ -167,25 +167,4 @@ export const addProduct = (part) => {
     }
 }
 
-// export const addProduct = (part) => {
-//     return async function (dispatch) {
-//         let json = await axios.post(`http://localhost:3001/products/add`, part)
-//         return dispatch({
-//             type: ADD_PRODUCT,
-//             payload: json.data
-//         })
-//     }
-// };
 
-
-
-export const getTypeProducts = () => {
-    return async function (dispatch) {
-        let json = await axios.get(`http://localhost:3001/categorys`)
-        return dispatch({
-            type: GET_TYPE_PRODUCTS,
-            payload: json.data
-        })
-    }
-
-}
