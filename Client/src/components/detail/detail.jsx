@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import procesador from './procesadorimg.png'
 import './detail.css';
+import Navbar from '../navbar/navbar';
+
 
 function DetailCard() {
   function getRandomArbitrary(min, max) {
@@ -28,23 +30,24 @@ function DetailCard() {
 
   return (
     <div className="DetailCard">
+      <Navbar />
       <section className="bg-white dark:bg-gray-900">
         <div className="container px-6 py-10 mx-auto">
           <div className="lg:-mx-6 lg:flex lg:items-center">
             <img className="espaciado object-cover object-center lg:h-[31rem]" src={details.image} alt="NOIMG" />
 
             <div className="mt-8 lg:w-1/2 lg:px-6 lg:mt-0">
-            {details.name?<p className="cap text-3xl font-semibold text-blue-500" > {details.name} ({details.category.name})</p>:null}
+              {details.name ? <p className="cap text-3xl font-semibold text-blue-500" > {details.name} ({details.category.name})</p> : null}
 
               <p className="max-w-lg mt-6 text-gray-500 dark:text-gray-400 ">
                 {details.description}
               </p>
               <div className='espec'>
                 <h3 className="mt-6 text-lg font-medium text-blue-500">Frecuencia</h3>
-                <p className="text-gray-600 dark:text-gray-300">{getRandomArbitrary(2000,4000)} Mhs</p>
+                <p className="text-gray-600 dark:text-gray-300">{getRandomArbitrary(2000, 4000)} Mhs</p>
 
                 <h3 className="mt-6 text-lg font-medium text-blue-500">Nucleos/Hilos </h3>
-                <p className="text-gray-600 dark:text-gray-300">{getRandomArbitrary(1,6)} / {getRandomArbitrary(10,14)}  </p>
+                <p className="text-gray-600 dark:text-gray-300">{getRandomArbitrary(1, 6)} / {getRandomArbitrary(10, 14)}  </p>
 
                 <h3 className="mt-6 text-lg font-medium text-blue-500">En stock:</h3>
                 <p className="text-gray-600 dark:text-gray-300">{details.stock}</p>
