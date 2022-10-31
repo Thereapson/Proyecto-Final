@@ -7,6 +7,7 @@ export const SHORT_BY_PRICE = "SHORT_BY_PRICE";
 export const GET_PRODUCT_BY_ID = "GER_PRODUCT_BY_ID";
 export const GET_CATEGORIES = "GET_CATEGORIES";
 export const ADD_PRODUCT = "ADD_PRODUCT";
+export const CLEAN_DETAILS = "CLEAN _DETAILS"
 
 
 
@@ -81,3 +82,9 @@ export const addProduct = (part) => {
         } 
     }
 }
+
+export const cleanDetails = () => {
+    return {
+        type: CLEAN_DETAILS
+    };
+};

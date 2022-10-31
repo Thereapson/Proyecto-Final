@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react"
 import {useSelector, useDispatch} from "react-redux"
+import { useNavigate } from 'react-router-dom'
 import s from "./Register.module.css";
 import validate from "../../utils/validateForms"
 import {addProduct, getCategories } from "../../Redux/Actions/Actions"
+import Navbar from '../navbar/navbar'
 // Estados locales para controlar el formulario
 
 export default function FormAddComp() {
 
   const dispatch = useDispatch()
+  const Navigate = useNavigate()
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
@@ -103,6 +106,7 @@ export default function FormAddComp() {
         stock: true, 
       })
     }
+    Navigate("/products")
     //e.target.reset()
     //dispatch(addProduct(product))
   };
@@ -117,6 +121,7 @@ export default function FormAddComp() {
 
     return (
       <>  
+        <Navbar/>
         <div className="hidden sm:block" aria-hidden="true">
           <div className="py-5">
             <div className="border-t border-gray-200" />
