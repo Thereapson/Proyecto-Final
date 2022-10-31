@@ -46,7 +46,7 @@ export const getProductById = (id) => {
     return async (dispatch) => {
         await axios.get(`http://localhost:3001/products/detail/${id}`)
             .then((response) => {
-                let respuesta = response.data.product
+                let respuesta = response.data
                 dispatch({ type: GET_PRODUCT_BY_ID, payload: respuesta })
             })
     }
