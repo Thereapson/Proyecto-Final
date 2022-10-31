@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getProducts } from "../../Redux/Actions/Actions";
 import Card from '../Card/Card';
 import Noproductsfound from '../noproductsfound/noproductsfound';
+import Paginado from "../paginado/paginado";
+import Navbar from '../navbar/navbar';
 
 const Products = () => {
     const productsRender = useSelector(state => state.productsRender);
@@ -12,27 +14,26 @@ const Products = () => {
     useEffect(() => {
         dispatch(getProducts());
     }, [dispatch]);
-    // if (filteredProducts.length > 0) {
-    //     return {
-    //         ...state,
-    //         productsRender: filteredProducts,
-    //     };
-    // } else {
-    //     return {
-    //         ...state,
-    //         productsRender: ["No Products Found"],
-    //     };
-    // }
+    // paginado 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [productsPerPage] = useState(6);
+    let productsRendered = productsRender.length ? productsRender.length : allProducts.length;
+    const max = Math.ceil(productsRendered / productsPerPage);
+
     return (
         <div className="container mx-auto px-4">
+            <Navbar setCurrentPage={setCurrentPage} />
             <div className="flex flex-wrap -mx-1 lg:-mx-4 justify-center gap-4">
                 {
                     productsRender[0] === "No Products Found" ? <Noproductsfound /> // no products found
                         :
-                        productsRender.length > 0 ? productsRender.map((product) => <Card key={product._id} product={product} />) // products with filter
+                        productsRender.length > 0 ? productsRender.slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage).map((product) => <Card key={product._id} product={product} />) // products with filter
                             :
-                            allProducts.map((product) => <Card key={product._id} product={product} />)  // all products
+                            allProducts.slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage).map((product) => <Card key={product.id} product={product} />)  // all products
                 }
+            </div>
+            <div className='paginado'>
+                <Paginado currentPage={currentPage} max={max} setCurrentPage={setCurrentPage} />
             </div>
         </div>
     )
