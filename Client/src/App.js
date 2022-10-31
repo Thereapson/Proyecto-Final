@@ -5,6 +5,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/Register/Register';
 import DetailCard from './components/detail/detail';
+import Formaddcomp from './components/Formaddcomp/Formaddcomp'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/products/add" element={<Formaddcomp/>} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -6,6 +6,7 @@ export const GET_PRODUCTS_BY_SEARCH = "GET_PRODUCTS_BY_SEARCH";
 export const SHORT_BY_PRICE = "SHORT_BY_PRICE";
 export const GET_PRODUCT_BY_ID = "GER_PRODUCT_BY_ID";
 export const GET_CATEGORIES = "GET_CATEGORIES";
+export const ADD_PRODUCT = "ADD_PRODUCT";
 
 
 
@@ -50,7 +51,7 @@ export const getProductById = (id) => {
             })
     }
 
-}
+};
 
 export const getCategories = () => {
     return async (dispatch) => {
@@ -62,3 +63,20 @@ export const getCategories = () => {
         });
     };
 };
+
+export const addProduct = (part) => {
+    return async function (dispatch) {
+        try {
+            let json = await axios.post(`http://localhost:3001/products/add`, part)
+            return dispatch({
+                type: ADD_PRODUCT,
+                payload: json.data
+            })
+        } catch (error) {
+            return dispatch({
+                type: ADD_PRODUCT,
+                payload: error
+            })
+        } 
+    }
+}
