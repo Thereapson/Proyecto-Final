@@ -1,10 +1,11 @@
-import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCT_BY_ID, GET_PRODUCTS_BY_SEARCH, SHORT_BY_PRICE, GET_CATEGORIES } from '../Actions/Actions';
+import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCT_BY_ID, GET_PRODUCTS_BY_SEARCH, SHORT_BY_PRICE, GET_CATEGORIES, ADD_PRODUCT,  } from '../Actions/Actions';
 const initialState = {
     products: [],
     filteredProducts: [],
     productsRender: [],
     DetailProduct: [],
     categories: [],
+    lastAdd: {},
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -66,6 +67,11 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 categories: action.payload,
             };
+        case ADD_PRODUCT:
+            return {
+                ...state,
+                lastAdd: action.payload
+            }
         default:
             return { ...state };
     }

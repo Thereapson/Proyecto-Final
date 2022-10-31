@@ -164,6 +164,11 @@ const Navbar = ({ setCurrentPage }) => {
                             </svg>
                             {isLogin ? "Logout" : "Login"}</Link>
                     </div>
+                    <div className="flex items-center">
+                        <Link to={"/products/add"} className="text-gray-700 font-bold text-lg ml-2 flex items-center">
+                            Admin
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
