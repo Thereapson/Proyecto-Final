@@ -1,9 +1,18 @@
-import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY,GET_PRODUCT_BY_ID, GET_PRODUCTS_BY_SEARCH, SHORT_BY_PRICE } from '../Actions/Actions';
+import { GET_PRODUCTS, 
+        GET_PRODUCTS_BY_CATEGORY,
+        GET_PRODUCT_BY_ID, 
+        GET_PRODUCTS_BY_SEARCH, 
+        SHORT_BY_PRICE,
+        ADD_PRODUCT, 
+        GET_TYPE_PRODUCTS    
+    } from '../Actions/Actions';
 const initialState = {
     products: [],
     filteredProducts: [],
     productsRender: [],
-    DetailProduct:[]
+    DetailProduct:[],
+    typeProducts: [],
+    lastAdd: {}, 
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -59,6 +68,18 @@ const rootReducer = (state = initialState, action) => {
 
         case GET_PRODUCT_BY_ID:
             return{...state, DetailProduct:{...action.payload}}
+
+        case ADD_PRODUCT:
+            return {
+                ...state,
+                lastAdd: action.payload
+            }
+
+        case GET_TYPE_PRODUCTS:
+            return {
+                ...state,
+                typeProducts: action.payload
+            }
 
         default:
             return { ...state };

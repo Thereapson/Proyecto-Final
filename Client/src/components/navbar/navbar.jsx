@@ -1,7 +1,10 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { getProductsByCategory, getProductsBySearch } from "../../Redux/Actions/Actions";
+import {getTypeProducts} from "../../Redux/Actions/Actions"
+
+
 
 const menu = [
     {
@@ -53,8 +56,6 @@ const menu = [
 
 
 
-
-
 const Navbar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -83,6 +84,15 @@ const Navbar = () => {
     const handleGetAllProducts = () => {
         dispatch(getProductsByCategory(""));
     };
+
+    let typeProducts = useSelector((state) => state.typeProducts)
+    console.log(typeProducts)
+
+    useEffect(() => {
+        if (typeProducts.length > 0) {  
+        } 
+        dispatch(getTypeProducts())       
+    },[])
 
     return (
         <div className="bg-white">
@@ -176,6 +186,11 @@ const Navbar = () => {
                                 <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                             </svg>
                             {isLogin ? "Logout" : "Login"}</Link>
+                    </div>
+                    <div className="flex items-center">
+                        <Link to={"/products/add"} className="text-gray-700 font-bold text-lg ml-2 flex items-center">
+                            Admin
+                        </Link>
                     </div>
                 </div>
             </div>
