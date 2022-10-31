@@ -1,27 +1,29 @@
 import React from "react";
+import Navbar from '../navbar/navbar';
 
 function Register() {
   return (
     <div>
-      <section class="bg-white dark:bg-gray-900">
-        <div class="container flex items-center justify-center min-h-screen px-6 mx-auto">
-          <form class="w-full max-w-md">
+      <Navbar />
+      <section className="bg-white dark:bg-gray-900">
+        <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
+          <form className="w-full max-w-md">
             {/* <img class="object-cover w-24 h-24 mx-auto rounded-full" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt="user avatar"/> */}
 
-            <div class="flex items-center justify-center mt-6">
+            <div className="flex items-center justify-center mt-6">
               <a
                 href="#"
-                class="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500 dark:border-blue-400 dark:text-white"
+                className="w-1/3 pb-4 font-medium text-center text-gray-800 capitalize border-b-2 border-blue-500 dark:border-blue-400 dark:text-white"
               >
                 Registrate
               </a>
             </div>
 
-            <div class="relative flex items-center mt-8">
-              <span class="absolute">
+            <div className="relative flex items-center mt-8">
+              <span className="absolute">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
+                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -37,18 +39,18 @@ function Register() {
 
               <input
                 type="text"
-                class="block w-full py-3 text-gray-700 bg-white border rounded-md px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                className="block w-full py-3 text-gray-700 bg-white border rounded-md px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Nombre de usuario"
               />
             </div>
 
             <label
               for="dropzone-file"
-              class="flex items-center px-3 py-3 mx-auto mt-6 text-center bg-white border-2 border-dashed rounded-md cursor-pointer dark:border-gray-600 dark:bg-gray-900"
+              className="flex items-center px-3 py-3 mx-auto mt-6 text-center bg-white border-2 border-dashed rounded-md cursor-pointer dark:border-gray-600 dark:bg-gray-900"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-6 h-6 text-gray-300 dark:text-gray-500"
+                className="w-6 h-6 text-gray-300 dark:text-gray-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -61,16 +63,16 @@ function Register() {
                 />
               </svg>
 
-              <h2 class="mx-3 text-gray-400">Foto de perfil</h2>
+              <h2 className="mx-3 text-gray-400">Foto de perfil</h2>
 
-              <input id="dropzone-file" type="file" class="hidden" />
+              <input id="dropzone-file" type="file" className="hidden" />
             </label>
 
-            <div class="relative flex items-center mt-6">
-              <span class="absolute">
+            <div className="relative flex items-center mt-6">
+              <span className="absolute">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
+                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -86,16 +88,16 @@ function Register() {
 
               <input
                 type="email"
-                class="block w-full py-3 text-gray-700 bg-white border rounded-md px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                className="block w-full py-3 text-gray-700 bg-white border rounded-md px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Correo electronico"
               />
             </div>
 
-            <div class="relative flex items-center mt-4">
-              <span class="absolute">
+            <div className="relative flex items-center mt-4">
+              <span className="absolute">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
+                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -111,16 +113,16 @@ function Register() {
 
               <input
                 type="password"
-                class="block w-full px-10 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Contraseña"
               />
             </div>
 
-            <div class="relative flex items-center mt-4">
-              <span class="absolute">
+            <div className="relative flex items-center mt-4">
+              <span className="absolute">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
+                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -136,20 +138,20 @@ function Register() {
 
               <input
                 type="password"
-                class="block w-full px-10 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Confirmar contraseña"
               />
             </div>
 
-            <div class="mt-6">
-              <button class="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+            <div className="mt-6">
+              <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                 Registrarte
               </button>
 
-              <div class="mt-6 text-center ">
+              <div className="mt-6 text-center ">
                 <a
                   href="#"
-                  class="text-sm text-blue-500 hover:underline dark:text-blue-400"
+                  className="text-sm text-blue-500 hover:underline dark:text-blue-400"
                 >
                   ¿Ya tienes una cuenta?
                 </a>

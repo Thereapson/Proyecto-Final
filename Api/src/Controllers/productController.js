@@ -163,15 +163,26 @@ const getProductById = async (req, res, next) => {
     //tienen que mandar un id como este 635ad2a356d5ff1c0e93e083
     const product = await productModel.findById(id).populate("category");
 
-    res.status(200).json({
-      product,
-    });
-
+    res.status(200).send(product);
     next();
   } catch (error) {
     console.log(error);
   }
 };
+
+const deleteProduct = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    //tienen que mandar un id como este 635ad2a356d5ff1c0e93e083
+    const product = await productModel.findByIdAndDelete(id);
+
+    res.status(200).json({ deleted: product });
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
 module.exports = {
   getAllProducts,
@@ -180,4 +191,5 @@ module.exports = {
   getProductById,
   editProduct,
   addProduct,
+  deleteProduct,
 };
