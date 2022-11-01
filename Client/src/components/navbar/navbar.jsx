@@ -78,7 +78,7 @@ const Navbar = ({ setCurrentPage }) => {
                     <div className="flex items-center">
                         <span className="text-xl font-bold text-gray-700 ml-2">LOGO</span>
                         <div className="text-xl font-bold text-gray-700 ml-2">
-                            <NavLink to="/products">E-Commerce</NavLink>
+                            <NavLink to="/products">CompuDevs</NavLink>
                         </div>
                     </div>
                     {/* menu and filters */}
@@ -166,7 +166,7 @@ const Navbar = ({ setCurrentPage }) => {
                     </div>
                     <div className="flex items-center">
                         <Link to={"/products/add"} className="text-gray-700 font-bold text-lg ml-2 flex items-center">
-                            Admin
+                            Add Product
                         </Link>
                     </div>
                 </div>
