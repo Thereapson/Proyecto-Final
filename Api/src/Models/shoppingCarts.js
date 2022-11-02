@@ -1,22 +1,26 @@
 // MODELO SHOPPING-CART
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require("mongoose");
 
 // Schema del modelo
-const shoppincCartSchema = new Schema({
+const shoppincCartSchema = new Schema(
+  {
     user_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
-    products_id: [{
+    products_id: [
+      {
         type: Schema.Types.ObjectId,
-        ref: 'Product',
-        quantity: Number
-    }]
-}, 
-{
+        ref: "Product",
+        quantity: Number,
+      },
+    ],
+  },
+  {
     timestamps: true,
     versionKey: false,
-})
+  }
+);
 
 const shoppingCartModel = model("ShoppingCart", shoppincCartSchema);
 
