@@ -2,17 +2,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { getProductsByCategory, getProductsBySearch, getCategories } from "../../Redux/Actions/Actions";
-
-
-
-
-
-
-
+import Cart from "../cart/cart";
+import { getCart } from '../../Redux/Actions/Actions'
 
 const Navbar = ({ setCurrentPage }) => {
     const dispatch = useDispatch();
     const categories = useSelector(state => state.categories);
+    useEffect(() => {
+        dispatch(getCart());
+    }, [dispatch]);
     const menu = [
         // {
         //     name: "Home",
@@ -69,6 +67,12 @@ const Navbar = ({ setCurrentPage }) => {
     const handleGetAllProducts = () => {
         setCurrentPage(1);
         dispatch(getProductsByCategory(""));
+    };
+
+    // cart 
+    const [showCart, setShowCart] = useState(false);
+    const handleCart = () => {
+        setShowCart(true);
     };
 
     return (
@@ -142,7 +146,8 @@ const Navbar = ({ setCurrentPage }) => {
                     {/* cart */}
                     <div className="flex items-center hover:cursor-pointer">
                         <div className="relative">
-                            <Link to="/cart">
+                            {/* cart */}
+                            <button className="focus:outline-none focus:shadow-outline" onClick={handleCart}>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <circle cx="6" cy="19" r="2"></circle>
@@ -150,7 +155,8 @@ const Navbar = ({ setCurrentPage }) => {
                                     <path d="M17 17h-11v-14h-2"></path>
                                     <path d="M6 5l14 1l-1 7h-13"></path>
                                 </svg>
-                            </Link>
+                            </button>
+                            {showCart && <Cart setShowCart={setShowCart} showCart={showCart} />}
                         </div>
                     </div>
                     {/* user */}
@@ -171,7 +177,7 @@ const Navbar = ({ setCurrentPage }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

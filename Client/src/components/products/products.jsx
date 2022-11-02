@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProducts } from "../../Redux/Actions/Actions";
+import { getProducts, getProductsByMinMax } from "../../Redux/Actions/Actions";
 import Card from '../Card/Card';
 import Noproductsfound from '../noproductsfound/noproductsfound';
 import Paginado from "../paginado/paginado";
 import Navbar from '../navbar/navbar';
-
+import swal from 'sweetalert';
 const Products = () => {
-    const productsRender = useSelector(state => state.productsRender);
-    const allProducts = useSelector(state => state.products);
+    let productsRender = useSelector(state => state.productsRender);
+    let allProducts = useSelector(state => state.products);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -20,9 +20,45 @@ const Products = () => {
     let productsRendered = productsRender.length ? productsRender.length : allProducts.length;
     const max = Math.ceil(productsRendered / productsPerPage);
 
+    const [sorted, setSorted] = useState({
+        min: 0,
+        max: 0,
+    });
+
+    const handleInputChange = (e) => {
+        setSorted({
+            ...sorted,
+            [e.target.name]: e.target.value
+        });
+    }
+
+    const handleSort = (e) => {
+        e.preventDefault();
+        dispatch(getProductsByMinMax(sorted.min, sorted.max));
+        setCurrentPage(1);
+        setSorted({
+            min: null,
+            max: null,
+        });
+    }
+
+
     return (
         <div className="container mx-auto px-4">
             <Navbar setCurrentPage={setCurrentPage} />
+            <div className="sort flex flex justify-center items-center">
+                <form onSubmit={handleSort}>
+                    <label>Min</label>
+                    <input type="number" name="min" onChange={handleInputChange} value={sorted.min} />
+                    <label>Max</label>
+                    <input type="number" name="max" onChange={handleInputChange} value={sorted.max} />
+                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2">Sort</button>
+                </form>
+                {/* <label>Sort by price</label>
+                <button onClick={() => setSorted({ ...sorted, order: "asc" })} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Asc</button>
+                <button onClick={() => setSorted({ ...sorted, order: "desc" })} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Desc</button>
+                {sorted && <label>order: {sorted.order}</label>} */}
+            </div>
             <div className="flex flex-wrap -mx-1 lg:-mx-4 justify-center gap-4">
                 {
                     productsRender[0] === "No Products Found" ? <Noproductsfound /> // no products found

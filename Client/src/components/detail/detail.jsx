@@ -5,19 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import procesador from './procesadorimg.png'
 import Navbar from '../navbar/navbar'
 import './detail.css';
+import swal from 'sweetalert';
 
 function DetailCard() {
   function getRandomArbitrary(min, max) {
     let numero = Math.random() * (max - min) + min;
     return Math.round(numero)
-  }
-  const hardcode = {
-    nombre: "Intel i7-10400K",
-    tipo: "Procesador",
-    Especificaciones: ["3200Mh", "Nucleos: 3", "Hilos: 4"],
-    costo: "$500USD",
-    imagen: procesador,
-    descripcion: "El procesador está formado por un conjunto de registros que almacenen datos, una unidad aritmético-lógica que realiza operaciones con ellos y una unidad de control que se encarga de coordinar a todos los componentes. Un reloj interno determina la velocidad de trabajo de estos elementos internos."
   }
 
   const dispatch = useDispatch();
@@ -30,7 +23,7 @@ function DetailCard() {
 
   return (
     <div className="DetailCard">
-    <Navbar/>
+      <Navbar />
       <section className="bg-white dark:bg-gray-900">
         <div className="container px-6 py-10 mx-auto">
           <div className="lg:-mx-6 lg:flex lg:items-center">
@@ -56,9 +49,14 @@ function DetailCard() {
 
 
               <div className="flex items-center justify-between mt-12 lg:justify-start">
-                <button className="espacio padd1 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">
-                  Añadir al carrito
-                </button>
+                <button
+                  className="espacio padd1 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80"
+                  onClick={() => swal({
+                    title: "Product added to cart",
+                    icon: "success",
+                    button: "OK",
+                  }
+                  )}>Add to cart</button>
                 <button className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                   Compra Rapida
                 </button>

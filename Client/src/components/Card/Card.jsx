@@ -1,22 +1,22 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import swal from 'sweetalert';
+import { addProduct } from "../../Redux/Actions/Actions";
 
 function Card({ product }) {
-  const [addToCart, setAddToCart] = React.useState(false);
+  const dispatch = useDispatch();
   const handleAddProduct = () => {
-    setAddToCart(true);
-    setTimeout(() => {
-      setAddToCart(false);
-    }, 2000);
+    swal({
+      title: "Product added to cart",
+      icon: "success",
+      button: "Ok",
+    });
+    dispatch(addProduct(product));
   };
 
   return (
     <div className="bg-white p-4 w-80 relative">
-      {addToCart && (
-        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-gray-100 bg-opacity-50 z-10">
-          <span className="bg-green-500 text-white px-4 py-2 rounded-full"> Added to Cart </span>
-        </div>
-      )}
 
       <button
         type="button"
