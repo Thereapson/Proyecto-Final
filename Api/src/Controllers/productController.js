@@ -62,7 +62,6 @@ const addProduct = async (req, res, next) => {
       price,
       weight,
       description,
-      status,
       image,
       brand,
       benchmark,

@@ -8,8 +8,8 @@ const {
     createUser,
     editUser,
     blockUser,
-    deleteUser
-} = require("../Controllers/");
+    addFavorites
+} = require("../Controllers/userController");
 
 // configuramos las rutas
 router.get("/", getAllUsers);
@@ -20,8 +20,8 @@ router.post("/create", createUser);
 
 router.put("/update", editUser);
 
-router.put("/block/:id", blockUser)
+router.put("/favorites/:user_id", addFavorites);
 
-router.delete("/delete/:id", deleteUser);
+router.put("/block/:id", blockUser)
 
 module.exports = router;
