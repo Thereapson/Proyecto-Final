@@ -4,21 +4,23 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import procesador from './procesadorimg.png'
 import Navbar from '../navbar/navbar'
+import Stripe from '../Stripe/Stripe.jsx'
 import './detail.css';
+
 
 function DetailCard() {
   function getRandomArbitrary(min, max) {
     let numero = Math.random() * (max - min) + min;
     return Math.round(numero)
   }
-  const hardcode = {
-    nombre: "Intel i7-10400K",
-    tipo: "Procesador",
-    Especificaciones: ["3200Mh", "Nucleos: 3", "Hilos: 4"],
-    costo: "$500USD",
-    imagen: procesador,
-    descripcion: "El procesador está formado por un conjunto de registros que almacenen datos, una unidad aritmético-lógica que realiza operaciones con ellos y una unidad de control que se encarga de coordinar a todos los componentes. Un reloj interno determina la velocidad de trabajo de estos elementos internos."
-  }
+  // const hardcode = {
+  //   nombre: "Intel i7-10400K",
+  //   tipo: "Procesador",
+  //   Especificaciones: ["3200Mh", "Nucleos: 3", "Hilos: 4"],
+  //   costo: "$500USD",
+  //   imagen: procesador,
+  //   descripcion: "El procesador está formado por un conjunto de registros que almacenen datos, una unidad aritmético-lógica que realiza operaciones con ellos y una unidad de control que se encarga de coordinar a todos los componentes. Un reloj interno determina la velocidad de trabajo de estos elementos internos."
+  // }
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -30,7 +32,7 @@ function DetailCard() {
 
   return (
     <div className="DetailCard">
-    <Navbar/>
+      <Navbar />
       <section className="bg-white dark:bg-gray-900">
         <div className="container px-6 py-10 mx-auto">
           <div className="lg:-mx-6 lg:flex lg:items-center">
@@ -67,10 +69,16 @@ function DetailCard() {
                 </p>
 
               </div>
+
             </div>
+
           </div>
         </div>
       </section>
+      <div className='formtemp'>
+        <Stripe amount={details.price * 100} detail={details.name}></Stripe>
+      </div>
+
     </div>
   );
 }
