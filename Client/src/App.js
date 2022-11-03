@@ -8,6 +8,7 @@ import DetailCard from './components/detail/detail';
 import Stripe from './components/Stripe/Stripe';
 import Formaddcomp from './components/Formaddcomp/Formaddcomp'
 import { LandingPage } from './components/Landing/landing';
+import Cart from './components/cart/cart';
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/products/add" element={<Formaddcomp/>} />
+          <Route path="/products/add" element={<Formaddcomp />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </BrowserRouter>
     </div>
