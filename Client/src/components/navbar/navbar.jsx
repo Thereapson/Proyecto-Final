@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { getProductsByCategory, getProductsBySearch, getCategories } from "../../Redux/Actions/Actions";
+import { getProductsByCategory, getProductsBySearch, getCategories, getProducts } from "../../Redux/Actions/Actions";
 import Cart from "../cart/cart";
 import { getCart } from '../../Redux/Actions/Actions'
 
@@ -45,6 +45,8 @@ const Navbar = ({ setCurrentPage }) => {
     useEffect(() => {
         dispatch(getCategories());
         console.log('categories', categories);
+        dispatch(getProducts());
+
     }, [dispatch]);
     const submitSearch = (e) => {
         e.preventDefault();
@@ -74,6 +76,8 @@ const Navbar = ({ setCurrentPage }) => {
     const handleCart = () => {
         setShowCart(true);
     };
+
+
 
     return (
         <div className="bg-white relative">
@@ -157,6 +161,7 @@ const Navbar = ({ setCurrentPage }) => {
                                 </svg>
                             </button>
                             {showCart && <Cart setShowCart={setShowCart} showCart={showCart} />}
+
                         </div>
                     </div>
                     {/* user */}

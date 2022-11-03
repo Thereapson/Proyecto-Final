@@ -16,8 +16,7 @@ function Card({ product }) {
   };
 
   return (
-    <div className="bg-white p-4 w-80 relative">
-
+    <div className="p-4 relative w-80">
       <button
         type="button"
         className="absolute right-4 top-4 rounded-full bg-black p-2 text-white"

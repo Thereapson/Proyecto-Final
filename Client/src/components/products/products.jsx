@@ -5,15 +5,13 @@ import Card from '../Card/Card';
 import Noproductsfound from '../noproductsfound/noproductsfound';
 import Paginado from "../paginado/paginado";
 import Navbar from '../navbar/navbar';
-import swal from 'sweetalert';
+
 const Products = () => {
     let productsRender = useSelector(state => state.productsRender);
     let allProducts = useSelector(state => state.products);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(getProducts());
-    }, [dispatch]);
+
     // paginado 
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(6);
@@ -34,6 +32,7 @@ const Products = () => {
 
     const handleSort = (e) => {
         e.preventDefault();
+        // dispatch(cleanProducts());
         dispatch(getProductsByMinMax(sorted.min, sorted.max));
         setCurrentPage(1);
         setSorted({
@@ -44,9 +43,9 @@ const Products = () => {
 
 
     return (
-        <div className="container mx-auto px-4">
+        <div className="container">
             <Navbar setCurrentPage={setCurrentPage} />
-            <div className="sort flex flex justify-center items-center">
+            <div className="sort flex flex justify-center items-center mt-5 relative">
                 <form onSubmit={handleSort}>
                     <label>Min</label>
                     <input type="number" name="min" onChange={handleInputChange} value={sorted.min} />
@@ -59,7 +58,7 @@ const Products = () => {
                 <button onClick={() => setSorted({ ...sorted, order: "desc" })} className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Desc</button>
                 {sorted && <label>order: {sorted.order}</label>} */}
             </div>
-            <div className="flex flex-wrap -mx-1 lg:-mx-4 justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-4 p-4">
                 {
                     productsRender[0] === "No Products Found" ? <Noproductsfound /> // no products found
                         :

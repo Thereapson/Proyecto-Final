@@ -98,27 +98,7 @@ export const getProductsByMinMax = (min, max) => {
 };
 
 let fakeCart = [
-    {
-        id: '635d7a041ef1553a2b641e29',
-        name: 'Vengeance RGB DDR4 3466 C16 2x8GB',
-        href: '/products/635d7a041ef1553a2b641e29',
-        color: 'none',
-        price: '117',
-        quantity: 2,
-        imageSrc: "https://s3-sa-east-1.amazonaws.com/saasargentina/f939foKj3jFJzkn9zrjm/imagen",
-        imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
-    },
-    {
-        id: '635d7a761ef1553a2b641e41',
-        name: 'Gigabyte RTX 2080 8GB Gaming OC',
-        href: '/products/635d7a761ef1553a2b641e41',
-        color: 'none',
-        price: '907',
-        quantity: 1,
-        imageSrc: 'https://pcgamercatamarca.com.ar/wp-content/uploads/2022/04/gigabyte-1660-oc-6g-scaled.jpg',
-        imageAlt:
-            'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
-    },
+
 ];
 
 
@@ -127,10 +107,10 @@ export const getCart = () => {
     return async function (dispatch) {
         try {
             // test with fakeCart
-            let json = fakeCart //await axios.get(`http://localhost:3001/cart`)
+            let json = fakeCart //await axios.get("http://localhost:3001/shoppingCarts");
             return dispatch({
                 type: GET_CART,
-                payload: json
+                payload: json,
             })
         } catch (error) {
             return dispatch({

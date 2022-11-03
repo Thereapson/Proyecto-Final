@@ -11,22 +11,23 @@ const Cart = ({ setShowCart, showCart }) => {
     const setOpen = setShowCart
     const dispatch = useDispatch();
 
-
-
-    // final:
     const products = useSelector(state => state.cart);
-
-    const handleRemoveToCart = (product) => {
-        dispatch(deleteProductToCart(product));
-    }
 
     const total = products.reduce((acc, product) => {
         return acc + product.price * product.quantity;
     }, 0);
 
     const handleRemoveAll = () => {
-        for (let i = 0; i < products.length; i++) {
-            dispatch(deleteProductToCart(products[i]));
+        products.forEach(product => {
+            for (let i = 0; i < product.quantity; i++) {
+                dispatch(deleteProductToCart(product));
+            }
+        })
+    }
+
+    const handleRemoveToCartProduct = (product) => {
+        for (let i = 0; i < product.quantity; i++) {
+            dispatch(deleteProductToCart(product));
         }
     }
 
@@ -81,8 +82,8 @@ const Cart = ({ setShowCart, showCart }) => {
                                                             <li key={product.id} className="flex py-6">
                                                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                                     <img
-                                                                        src={product.imageSrc}
-                                                                        alt={product.imageAlt}
+                                                                        src={product.image}
+                                                                        alt={product.name}
                                                                         className="h-full w-full object-cover object-center"
                                                                     />
                                                                 </div>
@@ -91,7 +92,7 @@ const Cart = ({ setShowCart, showCart }) => {
                                                                     <div>
                                                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                                                             <h3>
-                                                                                <a href={product.href}>{product.name}</a>
+                                                                                <Link to={`/product/${product.id}`}> {product.name} </Link>
                                                                             </h3>
                                                                             <p className="ml-4">{product.price}</p>
                                                                         </div>
@@ -109,7 +110,7 @@ const Cart = ({ setShowCart, showCart }) => {
                                                                         </div>
 
                                                                         <div className="flex">
-                                                                            <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleRemoveToCart(product.id)}>
+                                                                            <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleRemoveToCartProduct(product)}>
                                                                                 Remove
                                                                             </button>
                                                                         </div>
@@ -160,7 +161,7 @@ const Cart = ({ setShowCart, showCart }) => {
                     </div>
                 </div>
             </Dialog>
-        </Transition.Root>
+        </Transition.Root >
     )
 }
 

@@ -3,8 +3,8 @@ const { shoppingCartModel, productModel } = require("../Models/index")
 
 const getAllShoppingCarts = async (req, res, next) => {
     try {
-        const response = await shoppingCartModel.find({})//.populate("user").populate("product")
-        if(response.flat().length > 0) {
+        const response = await shoppingCartModel.find({})//.populate("user")//.populate("product")
+        if (response.flat().length > 0) {
             const ShoppingCart = response?.map((s) => {
                 return {
                     user: s.user_id,
@@ -27,7 +27,7 @@ const getShoppingCartByUser = async (req, res, next) => {
         const { user_id } = req.params
         const ShoppingCart = await shoppingCartModel.findOne({ user_id: user_id }).populate("product")
 
-        if(ShoppingCart) {
+        if (ShoppingCart) {
             res.status(200).send(ShoppingCart)
         } else {
             res.status(400).send("There's no Shopping Cart with that user id")
@@ -47,11 +47,11 @@ const addProducts = async (req, res, next) => {
 
         console.log(productData)
 
-        if(shoppingCartFound) {
+        if (shoppingCartFound) {
             const product = await productModel.findById(product_id)
-            if(product) {
-                product.stock? 
-                    product.stock > quantity?
+            if (product) {
+                product.stock ?
+                    product.stock > quantity ?
                         quantity
                         : quantity = product.stock
                     : quantity = 0
@@ -71,9 +71,9 @@ const addProducts = async (req, res, next) => {
             }
         } else {
             const product = await productModel.findById(product_id)
-            if(product) {
-                product.stock? 
-                    product.stock > quantity?
+            if (product) {
+                product.stock ?
+                    product.stock > quantity ?
                         quantity
                         : quantity = product.stock
                     : quantity = 0
@@ -104,11 +104,11 @@ const editProducts = async (req, res, next) => {
         const { shopping_id, product_id, quantity } = productData
         const shoppingCartFound = await shoppingCartModel.findById(shopping_id)
 
-        if(shoppingCartFound) {
+        if (shoppingCartFound) {
             const product = await productModel.findById(product_id)
-            if(product) {
-                product.stock? 
-                    product.stock > quantity?
+            if (product) {
+                product.stock ?
+                    product.stock > quantity ?
                         quantity
                         : quantity = product.stock
                     : quantity = 0
@@ -138,7 +138,7 @@ const removeProducts = async (req, res, next) => {
         const { shopping_id, product_id } = productData
         const shoppingCartFound = await shoppingCartModel.findById(shopping_id)
 
-        if(shoppingCartFound) {
+        if (shoppingCartFound) {
             const products = shoppingCartFound.products_id
             editedProducts = products.filter(p => p.product_id !== product_id)
             const editedSC = await shoppingCartModel.findByIdAndUpdate(shopping_id, {
