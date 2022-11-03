@@ -4,10 +4,13 @@ const router = express.Router();
 
 const products = require("./products");
 const categorys = require("./categorys");
-// console.log(categorys);
+const shoppingCarts = require("./shoppingCarts");
+const users = require("./users");
 
 router.use("/products", products);
 router.use("/categorys", categorys);
+router.use("/shoppingCarts", shoppingCarts)
+router.use("/users", users)
 
 router.get("/", (req, res) => {
   res.status(200).send({ message: "Server Up" });

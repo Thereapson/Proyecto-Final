@@ -3,10 +3,11 @@ const { userModel } = require("../Models/index")
 
 const getAllUsers = async (req, res, next) => {
     try {
-        const response = await userModel.find({}).populate("product");
+        const response = await userModel.find({})//.populate("Product");
         if(response.flat().length > 0) {
             const Users = response?.map((u) => {
                 return {
+                    id: u._id,
                     full_name: u.full_name,
                     email: u.email,
                     favorites: u.favorites,
@@ -66,7 +67,7 @@ const createUser = async (req, res, next) => {
                 status: true,
                 isAdmin: isAdmin || false
             });
-
+            
             if(!newUser) {
                 res.status(400).send("The new User can't be created")
             } else {

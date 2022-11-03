@@ -15,11 +15,11 @@ router.get("/", getAllShoppingCarts);
 
 router.get("/detail/:user_id", getShoppingCartByUser);
 
-router.put("/add/:user_id", addProducts);
+router.put("/add", addProducts);
 
-router.put("/edit/:user_id", editProducts);
+router.put("/edit", editProducts);
 
-router.put("/remove/:user_id", removeProducts)
+router.put("/remove", removeProducts)
 
 
 module.exports = router;

@@ -8,8 +8,10 @@ const shoppincCartSchema = new Schema({
         ref: 'User'
     },
     products_id: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Product',
+        product_id: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product'
+        },
         quantity: Number
     }]
 }, 
