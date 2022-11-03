@@ -6,11 +6,14 @@ const products = require("./products");
 const categorys = require("./categorys");
 const shoppingCarts = require("./shoppingCarts");
 const users = require("./users");
+const payments = require("./payments");
 
 router.use("/products", products);
 router.use("/categorys", categorys);
 router.use("/shoppingCarts", shoppingCarts)
 router.use("/users", users)
+router.use("/payments", payments); // ruta pasarela de pago
+
 
 router.get("/", (req, res) => {
   res.status(200).send({ message: "Server Up" });
