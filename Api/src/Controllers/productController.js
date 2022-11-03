@@ -1,5 +1,7 @@
 // Controller de Products
 const { productModel } = require("../Models/index");
+require("dotenv").config();
+const Stripe = require('stripe')
 
 const getAllProducts = async (req, res, next) => {
   try {
@@ -62,7 +64,6 @@ const addProduct = async (req, res, next) => {
       price,
       weight,
       description,
-      status,
       image,
       brand,
       benchmark,
@@ -183,6 +184,27 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
+const doPayment = async (req, res, next) => {
+  //El amount debe venir por body 
+  const { id, detail, amount } = req.body;
+  const stripe = new Stripe(process.env.PAYMENT)
+  try {
+
+    const payment = await stripe.paymentIntents.create({
+      //Generalmente se usa en dolares y el amount debe estar expresado en centavos (10 Dolares = 1000 Centavos )
+      currency: "USD",
+      //Generalmente puede ir el nombre del producto a comprar, no una descripcion 
+      description: detail,
+      amount: amount,
+      payment_method: id,
+      //booleano que representa si la transaccion fue exitosa, no se debe hardcodear
+      confirm: true
+    })
+    res.json({ message: "Success" })
+  } catch (error) {
+    res.json({ messagge: error.raw.message });
+  }
+};
 
 module.exports = {
   getAllProducts,
@@ -192,4 +214,5 @@ module.exports = {
   editProduct,
   addProduct,
   deleteProduct,
+  doPayment
 };

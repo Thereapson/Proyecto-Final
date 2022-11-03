@@ -17,3 +17,13 @@
 .cap{
     text-transform: capitalize;
 }
+.formtemp{
+    
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-content: space-around;
+    height: 500px;
+    width: 1200px;
+
+}

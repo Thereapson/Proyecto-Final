@@ -162,4 +162,4 @@ export const deleteProductToCart = (id) => {
         type: REMOVE_FROM_CART,
         payload: id
     };
-}
+};

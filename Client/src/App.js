@@ -5,6 +5,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/Register/Register';
 import DetailCard from './components/detail/detail';
+import Stripe from './components/Stripe/Stripe';
 import Formaddcomp from './components/Formaddcomp/Formaddcomp'
 import { LandingPage } from './components/Landing/landing';
 import Cart from './components/cart/cart';
@@ -14,6 +15,8 @@ function App() {
     <div className="App container">
       <BrowserRouter>
         <Routes>
+        <Route path="/payment" element={<Stripe/>}/>
+          <Route path="/detail/:id" element={<DetailCard/>}/>
           <Route path='/' element={<LandingPage />} />
           <Route path="/product/:id" element={<DetailCard />} />
           <Route path="/products" element={<Products />} />
