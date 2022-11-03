@@ -6,6 +6,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/Register/Register';
 import DetailCard from './components/detail/detail';
+import Stripe from './components/Stripe/Stripe';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
+        <Route path="/payment" element={<Stripe/>}/>
           <Route path="/detail/:id" element={<DetailCard/>}/>
           <Route path="/products" element={<Products />} />
           <Route path="/products?search=:search" element={<Products />} />

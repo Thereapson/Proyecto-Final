@@ -8,6 +8,7 @@ const {
   getProductById,
   getProductByName,
   editProduct,
+  doPayment,
 } = require("../Controllers/productController");
 
 // configuramos las rutas
@@ -23,4 +24,5 @@ router.get("/detail/:id", getProductById);
 
 router.put("/update", editProduct);
 
+router.post("/products/payment" , doPayment)
 module.exports = router;

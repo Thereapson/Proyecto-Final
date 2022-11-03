@@ -1,5 +1,7 @@
 // Controller de Products
 const { productModel } = require("../Models/index");
+require("dotenv").config();
+const Stripe = require('stripe')
 
 const getAllProducts = async (req, res, next) => {
   try {
@@ -163,13 +165,45 @@ const getProductById = async (req, res, next) => {
     //tienen que mandar un id como este 635ad2a356d5ff1c0e93e083
     const product = await productModel.findById(id).populate("category");
 
-    res.status(200).json({
-      product,
-    });
-
+    res.status(200).send(product);
     next();
   } catch (error) {
     console.log(error);
+  }
+};
+
+const deleteProduct = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    //tienen que mandar un id como este 635ad2a356d5ff1c0e93e083
+    const product = await productModel.findByIdAndDelete(id);
+
+    res.status(200).json({ deleted: product });
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const doPayment = async (req, res, next) => {
+  //El amount debe venir por body 
+  const { id, detail, amount } = req.body;
+  const stripe = new Stripe(process.env.PAYMENT)
+  try {
+
+    const payment = await stripe.paymentIntents.create({
+      //Generalmente se usa en dolares y el amount debe estar expresado en centavos (10 Dolares = 1000 Centavos )
+      currency: "USD",
+      //Generalmente puede ir el nombre del producto a comprar, no una descripcion 
+      description: detail,
+      amount: amount,
+      payment_method: id,
+      //booleano que representa si la transaccion fue exitosa, no se debe hardcodear
+      confirm: true
+    })
+    res.json({ message: "Success" })
+  } catch (error) {
+    res.json({ messagge: error.raw.message });
   }
 };
 
@@ -180,4 +214,6 @@ module.exports = {
   getProductById,
   editProduct,
   addProduct,
+  deleteProduct,
+  doPayment
 };
