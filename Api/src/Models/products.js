@@ -19,9 +19,6 @@ const productSchema = new Schema({
     description: {
         type: String,
     },
-    status: {
-        type: Boolean,
-    },
     image: {
         type: String,
     },
@@ -30,6 +27,9 @@ const productSchema = new Schema({
     },
     benchmark: {
         type: Number,
+    },
+    score: {
+        type: Number
     },
     category: {
         type: Schema.Types.ObjectId,
@@ -40,6 +40,9 @@ const productSchema = new Schema({
     },
     stock: {
         type: Number
+    },
+    status: {
+        type: Boolean,
     }
 }, 
 {

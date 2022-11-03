@@ -9,6 +9,7 @@ const {
   getProductByName,
   editProduct,
   doPayment,
+  deleteProduct
 } = require("../Controllers/productController");
 
 // configuramos las rutas
@@ -18,11 +19,12 @@ router.get("/search/:key", getProductByName);
 
 router.post("/add", addProduct);
 
-router.put("/update", editProduct);
-
 router.get("/detail/:id", getProductById);
 
 router.put("/update", editProduct);
 
-router.post("/products/payment" , doPayment)
+router.post("/payment" , doPayment)
+
+router.delete("/delete/:id", deleteProduct);
+
 module.exports = router;

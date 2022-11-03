@@ -1,71 +1,56 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { getProductsByCategory, getProductsBySearch } from "../../Redux/Actions/Actions";
-
-const menu = [
-    {
-        name: "Home",
-        link: "/",
-    },
-    {
-        name: "Products",
-        link: "/products",
-        submenu: true,
-        isProducts: true,
-        subMenuItems: [
-            {
-                Head: "CPU",
-            },
-            {
-                Head: "GPU",
-
-            },
-            {
-                Head: "RAM",
-            },
-            {
-                Head: "HDD",
-                sublink: [
-                    {
-                        name: "1TB",
-                    },
-                    {
-                        name: "2TB",
-                    },
-                ],
-            },
-            {
-                Head: "SSD",
-            }
-        ],
-    },
-    {
-        name: "About",
-        link: "/about",
-    },
-    {
-        name: "Contact",
-        link: "/contact",
-    },
-];
+import { getProductsByCategory, getProductsBySearch, getCategories } from "../../Redux/Actions/Actions";
 
 
 
 
 
 
-const Navbar = () => {
+
+
+const Navbar = ({ setCurrentPage }) => {
     const dispatch = useDispatch();
+    const categories = useSelector(state => state.categories);
+    const menu = [
+        // {
+        //     name: "Home",
+        //     link: "/",
+        // },
+        {
+            name: "Products",
+            link: "/products",
+            submenu: true,
+            isProducts: true,
+            subMenuItems: categories.map((category) => {
+                return {
+                    Head: category.name,
+                }
+            })
+        },
+        // {
+        //     name: "About",
+        //     link: "/about",
+        // },
+        // {
+        //     name: "Contact",
+        //     link: "/contact",
+        // },
+    ];
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
     const [isLogin, setIsLogin] = useState(true);
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
-
+    useEffect(() => {
+        dispatch(getCategories());
+        console.log('categories', categories);
+    }, [dispatch]);
     const submitSearch = (e) => {
         e.preventDefault();
+        setCurrentPage(1);
         dispatch(getProductsBySearch(search));
         setSearch("");
         navigate("/products");
@@ -78,20 +63,22 @@ const Navbar = () => {
     const handleCategory = (e) => {
         const category = e.target.value;
         dispatch(getProductsByCategory(category));
+        setCurrentPage(1);
     };
 
     const handleGetAllProducts = () => {
+        setCurrentPage(1);
         dispatch(getProductsByCategory(""));
     };
 
     return (
-        <div className="bg-white">
+        <div className="bg-white relative">
             <div className="container mx-auto px-4">
                 <div className="flex justify-evenly items-center py-3">
                     <div className="flex items-center">
                         <span className="text-xl font-bold text-gray-700 ml-2">LOGO</span>
                         <div className="text-xl font-bold text-gray-700 ml-2">
-                            <NavLink to="/">E-Commerce</NavLink>
+                            <NavLink to="/products">CompuDevs</NavLink>
                         </div>
                     </div>
                     {/* menu and filters */}
@@ -99,7 +86,7 @@ const Navbar = () => {
                         <div className="hidden md:block">
                             <ul className="flex items-center">
                                 {menu.map((link) => (
-                                    <li className="px-3 text-left md:cursor-pointer group">
+                                    <li className="px-3 text-left md:cursor-pointer group" key={link.name}>
 
                                         {link.isProducts ? (
                                             <NavLink to={link.link} className="text-gray-700" onClick={handleGetAllProducts}>
@@ -113,10 +100,10 @@ const Navbar = () => {
 
                                         {link.submenu && (
                                             <div>
-                                                <div className="absolute top-30 hidden group-hover:md:block hover:md:block bg-white z-10 w-64 rounded-md shadow-lg">
-                                                    <div className="py-3 px-5 flex justify-between items-center">
+                                                <div className="absolute top-25 hidden group-hover:md:block hover:md:block z-20  rounded-md shadow-md bg-gray-100">
+                                                    <div className="flex justify-between items-center gap-4">
                                                         {link.subMenuItems.map((sublink) => (
-                                                            <div className="flex flex-col">
+                                                            <div className="flex flex-col hover:bg-gray-200 p-2">
                                                                 <Link to={"/products"} >
                                                                     <button className="text-gray-700 font-bold text-lg" onClick={handleCategory} value={sublink.Head}>{sublink.Head}</button>
                                                                 </Link>
@@ -176,6 +163,11 @@ const Navbar = () => {
                                 <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                             </svg>
                             {isLogin ? "Logout" : "Login"}</Link>
+                    </div>
+                    <div className="flex items-center">
+                        <Link to={"/products/add"} className="text-gray-700 font-bold text-lg ml-2 flex items-center">
+                            Add Product
+                        </Link>
                     </div>
                 </div>
             </div>
