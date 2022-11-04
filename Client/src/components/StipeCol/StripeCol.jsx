@@ -1,5 +1,5 @@
 import React from "react";
-import './Stripe.css'
+import './StripeCol.css'
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 import {
@@ -25,19 +25,24 @@ const CheckoutForm = (props) => {
 
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
-            card: elements.getElement(CardElement)
+            card: elements.getElement(CardElement),
         })
 
         if (!error) {
-            const { data } = await axios.post('http://localhost:3001/products/payment', {
-                id: paymentMethod.id,
-                amount: props.amount,
-                detail: props.detail,
-                email: "andrefe12808@hotmail.com"
+            props.products.forEach(async (product) => {
+                const { data } = await axios.post('http://localhost:3001/products/payment', {
+                    id: paymentMethod.id,
+                    amount: product.amount,
+                    detail: product.detail,
+                    email: "andrealtfe1808@hotmail.com"
 
-            })
+                })
+                console.log(data)
+            });
 
-            console.log(data)
+
+
+
         } else {
             console.log(error)
         }
@@ -51,13 +56,13 @@ const CheckoutForm = (props) => {
         </button>
     </form>
 }
-function Stripe(props) {
+function StripeCol(props) {
 
     return (
         <div className=''>
 
             <Elements stripe={stripePromise}>
-                <CheckoutForm amount={props.amount} detail={props.detail}>
+                <CheckoutForm products={props.products}>
 
                 </CheckoutForm>
             </Elements>
@@ -65,4 +70,4 @@ function Stripe(props) {
     );
 }
 
-export default Stripe;
+export default StripeCol;
