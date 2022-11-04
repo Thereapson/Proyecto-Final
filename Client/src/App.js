@@ -4,6 +4,7 @@ import Login from './components/Login/Login';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/Register/Register';
+import Register2 from './components/Register/Register2';
 import DetailCard from './components/detail/detail';
 import Stripe from './components/Stripe/Stripe';
 import Formaddcomp from './components/Formaddcomp/Formaddcomp'
@@ -20,7 +21,7 @@ function App() {
           <Route path="/product/:id" element={<DetailCard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register2 />} />
           <Route path="/products/add" element={<Formaddcomp/>} />
         </Routes>
       </BrowserRouter>

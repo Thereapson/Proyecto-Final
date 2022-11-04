@@ -8,10 +8,13 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
+        required: [true, "Email is required"],    
         unique: true,
     },
     password: {
         type: String,
+        required: [true, "Password is required"], 
+
     },
     favorites: [{
         type: Schema.Types.ObjectId,
