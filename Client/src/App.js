@@ -20,9 +20,9 @@ function App() {
         <Routes>
         <Route path="/payment" element={<Stripe/>}/>
           <Route path="/detail/:id" element={<DetailCard/>}/>
-          <Route path='/' element={<LandingPage />} />
+          <Route path='/' element={loggedIn?<UserDetail/>:<LandingPage />} />
           <Route path="/product/:id" element={<DetailCard />} />
-          <Route path="/products" element={loggedIn?<UserDetail/>:<Products />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/login" element={<Login2 />} />
           <Route path="/register" element={<Register2 />} />
           <Route path="/products/add" element={<Formaddcomp/>} />
