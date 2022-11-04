@@ -33,15 +33,15 @@ app.use((error, req, res, next) => {
 });
 app.use(
     cors({
-      origin: '*', //react
+      origin: process.env.CORS_URL, //react
       methods: "GET,POST,PUT,DELETE",
-      credentials: true,
+      withCredentials: true,
       allowedHeaders:
         "X-Requested-With, x-auth-token, X-HTTP-Method-Override, Content-Type, Accept, access-control-allow-credentials",
     })
   );
   app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin: *"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Origin", process.env.CORS_URL ); // update to match the domain you will make the request from
   
     res.header("Access-Control-Allow-Credentials", "true");
     res.header(

@@ -94,80 +94,124 @@ const createToken = (id) => {
         expiresIn: "3600s"
     })
 }
-// const registerUser = async (req, res, next) => {
-//     const {full_name, email, password, isAdmin} = req.body;
+const registerUser = async (req, res, next) => {
+    const {full_name, email, password, isAdmin} = req.body;
 
-//     const encryptedPassword = await bcrypt.hash(password, 10);
-//     try{
-//         const oldUser = await userModel.findOne({email})
-//         if(oldUser){
-//           return res.json({error:'User Exists'}) 
-//         }
-//         await userModel.create({
-//             full_name,
-//             email,
-//             password: encryptedPassword,
-//         })
-//         res.send({status:'ok'})
-//     }catch(error){
-//         res.send({status:'error'})
-//     }
-// }
+    const salt = await bcrypt.genSalt(10);
+    const encryptedPassword = await bcrypt.hash(password, salt);
+    try{
+        const oldUser = await userModel.findOne({email})
+        if(oldUser){
+          return res.json({error:'User Exists'}) 
+        }
+        await userModel.create({
+            full_name,
+            email,
+            password: encryptedPassword,
+        })
+        res.send({status:'ok'})
+    }catch(error){
+        res.send({status:'error'})
+    }
+}
 
 const loginUser = async (req, res, next) => {
     const {email, password} = req.body
-
-    const user = userModel.findOne({email})
-    if(!user){
-        return res.json({error:'User not found'}) 
-      }
-
-      if (await bcrypt.compare(password, user.password)){
-        const token = jwt.sign({}, JWT_SECRET);
-
-        if (res.status(201)){
-            return res.json({status: 'ok', data: token})
-        }else {
-            return res.json({error:'error'})
+    try {
+        const user = await userModel.findOne({ 
+            email,
+        });
+    
+        // If user not found, send error message
+        if (!user) {
+          return res.status(400).json({
+            errors: [
+              {
+                msg: "Invalid credentials",
+              },
+            ],
+          });
         }
+    
+        // Compare hased password with user password to see if they are valid
+        let isMatch = await bcrypt.compare(password, user.password);
+        const token = jwt.sign({}, JWT_SECRET);
+    
+        if (!isMatch) {
+          return res.status(401).json({
+            errors: [
+              {
+                msg: "Email or password is invalid",
+              },
+            ],
+          });
+        }else{
+            const token = jwt.sign({email:user.email}, JWT_SECRET);
+
+            return res.json({status :'ok', data:token})
+        }
+    
+       
+      } catch (err) {
+        res.send({ error: err.message });
       }
-      res.json({status:'error', error:'Invalid Password'})
+    
       
 }
 
-const registerUser = async (req, res, next) => {
-    try {
-        const {email, password} = req.body;
-    const user = await userModel.create({
-        email,
-        password
-    });
-    const token = createToken(user._id);
-    res.cookie('jwt', token, {
-        withCredentials: true,
-        httpOnly: false,
-        expiresIn: '3600s'
-    });
-    res.status(201).json({user: user._id, created: true})
-    }catch (e){
-        console.log(e)
-    }
-    
-}
-// const userData = async (req, res, next) => {
-//     const {token} = req.body;
-//     try{
-//         const user = jwt.verify(token, JWT_SECRET);
-//         const userEmail = user.email;
-//         userModel.findOne({email:userEmail}).then((data) => {
-//             res.send({status:'ok', data:data})
-//         }).catch((error) => {
-//             res.send ({status: 'error', data: error})
-//         })
-//     }catch(e){
+// const registerUser = async (req, res, next) => {
+//     try {
+//         const {email, password} = req.body;
+//     const user = await userModel.create({
+//         email,
+//         password
+//     });
+//     const token = createToken(user._id);
+//     res.cookie('jwt', token, {
+//         withCredentials: true,
+//         httpOnly: false,
+//         expiresIn: '3600s'
+//     });
+//     res.status(201).json({user: user._id, created: true})
+//     }catch (e){
 //         console.log(e)
 //     }
+    
 // }
+// const loginUser = async (req, res, next) => {
+//     try {
+//         const {email, password} = req.body;
+//     const user = await userModel.login({
+//         email,
+//         password
+//     });
+//     const token = createToken(user._id);
+//     res.cookie('jwt', token, {
+//         withCredentials: true,
+//         httpOnly: false,
+//         expiresIn: '3600s'
+//     });
+//     res.status(201).json({user: user._id, created: true})
+//     }catch (e){
+//         console.log(e)
+//     }
+    
+// }
+
+const userData = async (req, res, next) => {
+    const {token} = req.body;
+    try{
+        const user = jwt.verify(token, JWT_SECRET);
+        const userEmail = user.email;
+        userModel.findOne({email:userEmail}).then((data) => {
+            res.send({status:'ok', data:data})
+        }).catch((error) => {
+            res.send ({status: 'error', data: error})
+        })
+    }catch(e){
+        console.log(e)
+    }
+}
 const editUser = async (req, res, next) => {
     try{
 
@@ -204,4 +248,5 @@ module.exports = {
     addFavorites,
     registerUser,
     loginUser,
+    userData
 };
