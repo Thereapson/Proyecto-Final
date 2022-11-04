@@ -8,19 +8,18 @@ const shoppincCartSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    products_id: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-        quantity: Number,
-      },
-    ],
-  },
-  {
+    products_id: [{
+        product_id: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product'
+        },
+        quantity: Number
+    }]
+}, 
+{
     timestamps: true,
     versionKey: false,
-  }
-);
+});
 
 const shoppingCartModel = model("ShoppingCart", shoppincCartSchema);
 

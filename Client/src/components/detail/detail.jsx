@@ -7,6 +7,7 @@ import Navbar from '../navbar/navbar'
 import Stripe from '../Stripe/Stripe.jsx'
 import './detail.css';
 import StripeCol from '../StipeCol/StripeCol.jsx';
+import swal from 'sweetalert';
 
 
 function DetailCard() {
@@ -68,9 +69,14 @@ function DetailCard() {
 
 
               <div className="flex items-center justify-between mt-12 lg:justify-start">
-                <button className="espacio padd1 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80">
-                  Añadir al carrito
-                </button>
+                <button
+                  className="espacio padd1 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80"
+                  onClick={() => swal({
+                    title: "Product added to cart",
+                    icon: "success",
+                    button: "OK",
+                  }
+                  )}>Add to cart</button>
                 <button className="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                   Compra Rapida
                 </button>

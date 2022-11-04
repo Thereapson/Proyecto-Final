@@ -1,46 +1,39 @@
-import React, { Component } from "react";
-import Navbar from '../navbar/navbar';
-import axios from 'axios'
-export default class Register extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      full_name: "",
-      password: "",
-      email: ""
-    }
-    this.handleSubmit = this.handleSubmit.bind(this)
+import React, { useState } from "react";
+import axios from "axios";
+
+function Register2() {
+  const [input, setInput] = useState({
+    full_name: "",
+    email: "",
+    password: "",
+  });
+
+  function handleChange(e) {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
   }
-handleSubmit(e){
-  e.preventDefault()
-  const {full_name, email, password} = this.state;
-  console.log(full_name, email, password)
-  fetch('http://localhost:3001/users/register', {
-    method: 'POST',
-    crossDomain:true,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'Access-Control-Allow-Origin': '*'
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+try {
+    const {data} = await axios.post('http://localhost:3001/users/register', {
+        ...input
     },
-    body:JSON.stringify({
-      full_name,
-      email,
-      password
-    }),
-  })
-  .then((res) => res.json())
-  .then((data) => {
-    console.log(data, 'userRegister')
-  })
+    // {withCredentials:true}
+    );
+    console.log(data)
+}catch(e){
+    console.log(e)
 }
-render(){
+
+  }
   return (
     <div>
-      <Navbar />
       <section className="bg-white dark:bg-gray-900">
         <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
-          <form className="w-full max-w-md" onSubmit={this.handleSubmit}>
+          <form className="w-full max-w-md" onSubmit={handleSubmit}>
             {/* <img class="object-cover w-24 h-24 mx-auto rounded-full" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt="user avatar"/> */}
 
             <div className="flex items-center justify-center mt-6">
@@ -75,33 +68,34 @@ render(){
                 name="full_name"
                 className="block w-full py-3 text-gray-700 bg-white border rounded-md px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Nombre completo"
-                onChange={e => this.setState({full_name:e.target.value}) }
+                onChange={(e) => handleChange(e)}
+                value={input.full_name}
               />
             </div>
-{/* 
-            <label
-              for="dropzone-file"
-              className="flex items-center px-3 py-3 mx-auto mt-6 text-center bg-white border-2 border-dashed rounded-md cursor-pointer dark:border-gray-600 dark:bg-gray-900"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 text-gray-300 dark:text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                />
-              </svg>
-
-              <h2 className="mx-3 text-gray-400">Foto de perfil</h2>
-
-              <input id="dropzone-file" type="file" className="hidden" />
-            </label> */}
+            {/* 
+                <label
+                  for="dropzone-file"
+                  className="flex items-center px-3 py-3 mx-auto mt-6 text-center bg-white border-2 border-dashed rounded-md cursor-pointer dark:border-gray-600 dark:bg-gray-900"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 text-gray-300 dark:text-gray-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                    />
+                  </svg>
+    
+                  <h2 className="mx-3 text-gray-400">Foto de perfil</h2>
+    
+                  <input id="dropzone-file" type="file" className="hidden" />
+                </label> */}
 
             <div className="relative flex items-center mt-6">
               <span className="absolute">
@@ -126,7 +120,8 @@ render(){
                 name="email"
                 className="block w-full py-3 text-gray-700 bg-white border rounded-md px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Correo electronico"
-                onChange={e => this.setState({email:e.target.value}) }
+                onChange={(e) => handleChange(e)}
+                value={input.email}
               />
             </div>
 
@@ -153,37 +148,41 @@ render(){
                 name="password"
                 className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Contraseña"
-                onChange={e => this.setState({password:e.target.value}) }
+                onChange={(e) => handleChange(e)}
+                value={input.password}
               />
             </div>
 
             {/* <div className="relative flex items-center mt-4">
-              <span className="absolute">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  <span className="absolute">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                      />
+                    </svg>
+                  </span>
+    
+                  <input
+                    type="password"
+                    className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                    placeholder="Confirmar contraseña"
                   />
-                </svg>
-              </span>
-
-              <input
-                type="password"
-                className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                placeholder="Confirmar contraseña"
-              />
-            </div> */}
+                </div> */}
 
             <div className="mt-6">
-              <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50" type="submit">
+              <button
+                className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                type="submit"
+              >
                 Registrarte
               </button>
 
@@ -201,7 +200,6 @@ render(){
       </section>
     </div>
   );
-
-}
 }
 
+export default Register2;
