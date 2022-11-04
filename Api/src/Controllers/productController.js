@@ -186,21 +186,37 @@ const deleteProduct = async (req, res, next) => {
 
 const doPayment = async (req, res, next) => {
   //El amount debe venir por body 
-  const { id, detail, amount } = req.body;
+  const { id, detail, amount, paymentMethod, email } = req.body;
   const stripe = new Stripe(process.env.PAYMENT)
   try {
 
-    const payment = await stripe.paymentIntents.create({
+    const token = await stripe.tokens.create({
+      card: {
+        number: '4242424242424242',
+        exp_month: 11,
+        exp_year: 2023,
+        cvc: '314',
+      },
+    });
+
+    const customer = await stripe.customers.create({
+      email: email,
+      source: token.id
+    })
+    const payment = await stripe.charges.create({
       //Generalmente se usa en dolares y el amount debe estar expresado en centavos (10 Dolares = 1000 Centavos )
       currency: "USD",
       //Generalmente puede ir el nombre del producto a comprar, no una descripcion 
       description: detail,
       amount: amount,
-      payment_method: id,
+      customer: customer.id,
+
       //booleano que representa si la transaccion fue exitosa, no se debe hardcodear
-      confirm: true
     })
-    res.json({ message: "Success" })
+    console.log(payment.id)
+    res.json({
+      message: "Success"
+    })
   } catch (error) {
     res.json({ messagge: error.raw.message });
   }
