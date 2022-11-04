@@ -1,4 +1,4 @@
-export const  register = {
+ const  register = {
     from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
     to: newUser.email,
     subject: "CompuDevs -Te has registrado con exito",
