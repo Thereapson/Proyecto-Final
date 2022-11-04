@@ -1,11 +1,25 @@
+require("dotenv").config();
+
 // Controller de Users
 const { userModel } = require("../Models/index")
 const jwt = require ('jsonwebtoken');
 const bcrypt = require("bcrypt");
 const cookieParser = require('cookie-parser')
 const JWT_SECRET = 'asjkdnajksfndjaksndasknd12123()239883smlkdsmad?)==(23'
+const nodemailer = require("nodemailer");
+const {register} = require('../MailTemplates/Register')
+//NOTIFICACIONES POR MAIL
 
-
+var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "compudevs2022@gmail.com",
+      pass: "ftmgoxulpwshhfak",
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
 const getAllUsers = async (req, res, next) => {
     try {
         const response = await userModel.find({})//.populate("Product");
@@ -104,12 +118,22 @@ const registerUser = async (req, res, next) => {
         if(oldUser){
           return res.json({error:'User Exists'}) 
         }
-        await userModel.create({
+       const newUser = await userModel.create({
             full_name,
             email,
             password: encryptedPassword,
-        })
-        res.send({status:'ok'})
+        });
+ 
+        //NOTIFICACION DE REGISTRO
+        console.log(newUser.email, 'email')
+        transporter.sendMail(register, function (error, info) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Email de verificacion es enviado a tu correo");
+            }
+          });
+        // res.send({status:'ok'})
     }catch(error){
         res.send({status:'error'})
     }
