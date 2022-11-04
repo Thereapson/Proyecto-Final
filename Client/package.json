@@ -21,7 +21,8 @@
     "react-stripe": "^0.1.0",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
-    "stripe": "^10.15.0"
+    "stripe": "^10.15.0",
+    "sweetalert": "^2.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
