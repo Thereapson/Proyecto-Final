@@ -3,7 +3,7 @@ require("dotenv").config();
 // Controller de Users
 const { userModel } = require("../Models/index")
 const jwt = require ('jsonwebtoken');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const cookieParser = require('cookie-parser')
 const JWT_SECRET = 'asjkdnajksfndjaksndasknd12123()239883smlkdsmad?)==(23'
 const nodemailer = require("nodemailer");
