@@ -6,6 +6,7 @@ import procesador from './procesadorimg.png'
 import Navbar from '../navbar/navbar'
 import Stripe from '../Stripe/Stripe.jsx'
 import './detail.css';
+import StripeCol from '../StipeCol/StripeCol.jsx';
 import swal from 'sweetalert';
 
 
@@ -14,14 +15,23 @@ function DetailCard() {
     let numero = Math.random() * (max - min) + min;
     return Math.round(numero)
   }
-  // const hardcode = {
-  //   nombre: "Intel i7-10400K",
-  //   tipo: "Procesador",
-  //   Especificaciones: ["3200Mh", "Nucleos: 3", "Hilos: 4"],
-  //   costo: "$500USD",
-  //   imagen: procesador,
-  //   descripcion: "El procesador está formado por un conjunto de registros que almacenen datos, una unidad aritmético-lógica que realiza operaciones con ellos y una unidad de control que se encarga de coordinar a todos los componentes. Un reloj interno determina la velocidad de trabajo de estos elementos internos."
-  // }
+  const hardcode = [{
+    detail: "Intel i7-10400K",
+    amount: 5000,
+  },
+  {
+    detail: "Intel i9-10400K",
+    amount: 9000,
+  },
+  {
+    detail: "Intel i3-10000K",
+    amount: 3000,
+  },
+  {
+    detail: "Intel i1-10400K",
+    amount: 7000,
+  }
+]
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -81,8 +91,13 @@ function DetailCard() {
           </div>
         </div>
       </section>
-      <div className='formtemp'>
+      {/* <div className='formtemp'>
         <Stripe amount={details.price * 100} detail={details.name}></Stripe>
+      </div> */}
+
+      <div className='fromtemp'>
+        <StripeCol products={hardcode}></StripeCol>
+
       </div>
 
     </div>
