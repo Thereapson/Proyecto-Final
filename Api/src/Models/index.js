@@ -1,7 +1,11 @@
 //constante de todos los modelos
 const models = {
-  productModel: require("./products"),
-  categoryModel: require("./categorys"),
+    categoryModel: require('./categorys'),
+    productModel: require('./products'),
+    purchaseModel: require('./purchases'),
+    reviewModel: require('./reviews'),
+    shoppingCartModel: require('./shoppingCarts'),
+    userModel: require('./users')
 };
 
 module.exports = models;

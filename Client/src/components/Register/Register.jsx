@@ -1,13 +1,46 @@
-import React from "react";
+import React, { Component } from "react";
 import Navbar from '../navbar/navbar';
-
-function Register() {
+import axios from 'axios'
+export default class Register extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      full_name: "",
+      password: "",
+      email: ""
+    }
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+handleSubmit(e){
+  e.preventDefault()
+  const {full_name, email, password} = this.state;
+  console.log(full_name, email, password)
+  fetch('http://localhost:3001/users/register', {
+    method: 'POST',
+    crossDomain:true,
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    },
+    body:JSON.stringify({
+      full_name,
+      email,
+      password
+    }),
+  })
+  .then((res) => res.json())
+  .then((data) => {
+    console.log(data, 'userRegister')
+  })
+}
+render(){
   return (
     <div>
       <Navbar />
       <section className="bg-white dark:bg-gray-900">
         <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
-          <form className="w-full max-w-md">
+          <form className="w-full max-w-md" onSubmit={this.handleSubmit}>
             {/* <img class="object-cover w-24 h-24 mx-auto rounded-full" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt="user avatar"/> */}
 
             <div className="flex items-center justify-center mt-6">
@@ -39,11 +72,13 @@ function Register() {
 
               <input
                 type="text"
+                name="full_name"
                 className="block w-full py-3 text-gray-700 bg-white border rounded-md px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                placeholder="Nombre de usuario"
+                placeholder="Nombre completo"
+                onChange={e => this.setState({full_name:e.target.value}) }
               />
             </div>
-
+{/* 
             <label
               for="dropzone-file"
               className="flex items-center px-3 py-3 mx-auto mt-6 text-center bg-white border-2 border-dashed rounded-md cursor-pointer dark:border-gray-600 dark:bg-gray-900"
@@ -66,7 +101,7 @@ function Register() {
               <h2 className="mx-3 text-gray-400">Foto de perfil</h2>
 
               <input id="dropzone-file" type="file" className="hidden" />
-            </label>
+            </label> */}
 
             <div className="relative flex items-center mt-6">
               <span className="absolute">
@@ -88,8 +123,10 @@ function Register() {
 
               <input
                 type="email"
+                name="email"
                 className="block w-full py-3 text-gray-700 bg-white border rounded-md px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Correo electronico"
+                onChange={e => this.setState({email:e.target.value}) }
               />
             </div>
 
@@ -113,12 +150,14 @@ function Register() {
 
               <input
                 type="password"
+                name="password"
                 className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Contraseña"
+                onChange={e => this.setState({password:e.target.value}) }
               />
             </div>
 
-            <div className="relative flex items-center mt-4">
+            {/* <div className="relative flex items-center mt-4">
               <span className="absolute">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -141,16 +180,16 @@ function Register() {
                 className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Confirmar contraseña"
               />
-            </div>
+            </div> */}
 
             <div className="mt-6">
-              <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+              <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50" type="submit">
                 Registrarte
               </button>
 
               <div className="mt-6 text-center ">
                 <a
-                  href="#"
+                  href="/login"
                   className="text-sm text-blue-500 hover:underline dark:text-blue-400"
                 >
                   ¿Ya tienes una cuenta?
@@ -162,6 +201,7 @@ function Register() {
       </section>
     </div>
   );
+
+}
 }
 
-export default Register;
