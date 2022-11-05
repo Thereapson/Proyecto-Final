@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 export const register = {
   from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
   to: newUser.email,
   subject: "CompuDevs -Te has registrado con exito",
   html: `<html
+=======
+ const  register = {
+    from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
+    to: newUser.email,
+    subject: "CompuDevs -Te has registrado con exito",
+    html: `<html
+>>>>>>> 662beaa771e96d3290c29d89bb70e6a8c2698df4
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:v="urn:schemas-microsoft-com:vml"
       xmlns:o="urn:schemas-microsoft-com:office:office"
