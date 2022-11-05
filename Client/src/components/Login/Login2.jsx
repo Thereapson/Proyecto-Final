@@ -138,7 +138,7 @@ render(){
                     Contraseña
                   </label>
                   <a
-                    href="#"
+                    href="/forgotPassword"
                     className="text-xs text-gray-500 dark:text-gray-300 hover:underline"
                   >
                     ¿Olvidaste tu contraseña?

@@ -500,7 +500,7 @@ const registerUser = async (req, res, next) => {
                                                     font-size: 16px;
                                                     line-height: 25.6px;
                                                   "
-                                                  ><strong>${newUser.userName}!</strong></span
+                                                  ><strong>${newUser.full_name}!</strong></span
                                                 >
                                               </p>
                                               <p style="font-size: 14px; line-height: 160%">
@@ -518,7 +518,7 @@ const registerUser = async (req, res, next) => {
                                               <p style="font-size: 14px; line-height: 160%">
                                              Por favor verifica tu email en el siguiente enlace
                                               </p>
-                                              <a href="http://${req.headers.host}/user/verify-email?token=${newUser.emailToken}">Verifica tu email</a>
+                                              // <a href="http://${req.headers.host}/user/verify-email?token=${newUser.emailToken}">Verifica tu email</a>
                                              
                                               <p style="font-size: 14px; line-height: 160%">
                                                 <strong>Compu Devs</strong>
@@ -1050,6 +1050,8 @@ const registerUser = async (req, res, next) => {
             }
           });
         // res.send({status:'ok'})
+
+        
     }catch(error){
         res.send({status:'error'})
     }
@@ -1098,7 +1100,120 @@ const loginUser = async (req, res, next) => {
     
       
 }
+//olvidar contraseñaa
+const forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
 
+  try{
+    const oldUser = await userModel.findOne({
+       
+        email: email,
+      },
+    );
+    if (!oldUser) {
+      return res.json({ status: "Usuario no existe" });
+    }
+    const secret = JWT_SECRET + oldUser.password;
+    const token = jwt.sign(
+      {
+        email: oldUser.email,
+        id: oldUser._id,
+      },
+      secret,
+      {
+        expiresIn: "5m",
+      }
+    );
+    const link = `http://localhost:3000/resetPassword/${oldUser._id}/${token}`
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "compudevs2022@gmail.com",
+        pass: "ftmgoxulpwshhfak",
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+    var mailOptions = {
+      from: "compudevs2022@gmail.com",
+      to: oldUser.email,
+      subject: "Restaura tu contraseña",
+      html: `
+      <h4>Hola ${oldUser.full_name} </h4>
+      <p>¿Olvidaste tu contraseña?</p>
+      <p>Recibimos una solicitud para restaurar tu contraseña, haz click en el siguiente enlace</p>
+      <p>${link}</p>`,
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Mensaje enviado" + info.response);
+      }
+    });
+    console.log(oldUser.full_name);
+
+    console.log(link);
+  }catch(e){
+    console.log(err);
+  }
+}
+const resetPassword = async (req, res, next) => {
+  const { id, token } = req.params;
+  console.log(req.params);
+  const oldUser = await userModel.findOne({
+   
+    _id: id,
+    
+  });
+  if (!oldUser) {
+    return res.json({ status: "Usuario no existe" });
+  }
+  const secret = JWT_SECRET + oldUser.password;
+  try {
+    const verify = jwt.verify(token, secret);
+    // res.render("index", { email: verify.email, status: "No verificado" });
+    res.status(201)
+
+  } catch (err) {
+    res.send("No verificado");
+    console.log(err);
+  }
+
+}
+
+const resetPasswordToken = async (req, res, next) => {
+  const { id, token } = req.params;
+  const { password } = req.body;
+  const oldUser = await userModel.findOne({
+    
+      _id: id,
+    
+  });
+  if (!oldUser) {
+    return res.json({ status: "Usuario no existe" });
+  }
+  const secret = JWT_SECRET + oldUser.password;
+  try {
+    const verify = jwt.verify(token, secret);
+    const encryptedPassword = await bcrypt.hash(password, 10);
+   await userModel.updateOne({
+    _id: id,
+   },
+   {
+    $set:{
+      password: encryptedPassword,
+    },
+   })
+    // res.render("index", { email: verify.email, status: "verificado" });
+    res.status(201).send('verified')
+
+  } catch (err) {
+    res.json({ status: "Algo salio mal" });
+    console.log(err);
+  }
+}
 // const registerUser = async (req, res, next) => {
 //     try {
 //         const {email, password} = req.body;
@@ -1188,5 +1303,8 @@ module.exports = {
     addFavorites,
     registerUser,
     loginUser,
-    userData
+    userData,
+    forgotPassword,
+    resetPassword,
+    resetPasswordToken
 };
