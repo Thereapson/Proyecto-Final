@@ -77,7 +77,7 @@ const Navbar = ({ setCurrentPage }) => {
         setShowCart(true);
     };
 
-
+    const quantityInCart = useSelector(state => state.cart.length);
 
     return (
         <div className="bg-white relative">
@@ -161,7 +161,7 @@ const Navbar = ({ setCurrentPage }) => {
                                 </svg>
                             </button>
                             {showCart && <Cart setShowCart={setShowCart} showCart={showCart} />}
-
+                            {quantityInCart > 0 && <div className="absolute bottom-5 left-3 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">{quantityInCart}</div>}
                         </div>
                     </div>
                     {/* user */}

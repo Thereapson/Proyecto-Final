@@ -18,15 +18,15 @@ function App() {
     <div className="App container">
       <BrowserRouter>
         <Routes>
-        <Route path="/payment" element={<Stripe/>}/>
-          <Route path="/detail/:id" element={<DetailCard/>}/>
-          <Route path='/' element={loggedIn?<UserDetail/>:<LandingPage />} />
+          <Route path="/payment" element={<Stripe />} />
+          <Route path="/detail/:id" element={<DetailCard />} />
+          <Route path='/' element={loggedIn ? <UserDetail /> : <LandingPage />} />
           <Route path="/product/:id" element={<DetailCard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/login" element={<Login2 />} />
           <Route path="/register" element={<Register2 />} />
-          <Route path="/products/add" element={<Formaddcomp/>} />
-          <Route path='/userDetail' element={<UserDetail/>}/>
+          <Route path="/products/add" element={<Formaddcomp />} />
+          <Route path='/userDetail' element={<UserDetail />} />
         </Routes>
       </BrowserRouter>
     </div>
