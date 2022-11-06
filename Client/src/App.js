@@ -12,30 +12,34 @@ import Cart from "./components/cart/cart";
 import UserDetail from "./components/Register/userDetail";
 import ForgotPassword from "./components/Login/ForgotPassword";
 import Resetpassword from "./components/Login/ResetPassword";
-const loggedIn = window.localStorage.getItem("isLogged");
+import ProtectedRouter from "./components/router/ProtectedRouter";
+
 function App() {
   return (
     <div className="App container">
       <BrowserRouter>
         <Routes>
-          <Route path="/payment" element={<Stripe />} />
-          <Route path="/detail/:id" element={<DetailCard />} />
-          <Route
-            path="/"
-            element={ <LandingPage />}
-          />
-          <Route path="/product/:id" element={<DetailCard />} />
+          {/* rutas publicas */}
+
+          <Route path="/" element={<LandingPage />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/product/:id" element={<DetailCard />} />
           <Route path="/login" element={<Login2 />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/products/add" element={<Formaddcomp />} />
-          <Route path="/userDetail" element={<UserDetail />} />
           <Route exact path="/forgotPassword" element={<ForgotPassword />} />
           <Route
             exact
             path="/resetPassword/:id/:token"
             element={<Resetpassword />}
           />
+          {/* rutas privadas */}
+          <Route element={<ProtectedRouter />}>
+            <Route path="/userDetail" element={<UserDetail />} />
+            <Route path="/payment" element={<Stripe />} />
+            <Route path="/products/add" element={<Formaddcomp />} />
+          </Route>
+
+          {/* <Route path="/detail/:id" element={<DetailCard />} />           */}
         </Routes>
       </BrowserRouter>
     </div>
