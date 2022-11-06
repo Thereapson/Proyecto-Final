@@ -11,15 +11,15 @@ const nodemailer = require("nodemailer");
 //NOTIFICACIONES POR MAIL
 
 var transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "compudevs2022@gmail.com",
-    pass: "ftmgoxulpwshhfak",
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
+    service: "gmail",
+    auth: {
+      user: "compudevs2022@gmail.com",
+      pass: "ftmgoxulpwshhfak",
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
 const getAllUsers = async (req, res, next) => {
   try {
     const response = await userModel.find({})//.populate("Product");
@@ -132,23 +132,23 @@ const createToken = (id) => {
 const registerUser = async (req, res, next) => {
   const { full_name, email, password, isAdmin } = req.body;
 
-  const salt = await bcrypt.genSalt(10);
-  const encryptedPassword = await bcrypt.hash(password, salt);
-  try {
-    const oldUser = await userModel.findOne({ email })
-    if (oldUser) {
-      return res.json({ error: 'User Exists' })
-    }
-    const newUser = await userModel.create({
-      full_name,
-      email,
-      password: encryptedPassword,
-    });
-    var register = {
-      from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
-      to: newUser.email,
-      subject: "CompuDevs -Te has registrado con exito",
-      html: `<html
+    const salt = await bcrypt.genSalt(10);
+    const encryptedPassword = await bcrypt.hash(password, salt);
+    try{
+        const oldUser = await userModel.findOne({email})
+        if(oldUser){
+          return res.json({error:'User Exists'}) 
+        }
+        const newUser = await userModel.create({
+            full_name,
+            email,
+            password: encryptedPassword,
+        });
+        var register = {
+            from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
+            to: newUser.email,
+            subject: "CompuDevs -Te has registrado con exito",
+            html: `<html
               xmlns="http://www.w3.org/1999/xhtml"
               xmlns:v="urn:schemas-microsoft-com:vml"
               xmlns:o="urn:schemas-microsoft-com:office:office"
