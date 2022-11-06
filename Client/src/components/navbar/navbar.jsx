@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { getProductsByCategory, getProductsBySearch, getCategories, getProducts } from "../../Redux/Actions/Actions";
+import { getProductsByCategory, getProductsBySearch, getCategories, getProducts, getUser, getCart } from "../../Redux/Actions/Actions";
 import Cart from "../cart/cart";
-import { getCart } from '../../Redux/Actions/Actions'
 
 const Navbar = ({ setCurrentPage }) => {
     const dispatch = useDispatch();
     const categories = useSelector(state => state.categories);
+
     useEffect(() => {
         dispatch(getCart());
+        dispatch(getUser(window.localStorage.getItem('email')));
+    }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(getCart(window.localStorage.getItem('userID')));
     }, [dispatch]);
     const menu = [
         // {
@@ -38,7 +43,7 @@ const Navbar = ({ setCurrentPage }) => {
     ];
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
-    const [isLogin, setIsLogin] = useState(true);
+    const [isLogin, setIsLogin] = useState(window.localStorage.getItem('isLogged'));
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
@@ -46,7 +51,6 @@ const Navbar = ({ setCurrentPage }) => {
         dispatch(getCategories());
         console.log('categories', categories);
         dispatch(getProducts());
-
     }, [dispatch]);
     const submitSearch = (e) => {
         e.preventDefault();
@@ -77,7 +81,13 @@ const Navbar = ({ setCurrentPage }) => {
         setShowCart(true);
     };
 
-    const quantityInCart = useSelector(state => state.cart.length);
+    const quantityInCart = useSelector(state => state.cart.products?.length);
+
+    const handleLogOut = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("isLogged");
+        localStorage.removeItem("email");
+    };
 
     return (
         <div className="bg-white relative">
@@ -166,14 +176,15 @@ const Navbar = ({ setCurrentPage }) => {
                     </div>
                     {/* user */}
                     <div className="flex items-center">
-                        <Link to={isLogin ? "/products" : "/login"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={handleLogin}>
+                        <Link to={isLogin ? "/products" : "/login"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={isLogin ? handleLogOut : null}>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <circle cx="12" cy="12" r="9"></circle>
                                 <circle cx="12" cy="10" r="3"></circle>
                                 <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                             </svg>
-                            {isLogin ? "Logout" : "Login"}</Link>
+                            {/* {isLogin ? <button className="ml-2">Logout</button> : <button className="ml-2">Login</button>} */}
+                        </Link>
                     </div>
                     <div className="flex items-center">
                         <Link to={"/products/add"} className="text-gray-700 font-bold text-lg ml-2 flex items-center">

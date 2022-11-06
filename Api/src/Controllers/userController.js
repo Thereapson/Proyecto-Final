@@ -7,134 +7,148 @@ const bcrypt = require("bcrypt");
 const cookieParser = require('cookie-parser')
 const JWT_SECRET = 'asjkdnajksfndjaksndasknd12123()239883smlkdsmad?)==(23'
 const nodemailer = require("nodemailer");
-<<<<<<< HEAD
-// const {register} = require('../MailTemplates/Register')
-=======
 // const register = require('../MailTemplates/Register')
->>>>>>> 662beaa771e96d3290c29d89bb70e6a8c2698df4
 //NOTIFICACIONES POR MAIL
 
 var transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: "compudevs2022@gmail.com",
-        pass: "ftmgoxulpwshhfak",
-    },
-    tls: {
-        rejectUnauthorized: false,
-    },
+  service: "gmail",
+  auth: {
+    user: "compudevs2022@gmail.com",
+    pass: "ftmgoxulpwshhfak",
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 const getAllUsers = async (req, res, next) => {
-    try {
-        const response = await userModel.find({})//.populate("Product");
-        if (response.flat().length > 0) {
-            const Users = response?.map((u) => {
-                return {
-                    id: u._id,
-                    full_name: u.full_name,
-                    email: u.email,
-                    favorites: u.favorites,
-                    address: u.address,
-                    phone: u.phone,
-                    status: u.status,
-                    isAdmin: u.isAdmin,
-                }
-            })
-            res.status(200).send(Users);
-        } else {
-            res.status(400).send("There's no Users to show")
+  try {
+    const response = await userModel.find({})//.populate("Product");
+    if (response.flat().length > 0) {
+      const Users = response?.map((u) => {
+        return {
+          id: u._id,
+          full_name: u.full_name,
+          email: u.email,
+          favorites: u.favorites,
+          address: u.address,
+          phone: u.phone,
+          status: u.status,
+          isAdmin: u.isAdmin,
         }
-
-    } catch (error) {
-        console.error(error);
-        next(error)
+      })
+      res.status(200).send(Users);
+    } else {
+      res.status(400).send("There's no Users to show")
     }
+
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
 }
 
 const getUserById = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const user = await userModel.findById(id).populate("product")
-        if (user) {
-            res.status(200).send(user)
-        } else {
-            res.status(400).send("There's no User with that ID")
-        }
-
-    } catch (error) {
-        console.error(error);
-        next(error)
+  try {
+    const { id } = req.params;
+    const user = await userModel.findById(id).populate("product")
+    if (user) {
+      res.status(200).send(user)
+    } else {
+      res.status(400).send("There's no User with that ID")
     }
+
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
+}
+
+const getUserByEmail = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    const user = await userModel.findOne({ email: email })
+    if (user) {
+      let userToSend = {
+        id: user._id,
+        full_name: user.full_name,
+        email: user.email,
+        favorites: user.favorites
+      }
+      res.status(200).send(userToSend)
+    } else {
+      res.status(400).send("There's no User with that Email")
+    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
 }
 
 const createUser = async (req, res, next) => {
-    try {
-        const userData = req.body;
-        const {
-            full_name,
-            email,
-            password,
-            isAdmin
-        } = userData;
-        const foundUser = await userModel.findOne({ email: email })
-        if (foundUser) {
-            res.status(400).send("The User email already exists")
-        } else if (full_name && email && password && isAdmin) {
-            const newUser = await userModel.create({
-                full_name,
-                email,
-                password,
-                favorites: [],
-                address: "",
-                phone: "",
-                status: true,
-                isAdmin: isAdmin || false
-            });
+  try {
+    const userData = req.body;
+    const {
+      full_name,
+      email,
+      password,
+      isAdmin
+    } = userData;
+    const foundUser = await userModel.findOne({ email: email })
+    if (foundUser) {
+      res.status(400).send("The User email already exists")
+    } else if (full_name && email && password && isAdmin) {
+      const newUser = await userModel.create({
+        full_name,
+        email,
+        password,
+        favorites: [],
+        address: "",
+        phone: "",
+        status: true,
+        isAdmin: isAdmin || false
+      });
 
-            if (!newUser) {
-                res.status(400).send("The new User can't be created")
-            } else {
-                res.status(200).send({ msg: "New User created", newUser })
-            }
-        } else {
-            res.status(400).send("The new User can't be created. Missing required Data")
-        }
-
-    } catch (error) {
-        console.error(error);
-        next(error)
+      if (!newUser) {
+        res.status(400).send("The new User can't be created")
+      } else {
+        res.status(200).send({ msg: "New User created", newUser })
+      }
+    } else {
+      res.status(400).send("The new User can't be created. Missing required Data")
     }
+
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
 }
 ////////////////////autenticacion
 
 const createToken = (id) => {
-    return jwt.sign({ id }, JWT_SECRET, {
-        expiresIn: "3600s"
-    })
+  return jwt.sign({ id }, JWT_SECRET, {
+    expiresIn: "3600s"
+  })
 }
 const registerUser = async (req, res, next) => {
-    const { full_name, email, password, isAdmin } = req.body;
+  const { full_name, email, password, isAdmin } = req.body;
 
-    const salt = await bcrypt.genSalt(10);
-    const encryptedPassword = await bcrypt.hash(password, salt);
-    try {
-        const oldUser = await userModel.findOne({ email })
-        if (oldUser) {
-            return res.json({ error: 'User Exists' })
-        }
-        const newUser = await userModel.create({
-            full_name,
-            email,
-            password: encryptedPassword,
-        });
-<<<<<<< HEAD
-
-=======
-        var register = {
-            from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
-            to: newUser.email,
-            subject: "CompuDevs -Te has registrado con exito",
-            html: `<html
+  const salt = await bcrypt.genSalt(10);
+  const encryptedPassword = await bcrypt.hash(password, salt);
+  try {
+    const oldUser = await userModel.findOne({ email })
+    if (oldUser) {
+      return res.json({ error: 'User Exists' })
+    }
+    const newUser = await userModel.create({
+      full_name,
+      email,
+      password: encryptedPassword,
+    });
+    var register = {
+      from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
+      to: newUser.email,
+      subject: "CompuDevs -Te has registrado con exito",
+      html: `<html
               xmlns="http://www.w3.org/1999/xhtml"
               xmlns:v="urn:schemas-microsoft-com:vml"
               xmlns:o="urn:schemas-microsoft-com:office:office"
@@ -1046,63 +1060,62 @@ const registerUser = async (req, res, next) => {
               </body>
             </html>
             `,
-          };
->>>>>>> 662beaa771e96d3290c29d89bb70e6a8c2698df4
-        //NOTIFICACION DE REGISTRO
-        console.log(newUser.email, 'email')
-        transporter.sendMail(register, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Email de verificacion es enviado a tu correo");
-            }
-        });
-        // res.send({status:'ok'})
-    } catch (error) {
-        res.send({ status: 'error' })
-    }
+    };
+    //NOTIFICACION DE REGISTRO
+    console.log(newUser.email, 'email')
+    transporter.sendMail(register, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email de verificacion es enviado a tu correo");
+      }
+    });
+    // res.send({status:'ok'})
+  } catch (error) {
+    res.send({ status: 'error' })
+  }
 }
 
 const loginUser = async (req, res, next) => {
-    const { email, password } = req.body
-    try {
-        const user = await userModel.findOne({
-            email,
-        });
+  const { email, password } = req.body
+  try {
+    const user = await userModel.findOne({
+      email,
+    });
 
-        // If user not found, send error message
-        if (!user) {
-            return res.status(400).json({
-                errors: [
-                    {
-                        msg: "Invalid credentials",
-                    },
-                ],
-            });
-        }
-
-        // Compare hased password with user password to see if they are valid
-        let isMatch = await bcrypt.compare(password, user.password);
-        const token = jwt.sign({}, JWT_SECRET);
-
-        if (!isMatch) {
-            return res.status(401).json({
-                errors: [
-                    {
-                        msg: "Email or password is invalid",
-                    },
-                ],
-            });
-        } else {
-            const token = jwt.sign({ email: user.email }, JWT_SECRET);
-
-            return res.json({ status: 'ok', data: token })
-        }
-
-
-    } catch (err) {
-        res.send({ error: err.message });
+    // If user not found, send error message
+    if (!user) {
+      return res.status(400).json({
+        errors: [
+          {
+            msg: "Invalid credentials",
+          },
+        ],
+      });
     }
+
+    // Compare hased password with user password to see if they are valid
+    let isMatch = await bcrypt.compare(password, user.password);
+    const token = jwt.sign({}, JWT_SECRET);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        errors: [
+          {
+            msg: "Email or password is invalid",
+          },
+        ],
+      });
+    } else {
+      const token = jwt.sign({ email: user.email }, JWT_SECRET);
+
+      return res.json({ status: 'ok', data: token })
+    }
+
+
+  } catch (err) {
+    res.send({ error: err.message });
+  }
 
 
 }
@@ -1147,54 +1160,55 @@ const loginUser = async (req, res, next) => {
 // }
 
 const userData = async (req, res, next) => {
-    const { token } = req.body;
-    try {
-        const user = jwt.verify(token, JWT_SECRET);
-        const userEmail = user.email;
-        userModel.findOne({ email: userEmail }).then((data) => {
-            res.send({ status: 'ok', data: data })
-        }).catch((error) => {
-            res.send({ status: 'error', data: error })
-        })
-    } catch (e) {
-        console.log(e)
-    }
+  const { token } = req.body;
+  try {
+    const user = jwt.verify(token, JWT_SECRET);
+    const userEmail = user.email;
+    userModel.findOne({ email: userEmail }).then((data) => {
+      res.send({ status: 'ok', data: data })
+    }).catch((error) => {
+      res.send({ status: 'error', data: error })
+    })
+  } catch (e) {
+    console.log(e)
+  }
 }
 const editUser = async (req, res, next) => {
-    try {
+  try {
 
-    } catch (error) {
-        console.error(error);
-        next(error)
-    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
 }
 
 const blockUser = async (req, res, next) => {
-    try {
+  try {
 
-    } catch (error) {
-        console.error(error);
-        next(error)
-    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
 }
 
 const addFavorites = async (req, res, next) => {
-    try {
+  try {
 
-    } catch (error) {
-        console.error(error);
-        next(error)
-    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
 }
 
 module.exports = {
-    getAllUsers,
-    getUserById,
-    createUser,
-    editUser,
-    blockUser,
-    addFavorites,
-    registerUser,
-    loginUser,
-    userData
+  getAllUsers,
+  getUserById,
+  createUser,
+  editUser,
+  blockUser,
+  addFavorites,
+  registerUser,
+  loginUser,
+  userData,
+  getUserByEmail
 };

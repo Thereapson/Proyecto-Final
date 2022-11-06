@@ -12,7 +12,8 @@ const {
     addFavorites,
     registerUser,
     loginUser,
-    userData
+    userData,
+    getUserByEmail
 } = require("../Controllers/userController");
 
 // configuramos las rutas
@@ -33,5 +34,7 @@ router.put("/update", editUser);
 router.put("/favorites/:user_id", addFavorites);
 
 router.put("/block/:id", blockUser)
+
+router.get("/email/:email", getUserByEmail)
 
 module.exports = router;

@@ -8,10 +8,8 @@ export const GET_PRODUCT_BY_ID = "GER_PRODUCT_BY_ID";
 export const GET_CATEGORIES = "GET_CATEGORIES";
 export const CLEAN_DETAILS = "CLEAN _DETAILS"
 export const GET_PRODUCTS_BY_MIN_MAX = "GET_PRODUCTS_BY_MIN_MAX";
-export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
-export const ADD_PRODUCT = "ADD_PRODUCT";
-export const GET_CART = "GET_CART";
 
+export const GET_USER = "GET_USER";
 
 
 export const getProducts = () => {
@@ -69,20 +67,7 @@ export const getCategories = () => {
     };
 };
 
-export const addProduct = (products) => {
-    // return async (dispatch) => {
-    //     await axios.post("http://localhost:3001/products", products)
-    //         .then((response) => {
-    //             let respuesta = response.data
-    //             dispatch({ type: ADD_PRODUCT, payload: respuesta })
-    //         })
-    // };
-    // test:
-    return {
-        type: ADD_PRODUCT,
-        payload: products,
-    };
-}
+
 
 export const cleanDetails = () => {
     return {
@@ -97,49 +82,69 @@ export const getProductsByMinMax = (min, max) => {
     };
 };
 
-let fakeCart = [
-
-];
-
-
-
-export const getCart = () => {
-    return async function (dispatch) {
-        try {
-            // test with fakeCart
-            let json = fakeCart //await axios.get("http://localhost:3001/shoppingCarts");
-            return dispatch({
-                type: GET_CART,
-                payload: json,
+// add product to cart, if the product is already in the cart, increase the quantity by +1
+export const addProduct = (data) => {
+    return async (dispatch) => {
+        await axios.post("http://localhost:3001/shoppingCarts/addProductToShoppingCart", data)
+            .then((response) => {
+                console.log(response.data)
+                dispatch({ type: "ADD_PRODUCT", payload: response.data })
             })
-        } catch (error) {
-            return dispatch({
-                type: GET_CART,
-                payload: error
-            })
-        }
-    }
+    };
 }
 
-export const deleteProductToCart = (id) => {
-    // return async function (dispatch) {
-    //     try {
-    //         let json = fakeCart //await axios.delete(`http://localhost:3001/cart/${id}`)
-    //         return dispatch({
-    //             type: REMOVE_FROM_CART,
-    //             payload: json
-    //         })
-    //     } catch (error) {
-    //         return dispatch({
-    //             type: REMOVE_FROM_CART,
-    //             payload: error
-    //         })
-    //     }
-    // }
-
-    // test:
-    return {
-        type: REMOVE_FROM_CART,
-        payload: id
+// get cart by user
+export const getCart = (id) => {
+    return async (dispatch) => {
+        await axios.get(`http://localhost:3001/shoppingCarts/detail/${id}`)
+            .then((response) => {
+                console.log("response.data: ", response.data)
+                dispatch({ type: "GET_CART", payload: response.data })
+                window.localStorage.setItem("userID", response.data.user)
+            })
     };
-};
+}
+
+// delete 1 quantity of product from cart
+export const removeQuantity = (data) => {
+    return async (dispatch) => {
+        await axios.post("http://localhost:3001/shoppingCarts/deleteProductFromShoppingCart", data)
+            .then((response) => {
+                console.log(response.data)
+                dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
+            })
+    };
+}
+
+// delete product from cart
+export const removeProduct = (data) => {
+    return async (dispatch) => {
+        await axios.post("http://localhost:3001/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
+            .then((response) => {
+                console.log(response.data)
+                dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
+            })
+    };
+}
+
+// delete cart
+export const removeCart = (id) => {
+    return async (dispatch) => {
+        await axios.delete(`http://localhost:3001/shoppingCarts/deleteShoppingCart/${id}`)
+            .then((response) => {
+                console.log(response.data)
+                dispatch({ type: "REMOVE_CART", payload: response.data })
+            })
+    };
+}
+
+// get user
+export const getUser = (email) => {
+    return async (dispatch) => {
+        await axios.get(`http://localhost:3001/users/email/${email}`)
+            .then((response) => {
+                console.log("user: ", response.data)
+                dispatch({ type: GET_USER, payload: response.data })
+            })
+    };
+}   

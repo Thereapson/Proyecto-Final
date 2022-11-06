@@ -5,21 +5,23 @@ const router = Router();
 const {
     getAllShoppingCarts,
     getShoppingCartByUser,
-    addProducts,
-    editProducts,
-    removeProducts,
+    addProductToShoppingCart,
+    deleteProductFromShoppingCart,
+    deleteShoppingCart,
+    deleteProductFromShoppingCartAndDeleteShoppingCart
 } = require("../Controllers/shoppingCartController");
 
 // configuramos las rutas
 router.get("/", getAllShoppingCarts);
 
-router.get("/detail/:user_id", getShoppingCartByUser);
+router.get("/detail/:id", getShoppingCartByUser);
 
-router.put("/add", addProducts);
+router.post("/addProductToShoppingCart", addProductToShoppingCart);
 
-router.put("/edit", editProducts);
+router.post("/deleteProductFromShoppingCart", deleteProductFromShoppingCart);
 
-router.put("/remove", removeProducts)
+router.delete("/deleteShoppingCart/:id", deleteShoppingCart);
 
+router.post("/deleteProductFromShoppingCartAndDeleteShoppingCart", deleteProductFromShoppingCartAndDeleteShoppingCart);
 
 module.exports = router;

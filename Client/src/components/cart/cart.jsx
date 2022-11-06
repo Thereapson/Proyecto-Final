@@ -3,33 +3,67 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { deleteProductToCart, addProduct } from '../../Redux/Actions/Actions'
+import { addProduct, getCart, removeQuantity, removeProduct, removeCart } from '../../Redux/Actions/Actions'
 import { useEffect } from 'react'
 
 const Cart = ({ setShowCart, showCart }) => {
     const open = showCart
     const setOpen = setShowCart
     const dispatch = useDispatch();
+    const cart = useSelector(state => state.cart);
 
-    const products = useSelector(state => state.cart);
+    useEffect(() => {
+        dispatch(getCart(window.localStorage.getItem('userID')));
+    }, [dispatch])
 
-    const total = products.reduce((acc, product) => {
-        return acc + product.price * product.quantity;
-    }, 0);
+    useEffect(() => {
+        if (cart.products) {
+            setProducts(cart.products)
+        }
+        // console.log("cart", cart);
+    }, [cart])
+
+    const total = () => {
+        let total = 0;
+        products.forEach(product => {
+            total += product.product.price * product.quantity
+        })
+        return total
+    }
+
 
     const handleRemoveAll = () => {
-        products.forEach(product => {
-            for (let i = 0; i < product.quantity; i++) {
-                dispatch(deleteProductToCart(product));
-            }
-        })
+        dispatch(removeCart(cart.id))
+        setProducts([])
     }
 
     const handleRemoveToCartProduct = (product) => {
-        for (let i = 0; i < product.quantity; i++) {
-            dispatch(deleteProductToCart(product));
-        }
+        dispatch(removeProduct(product.id))
+        setProducts(products.filter(p => p.id !== product.id))
     }
+
+    const handleRemoveQuantity = (product) => {
+        dispatch(removeQuantity(product.id))
+        setProducts(products.map(p => {
+            if (p.id === product.id) {
+                p.quantity--
+            }
+            return p
+        }))
+    }
+
+
+    const handleAddQuantity = (product) => {
+        dispatch(addProduct(product.id))
+        setProducts(products.map(p => {
+            if (p.id === product.id) {
+                p.quantity++
+            }
+            return p
+        }))
+    }
+
+    const [products, setProducts] = useState([])
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -79,11 +113,11 @@ const Cart = ({ setShowCart, showCart }) => {
                                                 <div className="flow-root">
                                                     <ul role="list" className="-my-6 divide-y divide-gray-200">
                                                         {products.map((product) => (
-                                                            <li key={product.id} className="flex py-6">
+                                                            <li key={product.product.name} className="flex py-6">
                                                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                                     <img
-                                                                        src={product.image}
-                                                                        alt={product.name}
+                                                                        src={product.product.image}
+                                                                        alt={product.product.name}
                                                                         className="h-full w-full object-cover object-center"
                                                                     />
                                                                 </div>
@@ -92,19 +126,19 @@ const Cart = ({ setShowCart, showCart }) => {
                                                                     <div>
                                                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                                                             <h3>
-                                                                                <Link to={`/product/${product.id}`}> {product.name} </Link>
+                                                                                <Link to={`/product/${product.product.id}`}> {product.product.name}</Link>
                                                                             </h3>
-                                                                            <p className="ml-4">{product.price}</p>
+                                                                            <p className="ml-4">{product.product.price}</p>
                                                                         </div>
                                                                         {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                                                     </div>
                                                                     <div className="flex flex-1 items-end justify-between text-sm gap-4">
-                                                                        <p className="text-gray-500">Qty {product.quantity}</p>
+                                                                        <p className="text-gray-500"> Quantity: {product.quantity}</p>
                                                                         <div className="flex">
-                                                                            <button onClick={() => dispatch(deleteProductToCart(product))} className="text-gray-400 hover:text-gray-500">
+                                                                            <button onClick={handleRemoveQuantity} className="text-gray-400 hover:text-gray-500">
                                                                                 <span className="font-bold text-xl">-</span>
                                                                             </button>
-                                                                            <button onClick={() => dispatch(addProduct(product))} className="text-gray-400 hover:text-gray-500">
+                                                                            <button onClick={handleAddQuantity} className="text-gray-400 hover:text-gray-500">
                                                                                 <span className="font-bold text-xl">+</span>
                                                                             </button>
                                                                         </div>
@@ -134,11 +168,11 @@ const Cart = ({ setShowCart, showCart }) => {
                                             </div>
                                             <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                                             <div className="mt-6">
-                                                <Link to={'/checkout' + (products.length > 0 ? '?products=' + products.map(product => product.id).join(',') : '')}>
-                                                    <button type="button" className="w-full flex justify-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 inline-flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700">
-                                                        Checkout
-                                                    </button>
-                                                </Link>
+                                                {/* <Link to={'/checkout' + (products.length > 0 ? '?products=' + products.map(product => product.id).join(',') : '')}> */}
+                                                <button type="button" className="w-full flex justify-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 inline-flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700">
+                                                    Checkout
+                                                </button>
+                                                {/* </Link> */}
                                             </div>
                                             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                                 <p>

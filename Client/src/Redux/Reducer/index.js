@@ -4,13 +4,9 @@ import {
     GET_PRODUCT_BY_ID,
     GET_PRODUCTS_BY_SEARCH,
     GET_CATEGORIES,
-    ADD_PRODUCT,
     CLEAN_DETAILS,
     GET_PRODUCTS_BY_MIN_MAX,
-    GET_CART,
-    REMOVE_FROM_CART,
-    CLEAN_PRODUCTS,
-    CLEAN_PRODUCTS_RENDER,
+    GET_USER
 } from '../Actions/Actions';
 const initialState = {
     products: [],
@@ -21,6 +17,7 @@ const initialState = {
     lastAdd: {},
     cart: [
     ],
+    userData: {},
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -68,40 +65,6 @@ const rootReducer = (state = initialState, action) => {
                 categories: action.payload,
             };
 
-        case REMOVE_FROM_CART:
-            let productToRemove = action.payload;
-            let productInCartToRemove = state.cart.find((product) => product.id === productToRemove.id);
-            if (productInCartToRemove.quantity > 1) {
-                return {
-                    ...state,
-                    cart: state.cart.map((product) => (product.id === productToRemove.id ? { ...product, quantity: product.quantity - 1 } : product)),
-                };
-            } else {
-                return {
-                    ...state,
-                    cart: state.cart.filter((product) => product.id !== productToRemove.id),
-                };
-            }
-        case ADD_PRODUCT:
-            // from action
-            // return {
-            //     type: ADD_PRODUCT,
-            //     payload: products,
-            // };
-            let productToAdd = action.payload;
-            console.log("productToAdd: ", productToAdd);
-            let productInCart = state.cart.find((product) => product.id === productToAdd.id);
-            if (productInCart) {
-                return {
-                    ...state,
-                    cart: state.cart.map((product) => (product.id === productToAdd.id ? { ...product, quantity: product.quantity + 1 } : product)),
-                };
-            } else {
-                return {
-                    ...state,
-                    cart: [...state.cart, { ...productToAdd, quantity: 1 }],
-                };
-            }
         case CLEAN_DETAILS:
             return {
                 ...state,
@@ -123,11 +86,20 @@ const rootReducer = (state = initialState, action) => {
                 }
             }
 
-        case GET_CART:
-            let carted = action.payload;
+        case GET_USER:
             return {
                 ...state,
-                cart: carted
+                userData: action.payload
+            }
+
+        case "ADD_PRODUCT":
+            console.log("action.payload: ", action.payload);
+
+        case "GET_CART":
+            console.log("GET_CART: ", action.payload)
+            return {
+                ...state,
+                cart: action.payload
             }
 
         default:
