@@ -15,7 +15,7 @@ const Navbar = ({ setCurrentPage }) => {
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(getCart(window.localStorage.getItem('userID')));
+        dispatch(getCart(window.localStorage.getItem('id')));
     }, [dispatch]);
     const menu = [
         // {

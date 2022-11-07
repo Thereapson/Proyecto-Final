@@ -1111,7 +1111,7 @@ const loginUser = async (req, res, next) => {
     } else {
       const token = jwt.sign({ email: user.email }, JWT_SECRET);
 
-      return res.json({ status: 'ok', data: token })
+      return res.json({ status: 'ok', data: token, id: user.id })
     }
 
 
@@ -1318,6 +1318,7 @@ const addFavorites = async (req, res, next) => {
 module.exports = {
     getAllUsers,
     getUserById,
+    getUserByEmail,
     createUser,
     editUser,
     blockUser,

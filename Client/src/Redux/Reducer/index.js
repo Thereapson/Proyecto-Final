@@ -96,7 +96,7 @@ const rootReducer = (state = initialState, action) => {
             // };
             let productToAdd = action.payload;
             console.log("productToAdd: ", productToAdd);
-            let productInCart = state.cart.find((product) => product.id === productToAdd.id);
+            let productInCart = state.cart.find((product) => product.id == productToAdd.id);
             if (productInCart) {
                 return {
                     ...state,

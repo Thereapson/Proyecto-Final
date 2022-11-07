@@ -36,6 +36,7 @@ export default class Login2 extends Component {
         console.log(data, 'login')
         window.localStorage.setItem('token', data.data);
         window.localStorage.setItem('isLogged', true);
+        window.localStorage.setItem('id', data.id)
         if (data.status === 'ok') {
           alert('login succesful');
           // window.localStorage.setItem('token', data.data);

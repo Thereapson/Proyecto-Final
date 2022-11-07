@@ -13,7 +13,7 @@ const {
     registerUser,
     loginUser,
     userData,
-    getUserByEmail
+    getUserByEmail,
     forgotPassword,
     resetPassword,
     resetPasswordToken

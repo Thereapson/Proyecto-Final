@@ -26,6 +26,7 @@ const Cart = ({ setShowCart, showCart }) => {
     }, [cart])
 
     const total = () => {
+        console.log("pase total")
         let total = 0;
         products.forEach(product => {
             total += product.product_id.price * product.quantity
@@ -182,7 +183,7 @@ const Cart = ({ setShowCart, showCart }) => {
                                         <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                                             <div className="flex justify-between text-base font-medium text-gray-900">
                                                 <p>Subtotal</p>
-                                                {total}
+                                                {total()}
                                             </div>
                                             <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                                             <div className="mt-6">
