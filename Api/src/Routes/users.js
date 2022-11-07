@@ -13,6 +13,7 @@ const {
     registerUser,
     loginUser,
     userData,
+    getUserByEmail
     forgotPassword,
     resetPassword,
     resetPasswordToken
@@ -42,5 +43,7 @@ router.put("/update", editUser);
 router.put("/favorites/:user_id", addFavorites);
 
 router.put("/block/:id", blockUser)
+
+router.get("/email/:email", getUserByEmail)
 
 module.exports = router;

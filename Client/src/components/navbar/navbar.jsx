@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { getProductsByCategory, getProductsBySearch, getCategories, getProducts } from "../../Redux/Actions/Actions";
+import { getProductsByCategory, getProductsBySearch, getCategories, getProducts, getUser, getCart } from "../../Redux/Actions/Actions";
 import Cart from "../cart/cart";
-import { getCart } from '../../Redux/Actions/Actions'
 
 const Navbar = ({ setCurrentPage }) => {
 
     const dispatch = useDispatch();
     const categories = useSelector(state => state.categories);
+
     useEffect(() => {
-        dispatch(getCart());
+        dispatch(getCart(window.localStorage.getItem('id')));
+        dispatch(getUser(window.localStorage.getItem('email')));
+    }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(getCart(window.localStorage.getItem('userID')));
     }, [dispatch]);
     const menu = [
         // {
@@ -39,8 +44,7 @@ const Navbar = ({ setCurrentPage }) => {
     ];
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
-    const [isLogin, setIsLogin] = useState(true);
-
+    const [isLogin, setIsLogin] = useState(window.localStorage.getItem('isLogged'));
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
@@ -49,7 +53,6 @@ const Navbar = ({ setCurrentPage }) => {
         dispatch(getCategories());
         console.log('categories', categories);
         dispatch(getProducts());
-
     }, [dispatch]);
 
     const submitSearch = (e) => {
@@ -82,11 +85,16 @@ const Navbar = ({ setCurrentPage }) => {
         setShowCart(true);
     };
 
+    const quantityInCart = useSelector(state => state.cart.products?.length);
+
     const handleLogOut = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("isLogged");
+        localStorage.removeItem("email");
+        localStorage.removeItem("id");
+        localStorage.removeItem("userID");
         navigate("/products")
-    }
+    };
 
     return (
         <div className="bg-white relative">
@@ -170,7 +178,7 @@ const Navbar = ({ setCurrentPage }) => {
                                 </svg>
                             </button>
                             {showCart && <Cart setShowCart={setShowCart} showCart={showCart} />}
-
+                            {quantityInCart > 0 && <div className="absolute bottom-5 left-3 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">{quantityInCart}</div>}
                         </div>
                     </div>
                     {/* user */}

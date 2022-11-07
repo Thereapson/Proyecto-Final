@@ -2,21 +2,56 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import swal from 'sweetalert';
-import { addProduct } from "../../Redux/Actions/Actions";
+import { addProduct, getCart } from "../../Redux/Actions/Actions";
+import { useSelector } from "react-redux";
+
+//
+// {
+//   "user_id": "63655ee42e2e013aabe52aaf",
+//     "products_id": [
+//       {
+//         "product_id": "635d7eae6d25de9b14540274",
+//         "quantity": 7
+//       },
+//       {
+//         "product_id": "635d7eca6d25de9b14540276",
+//         "quantity": 9
+//       },
+//       {
+//         "product_id": "635f329a8c2248183912c15e",
+//         "quantity": 3
+//       }
+//     ]
+// }
 
 function Card({ product }) {
   const dispatch = useDispatch();
+  const user = useSelector(state => state.userData);
   const handleAddProduct = () => {
     swal({
       title: "Product added to cart",
       icon: "success",
       button: "Ok",
     });
-    dispatch(addProduct(product));
-  };
+    let userId = localStorage.getItem("userID");
+    let productId = product.id;
+    let productsToadd = {
+      "user_id": userId,
+      "products_id": [
+        {
+          "product_id": productId,
+          "quantity": 1
+        }
+      ]
+    }
+
+    console.log("productsToadd", productsToadd);
+    dispatch(addProduct(productsToadd));
+    dispatch(getCart(userId));
+  }
 
   return (
-    <div className="p-4 relative w-80">
+    <div className="p-4 relative w-80" >
       <button
         type="button"
         className="absolute right-4 top-4 rounded-full bg-black p-2 text-white"
@@ -74,7 +109,7 @@ function Card({ product }) {
         </button>
       </div>
 
-    </div>
+    </div >
   );
 }
 

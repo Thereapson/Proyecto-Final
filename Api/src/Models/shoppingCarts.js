@@ -9,17 +9,17 @@ const shoppincCartSchema = new Schema(
       ref: "User",
     },
     products_id: [{
-        product_id: {
-            type: Schema.Types.ObjectId,
-            ref: 'Product'
-        },
-        quantity: Number
+      product_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product'
+      },
+      quantity: Number
     }]
-}, 
-{
+  },
+  {
     timestamps: true,
     versionKey: false,
-});
+  });
 
 const shoppingCartModel = model("ShoppingCart", shoppincCartSchema);
 

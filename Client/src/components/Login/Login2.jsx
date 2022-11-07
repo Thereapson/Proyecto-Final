@@ -14,7 +14,6 @@ export default class Login2 extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-
   handleSubmit(e) {
     e.preventDefault()
     const { email, password } = this.state;
