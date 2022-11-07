@@ -33,7 +33,7 @@ function Card({ product }) {
       icon: "success",
       button: "Ok",
     });
-    let userId = user.id;
+    let userId = localStorage.getItem("userID");
     let productId = product.id;
     let productsToadd = {
       "user_id": userId,

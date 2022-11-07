@@ -11,9 +11,12 @@ const Cart = ({ setShowCart, showCart }) => {
     const setOpen = setShowCart
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart);
+    
+    const [products, setProducts] = useState([])
+    console.log("CART ====> ", cart)
 
     useEffect(() => {
-        dispatch(getCart(window.localStorage.getItem('userID')));
+        dispatch(getCart(window.localStorage.getItem('id')));
     }, [dispatch])
 
     useEffect(() => {
@@ -63,7 +66,6 @@ const Cart = ({ setShowCart, showCart }) => {
         }))
     }
 
-    const [products, setProducts] = useState([])
 
     return (
         <Transition.Root show={open} as={Fragment}>

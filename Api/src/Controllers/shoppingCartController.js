@@ -34,25 +34,36 @@ const addProductToShoppingCart = async (req, res, next) => {
         const userId = productData.user_id
         const products = productData.products_id
         const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
+        let updated = {}
+        let added = {}
         if (shoppingCartFound) {
             const productsFound = shoppingCartFound.products_id
-            products.forEach(product => {
-                const productFound = productsFound.find(p => p.product_id == product.product_id)
+            let updateQuantity = 0
+            let newArrayProduct = {}
+            let productFound = {}
+            await asyncForEach(products, async (product) => {
+                productFound = productsFound.find(p => p.product_id == product.product_id)
                 if (productFound) {
-                    productFound.quantity += product.quantity
+                    updateQuantity = productFound.quantity + product.quantity
+                    updated = await shoppingCartModel.updateOne(
+                        { user_id: userId, "products_id.product_id": productFound.product_id },
+                        { $set: { "products_id.$.quantity": updateQuantity } }
+                        )
                 } else {
-                    productsFound.push(product)
+                    newArrayProduct = {
+                        product_id: product.product_id,
+                        quantity: product.quantity
+                    }
+                    added = await shoppingCartModel.updateOne(
+                        { user_id: userId },
+                        { $push: { products_id: newArrayProduct } }
+                        )
                 }
             })
-            const updateShoppingCart = await shoppingCartModel.findByIdAndUpdate(shoppingCartFound._id, {
-                products_id: productsFound
-            })
-            if (!updateShoppingCart) {
-                res.status(400).send("The Product can't be added");
+            if( updated || added) {
+                res.status(200).send(updated || added)
             } else {
-                // get the new shopping cart with the updated products and send it to the client
-                const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
-                res.status(200).send(shoppingCartFound);
+                res.status(400).send("The Product can't be added")
             }
         } else {
             // if user doesn't have a shopping cart we create a new one with the products
@@ -70,28 +81,25 @@ const addProductToShoppingCart = async (req, res, next) => {
 
 }
 
+// Helper para poder usar async await con ForEach
+async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
+    }
+}
+
 // get a shopping cart by user
 const getShoppingCartByUser = async (req, res, next) => {
     try {
         const userId = req.params.id
-        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
+        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId }).populate({
+                path: 'products_id.product_id',
+                select: '_id name image price'
+            })
         if (shoppingCartFound) {
-            // find products by id and populate the shopping cart with the products
-            const productsFound = shoppingCartFound.products_id
-            const products = await productModel.find({ _id: { $in: productsFound.map(p => p.product_id) } })
             const ShoppingCart = {
                 user: shoppingCartFound.user_id,
-                products: products.map((p, i) => {
-                    return {
-                        product: {
-                            id: p._id,
-                            name: p.name,
-                            image: p.image,
-                            price: p.price,
-                        },
-                        quantity: productsFound[i].quantity
-                    }
-                })
+                products: shoppingCartFound.products_id
             }
             res.status(200).send(ShoppingCart)
         } else {
