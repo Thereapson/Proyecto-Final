@@ -12,7 +12,10 @@ const {
     addFavorites,
     registerUser,
     loginUser,
-    userData
+    userData,
+    forgotPassword,
+    resetPassword,
+    resetPasswordToken
 } = require("../Controllers/userController");
 
 // configuramos las rutas
@@ -27,6 +30,12 @@ router.post("/register", registerUser);
 router.post('/login', loginUser);
 
 router.post('/userData', userData);
+
+router.post('/forgotPassword', forgotPassword)
+
+router.get('/resetPassword/:id/:token', resetPassword)
+
+router.post('/resetPassword/:id/:token', resetPasswordToken)
 
 router.put("/update", editUser);
 
