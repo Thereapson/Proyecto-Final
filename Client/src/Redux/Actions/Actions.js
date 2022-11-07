@@ -11,6 +11,8 @@ export const GET_PRODUCTS_BY_MIN_MAX = "GET_PRODUCTS_BY_MIN_MAX";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const GET_CART = "GET_CART";
+export const GET_ALL_PRODUCTS_BY_ID = "GET_ALL_PRODUCTS_BY_ID";
+
 
 
 
@@ -143,3 +145,19 @@ export const deleteProductToCart = (id) => {
         payload: id
     };
 };
+export const buyAllProducts = (array) => {
+    return async (dispatch) => {
+        let arreglo = [];
+        for (let i = 0; i < array.length; i++) {
+            await axios.get(`http://localhost:3001/products/detail/${array[i]}`)
+                .then((response) => {
+                    let respuesta = response.data
+                    arreglo.push(respuesta)
+                })
+
+        }
+
+        dispatch({ type: GET_ALL_PRODUCTS_BY_ID, payload: arreglo })
+    }
+}
+

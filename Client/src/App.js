@@ -13,6 +13,8 @@ import UserDetail from "./components/Register/userDetail";
 import ForgotPassword from "./components/Login/ForgotPassword";
 import Resetpassword from "./components/Login/ResetPassword";
 import ProtectedRouter from "./components/router/ProtectedRouter";
+import StripeCol from "./components/StipeCol/StripeCol";
+
 
 function App() {
   return (
@@ -35,7 +37,10 @@ function App() {
           {/* rutas privadas */}
           <Route element={<ProtectedRouter />}>
             <Route path="/userDetail" element={<UserDetail />} />
-            <Route path="/payment" element={<Stripe />} />
+
+            <Route path="/payment/:id" element={<Stripe />} />
+            <Route path="/checkout" element={<StripeCol />} />
+
             <Route path="/products/add" element={<Formaddcomp />} />
           </Route>
 

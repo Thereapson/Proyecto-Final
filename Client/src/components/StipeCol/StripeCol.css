@@ -1,0 +1,65 @@
+.prueba form button {
+    color: black;
+
+}
+
+.prueba {
+
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+    align-items: center;
+    justify-content: space-around;
+    height: 400px;
+
+}
+
+.prueba form {
+    height: 200px;
+    width: 459px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #000;
+
+}
+
+.prueba form div {
+
+    width: 400px;
+    height: 20px;
+
+}
+
+h1 {
+    font-size: 35px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    color: blue;
+}
+
+.modal-content {
+
+    width: 350px;
+
+}
+
+.modal-content p {
+
+    margin-left: 40px;
+
+}
+
+.modal-content img {
+
+    margin-left: 60px;
+
+}
+
+.parrafo {
+    font-size: 18px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    color: rgb(30, 209, 45);
+}

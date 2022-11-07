@@ -12,13 +12,15 @@
 
 .padd {
     margin-left: 25px;
-    color:black;
+    color: black;
 }
-.cap{
+
+.cap {
     text-transform: capitalize;
 }
-.formtemp{
-    
+
+.formtemp {
+
     display: flex;
     justify-content: space-around;
     flex-direction: column;
@@ -26,4 +28,10 @@
     height: 500px;
     width: 1200px;
 
+}
+
+.padd {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
 }

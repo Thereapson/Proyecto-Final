@@ -11,6 +11,7 @@ import {
     REMOVE_FROM_CART,
     CLEAN_PRODUCTS,
     CLEAN_PRODUCTS_RENDER,
+    GET_ALL_PRODUCTS_BY_ID
 } from '../Actions/Actions';
 const initialState = {
     products: [],
@@ -21,6 +22,7 @@ const initialState = {
     lastAdd: {},
     cart: [
     ],
+    buyproducts: []
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -129,6 +131,12 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 cart: carted
             }
+
+        case GET_ALL_PRODUCTS_BY_ID:
+            return {
+                ...state, buyproducts: [...action.payload]
+            }
+
 
         default:
             return { ...state };
