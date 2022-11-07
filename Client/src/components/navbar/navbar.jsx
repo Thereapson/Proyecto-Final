@@ -9,7 +9,7 @@ const Navbar = ({ setCurrentPage }) => {
     const categories = useSelector(state => state.categories);
 
     useEffect(() => {
-        dispatch(getCart());
+        dispatch(getCart(window.localStorage.getItem('id')));
         dispatch(getUser(window.localStorage.getItem('email')));
     }, [dispatch]);
 

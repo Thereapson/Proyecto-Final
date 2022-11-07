@@ -102,6 +102,12 @@ const rootReducer = (state = initialState, action) => {
                 cart: action.payload
             }
 
+        case "REMOVE_CART":
+            return {
+                ...state,
+                cart: action.payload
+            }
+
         default:
             return { ...state };
     }

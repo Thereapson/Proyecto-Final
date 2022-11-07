@@ -84,6 +84,7 @@ export const getProductsByMinMax = (min, max) => {
 
 // add product to cart, if the product is already in the cart, increase the quantity by +1
 export const addProduct = (data) => {
+    console.log("Desde la action: ", data)
     return async (dispatch) => {
         await axios.post("http://localhost:3001/shoppingCarts/addProductToShoppingCart", data)
             .then((response) => {
@@ -107,6 +108,7 @@ export const getCart = (id) => {
 
 // delete 1 quantity of product from cart
 export const removeQuantity = (data) => {
+    console.log("Desde la action: ", data)
     return async (dispatch) => {
         await axios.post("http://localhost:3001/shoppingCarts/deleteProductFromShoppingCart", data)
             .then((response) => {
@@ -118,6 +120,7 @@ export const removeQuantity = (data) => {
 
 // delete product from cart
 export const removeProduct = (data) => {
+    console.log("desde la action: ", data)
     return async (dispatch) => {
         await axios.post("http://localhost:3001/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
             .then((response) => {
@@ -133,7 +136,7 @@ export const removeCart = (id) => {
         await axios.delete(`http://localhost:3001/shoppingCarts/deleteShoppingCart/${id}`)
             .then((response) => {
                 console.log(response.data)
-                dispatch({ type: "REMOVE_CART", payload: response.data })
+                dispatch({ type: "REMOVE_CART", payload: [] })
             })
     };
 }

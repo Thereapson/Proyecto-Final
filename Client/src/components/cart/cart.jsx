@@ -13,7 +13,6 @@ const Cart = ({ setShowCart, showCart }) => {
     const cart = useSelector(state => state.cart);
     
     const [products, setProducts] = useState([])
-    console.log("CART ====> ", cart)
 
     useEffect(() => {
         dispatch(getCart(window.localStorage.getItem('id')));
@@ -29,43 +28,60 @@ const Cart = ({ setShowCart, showCart }) => {
     const total = () => {
         let total = 0;
         products.forEach(product => {
-            total += product.product.price * product.quantity
+            total += product.product_id.price * product.quantity
         })
+        console.log(total)
         return total
     }
 
-
     const handleRemoveAll = () => {
-        dispatch(removeCart(cart.id))
+        console.log(cart)
+        dispatch(removeCart(cart.user))
         setProducts([])
     }
 
     const handleRemoveToCartProduct = (product) => {
-        dispatch(removeProduct(product.id))
-        setProducts(products.filter(p => p.id !== product.id))
+        console.log(product)
+        const productToRemove = {
+            user_id: window.localStorage.getItem('id'),
+            product_id: product.product_id._id
+        }
+        dispatch(removeProduct(productToRemove))
+        setProducts(products.filter(p => p.product_id._id !== product.product_id._id))
     }
 
     const handleRemoveQuantity = (product) => {
-        dispatch(removeQuantity(product.id))
+        const id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
+        const productToRemove = {
+            user_id: window.localStorage.getItem('id'),
+            product_id: id
+        }
+        dispatch(removeQuantity(productToRemove))
         setProducts(products.map(p => {
-            if (p.id === product.id) {
+            if (p.product_id._id === id) {
                 p.quantity--
             }
             return p
         }))
     }
 
-
     const handleAddQuantity = (product) => {
-        dispatch(addProduct(product.id))
+        const id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
+        const productToAdd = {
+            user_id: window.localStorage.getItem('id'),
+            products_id: [{
+                product_id: id,
+                quantity: 1
+            }]
+        }
+        dispatch(addProduct(productToAdd))
         setProducts(products.map(p => {
-            if (p.id === product.id) {
+            if (p.product_id._id === id) {
                 p.quantity++
             }
             return p
         }))
     }
-
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -115,11 +131,11 @@ const Cart = ({ setShowCart, showCart }) => {
                                                 <div className="flow-root">
                                                     <ul role="list" className="-my-6 divide-y divide-gray-200">
                                                         {products.map((product) => (
-                                                            <li key={product.product.name} className="flex py-6">
+                                                            <li key={product.product_id.name} className="flex py-6">
                                                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                                     <img
-                                                                        src={product.product.image}
-                                                                        alt={product.product.name}
+                                                                        src={product.product_id.image}
+                                                                        alt={product.product_id.name}
                                                                         className="h-full w-full object-cover object-center"
                                                                     />
                                                                 </div>
@@ -128,9 +144,9 @@ const Cart = ({ setShowCart, showCart }) => {
                                                                     <div>
                                                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                                                             <h3>
-                                                                                <Link to={`/product/${product.product.id}`}> {product.product.name}</Link>
+                                                                                <Link to={`/product/${product.product_id.id}`}> {product.product_id.name}</Link>
                                                                             </h3>
-                                                                            <p className="ml-4">{product.product.price}</p>
+                                                                            <p className="ml-4">{product.product_id.price}</p>
                                                                         </div>
                                                                         {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                                                     </div>
@@ -138,10 +154,10 @@ const Cart = ({ setShowCart, showCart }) => {
                                                                         <p className="text-gray-500"> Quantity: {product.quantity}</p>
                                                                         <div className="flex">
                                                                             <button onClick={handleRemoveQuantity} className="text-gray-400 hover:text-gray-500">
-                                                                                <span className="font-bold text-xl">-</span>
+                                                                                <span name={product.product_id._id} className="font-bold text-xl">-</span>
                                                                             </button>
                                                                             <button onClick={handleAddQuantity} className="text-gray-400 hover:text-gray-500">
-                                                                                <span className="font-bold text-xl">+</span>
+                                                                                <span name={product.product_id._id} className="font-bold text-xl">+</span>
                                                                             </button>
                                                                         </div>
 

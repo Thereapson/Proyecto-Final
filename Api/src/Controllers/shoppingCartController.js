@@ -33,6 +33,7 @@ const addProductToShoppingCart = async (req, res, next) => {
         const productData = req.body
         const userId = productData.user_id
         const products = productData.products_id
+        console.log("Desde el controller: ",productData)
         const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
         let updated = {}
         let added = {}
@@ -131,11 +132,12 @@ const deleteShoppingCart = async (req, res, next) => {
 // delete product from a shopping cart if exists and delete the shopping cart if it's empty
 const deleteProductFromShoppingCartAndDeleteShoppingCart = async (req, res, next) => {
     try {
-        const { userId, productId } = req.body
-        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
+        const { user_id, product_id } = req.body
+        console.log(req.body)
+        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: user_id })
         if (shoppingCartFound) {
             const productsFound = shoppingCartFound.products_id
-            const productFound = productsFound.find(p => p.product_id == productId)
+            const productFound = productsFound.find(p => p.product_id == product_id)
             if (productFound) {
                 const index = productsFound.indexOf(productFound)
                 productsFound.splice(index, 1)
@@ -149,7 +151,7 @@ const deleteProductFromShoppingCartAndDeleteShoppingCart = async (req, res, next
                     if (!updateShoppingCart) {
                         res.status(400).send("The Product can't be deleted");
                     } else {
-                        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
+                        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: user_id })
                         res.status(200).send(shoppingCartFound);
                     }
                 }
@@ -169,37 +171,41 @@ const deleteProductFromShoppingCartAndDeleteShoppingCart = async (req, res, next
 // delete quantity -1 of a product from a shopping cart if exists
 const deleteProductFromShoppingCart = async (req, res, next) => {
     try {
-        const { userId, productId } = req.body
-        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
+        const { user_id, product_id } = req.body
+        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: user_id })
         if (shoppingCartFound) {
             const productsFound = shoppingCartFound.products_id
-            const productFound = productsFound.find(p => p.product_id == productId)
+            const productFound = productsFound.find(p => p.product_id == product_id)
+            console.log(productFound)
             if (productFound) {
                 if (productFound.quantity > 1) {
-                    productFound.quantity -= 1
-                    const updateShoppingCart = await shoppingCartModel.findByIdAndUpdate(shoppingCartFound._id, {
-                        products_id: productsFound
-                    })
+                    const newQuantity = productFound.quantity -= 1
+                    const updateShoppingCart = await shoppingCartModel.updateOne(
+                        { user_id: user_id, "products_id.product_id": product_id },
+                        { $set: { "products_id.$.quantity": newQuantity } }
+                    )
                     if (!updateShoppingCart) {
                         res.status(400).send("The Product can't be deleted");
                     } else {
-                        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
+                        const shoppingCartFound = await shoppingCartModel.findOne({ user_id: user_id })
                         res.status(200).send(shoppingCartFound);
                     }
                 } else {
                     const index = productsFound.indexOf(productFound)
-                    productsFound.splice(index, 1)
+                    const haveProducts = productsFound.splice(index, 1)
+                    console.log("Restan: ", haveProducts)
                     if (productsFound.length === 0) {
                         const deletedShoppingCart = await shoppingCartModel.findByIdAndDelete(shoppingCartFound._id)
                         res.status(200).send({ msg: "Shopping Cart Deleted", deletedShoppingCart });
                     } else {
-                        const updateShoppingCart = await shoppingCartModel.findByIdAndUpdate(shoppingCartFound._id, {
-                            products_id: productsFound
-                        })
+                        const updateShoppingCart = await shoppingCartModel.updateOne(
+                            { user_id: user_id },
+                            { $pull: { products_id: { product_id: product_id } } }
+                        )
                         if (!updateShoppingCart) {
                             res.status(400).send("The Product can't be deleted");
                         } else {
-                            const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
+                            const shoppingCartFound = await shoppingCartModel.findOne({ user_id: user_id })
                             res.status(200).send(shoppingCartFound);
                         }
                     }
