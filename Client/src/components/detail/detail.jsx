@@ -68,7 +68,7 @@ function DetailCard() {
               </div>
 
 
-              <div className="flex items-center justify-between mt-12 lg:justify-start">
+            <div className="flex items-center justify-between mt-12 lg:justify-start">
                 {/* <button
                   className="espacio padd1 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-green-600 rounded-md hover:bg-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-opacity-80"
                   onClick={() => swal({
