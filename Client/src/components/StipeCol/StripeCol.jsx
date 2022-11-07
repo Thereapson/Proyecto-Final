@@ -95,7 +95,7 @@ function StripeCol() {
                 {/* <!-- Modal content --> */}
                 <div className="modal-content">
                     <span className="close">&times;</span>
-                    <p>Pago efectuado exitosamente</p>
+                    <p className='parrafo'>Pago efectuado exitosamente</p>
                     <img src={paloma} alt="NOIMG" />
                 </div>
 

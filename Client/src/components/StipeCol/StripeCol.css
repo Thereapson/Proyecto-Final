@@ -41,7 +41,7 @@ h1 {
 
 .modal-content {
 
-    width: 342px;
+    width: 350px;
 
 }
 
@@ -55,4 +55,11 @@ h1 {
 
     margin-left: 60px;
 
+}
+
+.parrafo {
+    font-size: 18px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    color: rgb(30, 209, 45);
 }
