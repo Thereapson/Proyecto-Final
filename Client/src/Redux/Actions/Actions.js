@@ -8,6 +8,10 @@ export const GET_PRODUCT_BY_ID = "GER_PRODUCT_BY_ID";
 export const GET_CATEGORIES = "GET_CATEGORIES";
 export const CLEAN_DETAILS = "CLEAN _DETAILS"
 export const GET_PRODUCTS_BY_MIN_MAX = "GET_PRODUCTS_BY_MIN_MAX";
+export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
+export const ADD_PRODUCT = "ADD_PRODUCT";
+export const GET_CART = "GET_CART";
+export const GET_ALL_PRODUCTS_BY_ID = "GET_ALL_PRODUCTS_BY_ID";
 
 export const GET_USER = "GET_USER";
 
@@ -150,4 +154,19 @@ export const getUser = (email) => {
                 dispatch({ type: GET_USER, payload: response.data })
             })
     };
-}   
+};
+export const buyAllProducts = (array) => {
+    return async (dispatch) => {
+        let arreglo = [];
+        for (let i = 0; i < array.length; i++) {
+            await axios.get(`http://localhost:3001/products/detail/${array[i]}`)
+                .then((response) => {
+                    let respuesta = response.data
+                    arreglo.push(respuesta)
+                })
+
+        }
+
+        dispatch({ type: GET_ALL_PRODUCTS_BY_ID, payload: arreglo })
+    }
+}

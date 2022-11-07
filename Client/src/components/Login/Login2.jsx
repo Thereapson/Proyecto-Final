@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import Navbar from '../navbar/navbar';
 import axios from 'axios'
+
+
+
 export default class Login2 extends Component {
   constructor(props) {
     super(props);
@@ -10,6 +13,7 @@ export default class Login2 extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
   }
+
   handleSubmit(e) {
     e.preventDefault()
     const { email, password } = this.state;
@@ -32,9 +36,7 @@ export default class Login2 extends Component {
         console.log(data, 'login')
         window.localStorage.setItem('token', data.data);
         window.localStorage.setItem('isLogged', true);
-        window.localStorage.setItem('email', email);
-        window.localStorage.setItem('id', data.id);
-        if (data.status == 'ok') {
+        if (data.status === 'ok') {
           alert('login succesful');
           // window.localStorage.setItem('token', data.data);
           window.location.href = '/userDetail'
@@ -45,10 +47,10 @@ export default class Login2 extends Component {
       })
   }
 
-  logOut = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("isLogged");
-  }
+  // logOut = () => {
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("isLogged");
+  // }
   render() {
     return (
       <div>
@@ -140,7 +142,7 @@ export default class Login2 extends Component {
                     Contraseña
                   </label>
                   <a
-                    href="#"
+                    href="/forgotPassword"
                     className="text-xs text-gray-500 dark:text-gray-300 hover:underline"
                   >
                     ¿Olvidaste tu contraseña?
@@ -149,6 +151,7 @@ export default class Login2 extends Component {
 
                 <input
                   id="loggingPassword"
+                  autoComplete="off"
                   className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                   type="password"
                   onChange={e => this.setState({ password: e.target.value })}

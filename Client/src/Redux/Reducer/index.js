@@ -7,7 +7,13 @@ import {
     CLEAN_DETAILS,
     GET_PRODUCTS_BY_MIN_MAX,
     GET_USER
+    GET_CART,
+    REMOVE_FROM_CART,
+    CLEAN_PRODUCTS,
+    CLEAN_PRODUCTS_RENDER,
+    GET_ALL_PRODUCTS_BY_ID
 } from '../Actions/Actions';
+
 const initialState = {
     products: [],
     filteredProducts: [],
@@ -15,9 +21,10 @@ const initialState = {
     DetailProduct: [],
     categories: [],
     lastAdd: {},
-    cart: [
-    ],
+    cart: [],
     userData: {},
+    buyproducts: []
+
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -107,6 +114,12 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 cart: action.payload
             }
+
+        case GET_ALL_PRODUCTS_BY_ID:
+            return {
+                ...state, buyproducts: [...action.payload]
+            }
+
 
         default:
             return { ...state };

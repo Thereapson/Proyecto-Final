@@ -5,6 +5,7 @@ import { getProductsByCategory, getProductsBySearch, getCategories, getProducts,
 import Cart from "../cart/cart";
 
 const Navbar = ({ setCurrentPage }) => {
+
     const dispatch = useDispatch();
     const categories = useSelector(state => state.categories);
 
@@ -47,11 +48,13 @@ const Navbar = ({ setCurrentPage }) => {
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
+
     useEffect(() => {
         dispatch(getCategories());
         console.log('categories', categories);
         dispatch(getProducts());
     }, [dispatch]);
+
     const submitSearch = (e) => {
         e.preventDefault();
         setCurrentPage(1);
@@ -61,7 +64,8 @@ const Navbar = ({ setCurrentPage }) => {
     };
 
     const handleLogin = () => {
-        setIsLogin(!isLogin);
+        setIsLogin(!isLogin)
+
     };
 
     const handleCategory = (e) => {
@@ -87,6 +91,9 @@ const Navbar = ({ setCurrentPage }) => {
         localStorage.removeItem("token");
         localStorage.removeItem("isLogged");
         localStorage.removeItem("email");
+        localStorage.removeItem("id");
+        localStorage.removeItem("userID");
+        navigate("/products")
     };
 
     return (
@@ -103,8 +110,8 @@ const Navbar = ({ setCurrentPage }) => {
                     <div className="flex items-center">
                         <div className="hidden md:block">
                             <ul className="flex items-center">
-                                {menu.map((link) => (
-                                    <li className="px-3 text-left md:cursor-pointer group" key={link.name}>
+                                {menu.map((link, index) => (
+                                    <li className="px-3 text-left md:cursor-pointer group" key={index}>
 
                                         {link.isProducts ? (
                                             <NavLink to={link.link} className="text-gray-700" onClick={handleGetAllProducts}>
@@ -120,8 +127,8 @@ const Navbar = ({ setCurrentPage }) => {
                                             <div>
                                                 <div className="absolute top-25 hidden group-hover:md:block hover:md:block z-20  rounded-md shadow-md bg-gray-100">
                                                     <div className="flex justify-between items-center gap-4">
-                                                        {link.subMenuItems.map((sublink) => (
-                                                            <div className="flex flex-col hover:bg-gray-200 p-2">
+                                                        {link.subMenuItems.map((sublink, index) => (
+                                                            <div className="flex flex-col hover:bg-gray-200 p-2" key={index}>
                                                                 <Link to={"/products"} >
                                                                     <button className="text-gray-700 font-bold text-lg" onClick={handleCategory} value={sublink.Head}>{sublink.Head}</button>
                                                                 </Link>
@@ -146,7 +153,7 @@ const Navbar = ({ setCurrentPage }) => {
                                 <div className="absolute top-0 flex items-center h-full ml-2 cursor-pointer">
                                     <Link to={"/products"} >
                                         <button type="submit" className="text-gray-700 focus:outline-none focus:shadow-outline">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                 <circle cx="10" cy="10" r="7"></circle>
                                                 <line x1="21" y1="21" x2="15" y2="15"></line>
@@ -161,8 +168,8 @@ const Navbar = ({ setCurrentPage }) => {
                     <div className="flex items-center hover:cursor-pointer">
                         <div className="relative">
                             {/* cart */}
-                            <button className="focus:outline-none focus:shadow-outline" onClick={handleCart}>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <button className="focus:outline-none focus:shadow-outline" onClick={() => handleCart()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <circle cx="6" cy="19" r="2"></circle>
                                     <circle cx="17" cy="19" r="2"></circle>
@@ -176,14 +183,18 @@ const Navbar = ({ setCurrentPage }) => {
                     </div>
                     {/* user */}
                     <div className="flex items-center">
-                        <Link to={isLogin ? "/products" : "/login"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={isLogin ? handleLogOut : null}>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <Link to={isLogin ? "/userDetail" : "/login"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={handleLogin}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-user-circle" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <circle cx="12" cy="12" r="9"></circle>
                                 <circle cx="12" cy="10" r="3"></circle>
                                 <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                             </svg>
-                            {/* {isLogin ? <button className="ml-2">Logout</button> : <button className="ml-2">Login</button>} */}
+                            {
+                                isLogin
+                                    ? <button onClick={handleLogin}>Log In</button>
+                                    : <button onClick={handleLogOut}>Log Out</button>
+                            }
                         </Link>
                     </div>
                     <div className="flex items-center">
