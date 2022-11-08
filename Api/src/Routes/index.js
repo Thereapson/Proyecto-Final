@@ -7,12 +7,14 @@ const categorys = require("./categorys");
 const shoppingCarts = require("./shoppingCarts");
 const users = require("./users");
 const payments = require("./payments");
+const reviews = require("./reviews");
 
 router.use("/products", products);
 router.use("/categorys", categorys);
 router.use("/shoppingCarts", shoppingCarts)
 router.use("/users", users)
 router.use("/payments", payments); // ruta pasarela de pago
+router.use("/reviews", reviews);
 
 
 router.get("/", (req, res) => {
