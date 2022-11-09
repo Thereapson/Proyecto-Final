@@ -15,7 +15,7 @@ handleSubmit(e){
   e.preventDefault()
   const {full_name, email, password} = this.state;
   console.log(full_name, email, password)
-  fetch('http://localhost:3001/users/register', {
+  fetch('/users/register', {
     method: 'POST',
     crossDomain:true,
     headers: {
