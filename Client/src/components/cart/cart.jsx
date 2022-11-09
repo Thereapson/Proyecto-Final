@@ -11,11 +11,11 @@ const Cart = ({ setShowCart, showCart }) => {
     const setOpen = setShowCart
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart);
-    
+    const id = window.localStorage.getItem('id')
     const [products, setProducts] = useState([])
 
     useEffect(() => {
-        dispatch(getCart(window.localStorage.getItem('id')));
+        dispatch(getCart(id));
     }, [dispatch])
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const Cart = ({ setShowCart, showCart }) => {
     const handleRemoveToCartProduct = (product) => {
         console.log(product)
         const productToRemove = {
-            user_id: window.localStorage.getItem('id'),
+            user_id: id,
             product_id: product.product_id._id
         }
         dispatch(removeProduct(productToRemove))
@@ -52,14 +52,14 @@ const Cart = ({ setShowCart, showCart }) => {
     }
 
     const handleRemoveQuantity = (product) => {
-        const id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
+        const product_id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
         const productToRemove = {
-            user_id: window.localStorage.getItem('id'),
-            product_id: id
+            user_id: id,
+            product_id: product_id
         }
         dispatch(removeQuantity(productToRemove))
         setProducts(products.map(p => {
-            if (p.product_id._id === id) {
+            if (p.product_id._id === product_id) {
                 p.quantity--
             }
             return p
@@ -67,17 +67,17 @@ const Cart = ({ setShowCart, showCart }) => {
     }
 
     const handleAddQuantity = (product) => {
-        const id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
+        const product_id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
         const productToAdd = {
-            user_id: window.localStorage.getItem('id'),
+            user_id: id,
             products_id: [{
-                product_id: id,
+                product_id: product_id,
                 quantity: 1
             }]
         }
         dispatch(addProduct(productToAdd))
         setProducts(products.map(p => {
-            if (p.product_id._id === id) {
+            if (p.product_id._id === product_id) {
                 p.quantity++
             }
             return p
