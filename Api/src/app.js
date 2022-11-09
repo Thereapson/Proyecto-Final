@@ -51,14 +51,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// const PORT = process.env.PORT || 3001
-// app.listen(PORT, () => { // puerto 3001
-//   console.log('Server listening on port 3001'); // eslint-disable-line no-console
-// });
-
-// dbConn();
-
-
 const connectDB = () => {
   try {
     mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
