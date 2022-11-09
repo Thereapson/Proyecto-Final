@@ -26,12 +26,12 @@ const CheckoutForm = (props) => {
         var span = document.getElementsByClassName("close")[0];
 
         span.onclick = function () {
-            window.location.replace('http://localhost:3000/products');
+            window.location.replace('/products');
         }
 
         window.onclick = function (event) {
             if (event.target == modal) {
-                window.location.replace('http://localhost:3000/products');
+                window.location.replace('/products');
             }
         }
 
@@ -42,7 +42,7 @@ const CheckoutForm = (props) => {
 
         if (!error) {
             props.products.forEach(async (product) => {
-                const { data } = await axios.post('http://localhost:3001/products/payment', {
+                const { data } = await axios.post('/products/payment', {
                     id: paymentMethod.id,
                     amount: product.price * 100,
                     detail: product.name,

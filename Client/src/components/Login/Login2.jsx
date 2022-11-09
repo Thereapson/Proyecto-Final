@@ -18,7 +18,7 @@ export default class Login2 extends Component {
     e.preventDefault()
     const { email, password } = this.state;
     console.log(email, password)
-    fetch('http://localhost:3001/users/login', {
+    fetch('/users/login', {
       method: 'POST',
       crossDomain: true,
       headers: {
