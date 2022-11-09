@@ -18,7 +18,7 @@ export const GET_USER = "GET_USER";
 
 export const getProducts = () => {
     return async (dispatch) => {
-        const response = await axios.get("http://localhost:3001/products");
+        const response = await axios.get("/products");
         console.log("response: ", response);
         return dispatch({
             type: GET_PRODUCTS,
@@ -50,7 +50,7 @@ export const shortOrderFilter = (order) => {
 
 export const getProductById = (id) => {
     return async (dispatch) => {
-        await axios.get(`http://localhost:3001/products/detail/${id}`)
+        await axios.get(`/products/detail/${id}`)
             .then((response) => {
                 let respuesta = response.data
                 dispatch({ type: GET_PRODUCT_BY_ID, payload: respuesta })
@@ -62,7 +62,7 @@ export const getProductById = (id) => {
 export const getCategories = () => {
     console.log("pasé actions")
     return async (dispatch) => {
-        const response = await axios.get("http://localhost:3001/categorys");
+        const response = await axios.get("/categorys");
         console.log("response: ", response);
         return dispatch({
             type: GET_CATEGORIES,
@@ -90,7 +90,7 @@ export const getProductsByMinMax = (min, max) => {
 export const addProduct = (data) => {
     console.log("Desde la action: ", data)
     return async (dispatch) => {
-        await axios.post("http://localhost:3001/shoppingCarts/addProductToShoppingCart", data)
+        await axios.post("/shoppingCarts/addProductToShoppingCart", data)
             .then((response) => {
                 console.log(response.data)
                 dispatch({ type: "ADD_PRODUCT", payload: response.data })
@@ -101,7 +101,7 @@ export const addProduct = (data) => {
 // get cart by user
 export const getCart = (id) => {
     return async (dispatch) => {
-        await axios.get(`http://localhost:3001/shoppingCarts/detail/${id}`)
+        await axios.get(`/shoppingCarts/detail/${id}`)
             .then((response) => {
                 console.log("response.data: ", response.data)
                 dispatch({ type: "GET_CART", payload: response.data })
@@ -114,7 +114,7 @@ export const getCart = (id) => {
 export const removeQuantity = (data) => {
     console.log("Desde la action: ", data)
     return async (dispatch) => {
-        await axios.post("http://localhost:3001/shoppingCarts/deleteProductFromShoppingCart", data)
+        await axios.post("/shoppingCarts/deleteProductFromShoppingCart", data)
             .then((response) => {
                 console.log(response.data)
                 dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
@@ -126,7 +126,7 @@ export const removeQuantity = (data) => {
 export const removeProduct = (data) => {
     console.log("desde la action: ", data)
     return async (dispatch) => {
-        await axios.post("http://localhost:3001/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
+        await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
             .then((response) => {
                 console.log(response.data)
                 dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
@@ -137,7 +137,7 @@ export const removeProduct = (data) => {
 // delete cart
 export const removeCart = (id) => {
     return async (dispatch) => {
-        await axios.delete(`http://localhost:3001/shoppingCarts/deleteShoppingCart/${id}`)
+        await axios.delete(`/shoppingCarts/deleteShoppingCart/${id}`)
             .then((response) => {
                 console.log(response.data)
                 dispatch({ type: "REMOVE_CART", payload: [] })
@@ -148,7 +148,7 @@ export const removeCart = (id) => {
 // get user
 export const getUser = (email) => {
     return async (dispatch) => {
-        await axios.get(`http://localhost:3001/users/email/${email}`)
+        await axios.get(`/users/email/${email}`)
             .then((response) => {
                 console.log("user: ", response.data)
                 dispatch({ type: GET_USER, payload: response.data })
@@ -159,7 +159,7 @@ export const buyAllProducts = (array) => {
     return async (dispatch) => {
         let arreglo = [];
         for (let i = 0; i < array.length; i++) {
-            await axios.get(`http://localhost:3001/products/detail/${array[i]}`)
+            await axios.get(`/products/detail/${array[i]}`)
                 .then((response) => {
                     let respuesta = response.data
                     arreglo.push(respuesta)
