@@ -1079,12 +1079,13 @@ const registerUser = async (req, res, next) => {
 }
 
 const loginUser = async (req, res, next) => {
+  console.log(req.body)
   const { email, password } = req.body
+  console.log(email, password)
   try {
     const user = await userModel.findOne({
       email,
     });
-
     // If user not found, send error message
     if (!user) {
       return res.status(400).json({
@@ -1315,6 +1316,44 @@ const addFavorites = async (req, res, next) => {
   }
 }
 
+// const isAdmin = async (req, res, next) => {
+//   console.log("funcion isAdmin")
+//   try {
+//     const email= req.params.email
+//     const response = userModel.findOne({email:email})
+//     if (response.data.isAdmin === true) {
+//       res.send({isAdmin: true})
+//     } else {
+//       res.send({isAdmin: false})
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     next(error)
+//   }
+// }
+
+const getAdminByEmail = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    const user = await userModel.findOne({ email: email })
+    if (user) {
+      let userToSend = {
+        id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin
+      }
+      res.status(200).send(userToSend)
+    } else {
+      res.status(400).send("There's no User with that Email")
+    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
+}
+
+
+
 module.exports = {
     getAllUsers,
     getUserById,
@@ -1328,5 +1367,6 @@ module.exports = {
     userData,
     forgotPassword,
     resetPassword,
-    resetPasswordToken
+    resetPasswordToken,
+    getAdminByEmail,
 };

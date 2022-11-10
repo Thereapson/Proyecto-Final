@@ -14,7 +14,7 @@ export const Login2 = () => {
     let email = user?.email
     let password = user?.password
     console.log(user?.email, user?.password)
-    fetch('http://localhost:3001/users/login', {
+    fetch('/users/login', {
       method: 'POST',
       crossDomain: true,
       headers: {

@@ -40,7 +40,7 @@ const CheckoutForm = (props) => {
         })
 
         if (!error) {
-            const { data } = await axios.post('http://localhost:3001/products/payment', {
+            const { data } = await axios.post('/products/payment', {
                 id: paymentMethod.id,
                 amount: props.amount,
                 detail: props.detail,
