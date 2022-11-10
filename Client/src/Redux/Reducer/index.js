@@ -12,7 +12,8 @@ import {
     REMOVE_FROM_CART,
     CLEAN_PRODUCTS,
     CLEAN_PRODUCTS_RENDER,
-    GET_ALL_PRODUCTS_BY_ID
+    GET_ALL_PRODUCTS_BY_ID,
+    IS_ADMIN,
 } from '../Actions/Actions';
 
 const initialState = {
@@ -24,6 +25,7 @@ const initialState = {
     lastAdd: {},
     cart: [],
     userData: {},
+    isAdmin: {},
     buyproducts: []
 
 };
@@ -96,7 +98,7 @@ const rootReducer = (state = initialState, action) => {
             // };
             let productToAdd = action.payload;
             console.log("productToAdd: ", productToAdd);
-            let productInCart = state.cart.find((product) => product.id == productToAdd.id);
+            let productInCart = state.cart.find((product) => product.id === productToAdd.id);
             if (productInCart) {
                 return {
                     ...state,
@@ -156,6 +158,15 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state, buyproducts: [...action.payload]
             }
+
+        case IS_ADMIN:
+            if (action.payload.isAdmin === true) {
+                return {
+                    ...state, isAdmin: [true]
+            }} else {
+                return {
+                    ...state, isAdmin: [false]
+            }}
 
 
         default:
