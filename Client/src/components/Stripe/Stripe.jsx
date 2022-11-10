@@ -26,12 +26,12 @@ const CheckoutForm = (props) => {
         var span = document.getElementsByClassName("close")[0];
 
         span.onclick = function () {
-            window.location.replace('http://localhost:3000/products');
+            window.location.replace('https://compudevs.vercel.app/products');
         }
 
         window.onclick = function (event) {
             if (event.target == modal) {
-                window.location.replace('http://localhost:3000/products');
+                window.location.replace('https://compudevs.vercel.app/products');
             }
         }
         const { error, paymentMethod } = await stripe.createPaymentMethod({
