@@ -53,7 +53,7 @@ const Navbar = ({ setCurrentPage }) => {
         dispatch(getCategories());
         console.log('categories', categories);
         dispatch(getProducts(window.localStorage.getItem('email')));
-        dispatch(isAdmin(window.localStorage.getItem('email')));
+        dispatch(isAdmin(window.localStorage.getItem('email')));  // action para validar si el usuario es admin o no
     }, [dispatch]);
 
     const submitSearch = (e) => {
@@ -94,6 +94,7 @@ const Navbar = ({ setCurrentPage }) => {
         localStorage.removeItem("email");
         localStorage.removeItem("id");
         localStorage.removeItem("userID");
+        dispatch(isAdmin(window.localStorage.getItem('email')));                         
         navigate("/products")
     };
 

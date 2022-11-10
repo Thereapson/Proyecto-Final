@@ -14,7 +14,7 @@ import ForgotPassword from "./components/Login/ForgotPassword";
 import Resetpassword from "./components/Login/ResetPassword";
 import ProtectedRouter from "./components/router/ProtectedRouter";
 import StripeCol from "./components/StipeCol/StripeCol";
-import AdminPage1 from './components/Admin/AdminPage1';
+import AdminPage from './components/Admin/AdminPage';
 
 
 function App() {      
@@ -30,7 +30,7 @@ function App() {
           <Route path="/login" element={<Login2 />} />
           <Route path="/register" element={<Register />} />
           <Route exact path="/forgotPassword" element={<ForgotPassword />} />
-          <Route path="/admin/*" element={<AdminPage1/>}/>
+
           <Route
             exact
             path="/resetPassword/:id/:token"
@@ -44,6 +44,7 @@ function App() {
             <Route path="/checkout" element={<StripeCol />} />
 
             <Route path="/products/add" element={<Formaddcomp />} />
+            <Route path="/admin/*" element={<AdminPage/>}/>
           </Route>
 
           {/* <Route path="/detail/:id" element={<DetailCard />} />           */}

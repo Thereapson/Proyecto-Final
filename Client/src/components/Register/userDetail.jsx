@@ -10,7 +10,7 @@ export default class UserDetail extends Component {
     }
     componentDidMount() {
         // const token = this.state
-        fetch('http://localhost:3001/users/userData', {
+        fetch('/users/userData', {
             method: 'POST',
             crossDomain: true,
             headers: {

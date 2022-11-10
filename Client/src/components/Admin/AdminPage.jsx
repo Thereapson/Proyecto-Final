@@ -18,14 +18,10 @@ import {Dashboard} from './Dashboard/index'
 //const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
 import dataProvider from "../../utils/dataProvider"
 
-const AdminPage1 = () => (
+const AdminPage = () => (
         <>
             <Admin basename="/admin" dataProvider={dataProvider} > 
-            {/* <Resource name="users" list={UsersList} edit={UsersEdit} icon={UserIcon}>
-                <Route path="admin/users" element={<ProductList/>}/>            
-                </Resource>   */}
-                {/* <Resource name="category" list={CategoryList} edit={CategoryEdit} icon={PostIcon} recordRepresentation="name"/> */}
-                <Resource name="Dashboard" list={Dashboard}/>
+                 <Resource name="Dashboard" list={Dashboard}/>
                 <Resource name="products" list={ProductList} edit={ProductEdit} icon={InventoryIcon} />
                 <Resource name="category" list={CategoryList} edit={CategoryEdit} recordRepresentation="name" icon={ClassIcon}/>
                 <Resource name="users" list={UsersList} edit={UsersEdit} icon={PeopleIcon}/>                
@@ -33,4 +29,4 @@ const AdminPage1 = () => (
         </>    
         )
 
-export default AdminPage1;
+export default AdminPage;
