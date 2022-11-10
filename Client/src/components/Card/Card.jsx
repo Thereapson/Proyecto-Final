@@ -47,7 +47,7 @@ function Card({ product }) {
 
     console.log("productsToadd", productsToadd);
     dispatch(addProduct(productsToadd));
-    dispatch(getCart(userId));
+    userId && dispatch(getCart(userId));
   }
 
   return (

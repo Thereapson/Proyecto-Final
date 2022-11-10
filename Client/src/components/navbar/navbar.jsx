@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { getProductsByCategory, getProductsBySearch, getCategories, getProducts, getUser, getCart } from "../../Redux/Actions/Actions";
+import { getProductsByCategory, getProductsBySearch, getCategories, getProducts, getUser, getCart, isAdmin } from "../../Redux/Actions/Actions";
 import Cart from "../cart/cart";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+
 
 const Navbar = ({ setCurrentPage }) => {
 
     const dispatch = useDispatch();
     const categories = useSelector(state => state.categories);
+    const admin = useSelector(state => state.isAdmin);
 
     useEffect(() => {
-        dispatch(getCart(window.localStorage.getItem('id')));
-        dispatch(getUser(window.localStorage.getItem('email')));
+        window.localStorage.getItem('id') && dispatch(getCart(window.localStorage.getItem('id')));
+        window.localStorage.getItem('email') && dispatch(getUser(window.localStorage.getItem('email')));
     }, [dispatch]);
 
-    useEffect(() => {
-        dispatch(getCart(window.localStorage.getItem('id')));
-    }, [dispatch]);
     const menu = [
         // {
         //     name: "Home",
@@ -52,7 +52,8 @@ const Navbar = ({ setCurrentPage }) => {
     useEffect(() => {
         dispatch(getCategories());
         console.log('categories', categories);
-        dispatch(getProducts());
+        dispatch(getProducts(window.localStorage.getItem('email')));
+        dispatch(isAdmin(window.localStorage.getItem('email')));
     }, [dispatch]);
 
     const submitSearch = (e) => {
@@ -198,9 +199,13 @@ const Navbar = ({ setCurrentPage }) => {
                         </Link>
                     </div>
                     <div className="flex items-center">
-                        <Link to={"/products/add"} className="text-gray-700 font-bold text-lg ml-2 flex items-center">
-                            Add Product
-                        </Link>
+                        {
+                            admin[0] === true && 
+                            <Link to={"/admin"} className="text-gray-700 font-bold text-lg ml-2 flex items-center">
+                            <AdminPanelSettingsIcon/> 
+                            Admin
+                        </Link> 
+                        }
                     </div>
                 </div>
             </div>

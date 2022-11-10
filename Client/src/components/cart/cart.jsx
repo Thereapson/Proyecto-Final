@@ -15,7 +15,7 @@ const Cart = ({ setShowCart, showCart }) => {
     const [products, setProducts] = useState([])
 
     useEffect(() => {
-        dispatch(getCart(window.localStorage.getItem('id')));
+        window.localStorage.getItem('id') && dispatch(getCart(window.localStorage.getItem('id')));
     }, [dispatch])
 
     useEffect(() => {

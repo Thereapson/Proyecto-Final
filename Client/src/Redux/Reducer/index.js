@@ -12,7 +12,8 @@ import {
     REMOVE_FROM_CART,
     CLEAN_PRODUCTS,
     CLEAN_PRODUCTS_RENDER,
-    GET_ALL_PRODUCTS_BY_ID
+    GET_ALL_PRODUCTS_BY_ID,
+    IS_ADMIN,
 } from '../Actions/Actions';
 
 const initialState = {
@@ -24,6 +25,7 @@ const initialState = {
     lastAdd: {},
     cart: [],
     userData: {},
+    isAdmin: {},
     buyproducts: []
 
 };
@@ -157,6 +159,14 @@ const rootReducer = (state = initialState, action) => {
                 ...state, buyproducts: [...action.payload]
             }
 
+        case IS_ADMIN:
+            if (action.payload.isAdmin === true) {
+                return {
+                    ...state, isAdmin: [true]
+            }} else {
+                return {
+                    ...state, isAdmin: [false]
+            }}
 
         default:
             return { ...state };

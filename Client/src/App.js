@@ -1,6 +1,6 @@
 // import './App.css';
 import Products from "./components/products/products";
-import Login2 from "./components/Login/Login2";
+import {Login2} from "./components/Login/Login2";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./components/Register/Register";
@@ -14,9 +14,10 @@ import ForgotPassword from "./components/Login/ForgotPassword";
 import Resetpassword from "./components/Login/ResetPassword";
 import ProtectedRouter from "./components/router/ProtectedRouter";
 import StripeCol from "./components/StipeCol/StripeCol";
+import AdminPage1 from './components/Admin/AdminPage1';
 
 
-function App() {
+function App() {      
   return (
     <div className="App container">
       <BrowserRouter>
@@ -29,6 +30,7 @@ function App() {
           <Route path="/login" element={<Login2 />} />
           <Route path="/register" element={<Register />} />
           <Route exact path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/admin/*" element={<AdminPage1/>}/>
           <Route
             exact
             path="/resetPassword/:id/:token"
