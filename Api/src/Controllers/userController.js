@@ -1315,6 +1315,26 @@ const addFavorites = async (req, res, next) => {
   }
 }
 
+const getAdminByEmail = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    const user = await userModel.findOne({ email: email })
+    if (user) {
+      let userToSend = {
+        id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin
+      }
+      res.status(200).send(userToSend)
+    } else {
+      res.status(400).send("There's no User with that Email")
+    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
@@ -1328,5 +1348,6 @@ module.exports = {
     userData,
     forgotPassword,
     resetPassword,
-    resetPasswordToken
+    resetPasswordToken,
+    getAdminByEmail,
 };
