@@ -15,7 +15,7 @@ function Card({ product }) {
       icon: "success",
       button: "Ok",
     });
-    let userId = localStorage.getItem("userID");
+    let userId = localStorage.getItem("id");
     let productId = product.id;
     let productsToadd = {
       "user_id": userId,

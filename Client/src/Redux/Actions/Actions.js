@@ -12,6 +12,7 @@ export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const GET_CART = "GET_CART";
 export const GET_ALL_PRODUCTS_BY_ID = "GET_ALL_PRODUCTS_BY_ID";
+export const IS_ADMIN = "IS_ADMIN";
 
 export const GET_USER = "GET_USER";
 
@@ -175,5 +176,13 @@ export const buyAllProducts = (array) => {
         }
 
         dispatch({ type: GET_ALL_PRODUCTS_BY_ID, payload: arreglo })
+    }
+}
+
+export const isAdmin = (email) => {
+    console.log("valida si es admin")
+    return async (dispatch) => { 
+                let admin = await axios.get(`/users/isadmin/${email}`)
+        dispatch({ type: IS_ADMIN, payload: admin.data })
     }
 }

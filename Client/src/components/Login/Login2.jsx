@@ -1,24 +1,20 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import Navbar from '../navbar/navbar';
 import axios from 'axios'
+import {useDispatch, useSelector} from 'react-redux'
 
 
 
-export default class Login2 extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: "",
-      password: "",
-    }
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
+export const Login2 = () => { 
 
-  handleSubmit(e) {
+  const [user, userState] = useState({})
+
+    function handleSubmit(e) {
     e.preventDefault()
-    const { email, password } = this.state;
-    console.log(email, password)
-    fetch('/users/login', {
+    let email = user?.email
+    let password = user?.password
+    console.log(user?.email, user?.password)
+    fetch ('https://compudevs.herokuapp.com/users/login', {
       method: 'POST',
       crossDomain: true,
       headers: {
@@ -37,6 +33,10 @@ export default class Login2 extends Component {
         window.localStorage.setItem('token', data.data);
         window.localStorage.setItem('isLogged', true);
         window.localStorage.setItem('id', data.id);
+<<<<<<< HEAD
+=======
+        window.localStorage.setItem('email', email)
+>>>>>>> 8b1f223ff580cd875b3210cd0f4498c13198a5f9
         if (data.status === 'ok') {
           alert('login succesful');
           // window.localStorage.setItem('token', data.data);
@@ -48,15 +48,58 @@ export default class Login2 extends Component {
       })
   }
 
+  // function handleSubmit(e) {
+  //   e.preventDefault()
+  //   let email = user?.email
+  //   let password = user?.password
+  //   console.log(user?.email, user?.password)
+  //   fetch ('https://compudevs.herokuapp.com/users/login', {
+  //     method: 'POST',
+  //     crossDomain: true,
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Accept: 'application/json',
+  //       'Access-Control-Allow-Origin': '*'
+  //     },
+  //     body: JSON.stringify({
+  //       email,
+  //       password
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data, 'login')
+  //       window.localStorage.setItem('token', data.data);
+  //       window.localStorage.setItem('isLogged', true);
+  //       window.localStorage.setItem('id', data.id);
+  //       window.localStorage.setItem('email', email)
+  //       if (data.status === 'ok') {
+  //         alert('login succesful');
+  //         // window.localStorage.setItem('token', data.data);
+  //         window.location.href = '/userDetail'
+  //       } else {
+  //         alert('invalid email or password ')
+
+  //       }
+  //     })
+  // }
+
+
+  function handleChange(e) {
+    userState({...user, [e.target.name] : e.target.value})
+    console.log(user)
+  }
+
+
+
   // logOut = () => {
   //   localStorage.removeItem("token");
   //   localStorage.removeItem("isLogged");
   // }
-  render() {
     return (
       <div>
         <Navbar />
-        <form onSubmit={this.handleSubmit}>
+        <form >
 
 
           <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl my-40">
@@ -69,7 +112,7 @@ export default class Login2 extends Component {
 
             <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
               <h2 className="text-2xl font-semibold text-center text-gray-700 dark:text-white">
-                Techno parts
+                CompuDevs
               </h2>
 
               <p className="text-xl text-center text-gray-600 dark:text-gray-200">
@@ -128,9 +171,10 @@ export default class Login2 extends Component {
                 </label>
                 <input
                   id="LoggingEmailAddress"
+                  name="email"
                   className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                   type="email"
-                  onChange={e => this.setState({ email: e.target.value })}
+                  onChange={(e) => handleChange(e)}
                 />
               </div>
 
@@ -152,16 +196,17 @@ export default class Login2 extends Component {
 
                 <input
                   id="loggingPassword"
+                  name="password"
                   autoComplete="off"
                   className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                   type="password"
-                  onChange={e => this.setState({ password: e.target.value })}
+                  onChange={(e) => handleChange(e)}
 
                 />
               </div>
 
               <div className="mt-8">
-                <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600" type="submit">
+                <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600" type="submit" onClick={(e) => handleSubmit(e)}>
                   Inicia sesión
                 </button>
               </div>
@@ -183,7 +228,6 @@ export default class Login2 extends Component {
         </form>
       </div>
     );
-
-  }
 }
+
 

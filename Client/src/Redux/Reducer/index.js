@@ -12,7 +12,8 @@ import {
     REMOVE_FROM_CART,
     CLEAN_PRODUCTS,
     CLEAN_PRODUCTS_RENDER,
-    GET_ALL_PRODUCTS_BY_ID
+    GET_ALL_PRODUCTS_BY_ID,
+    IS_ADMIN,
 } from '../Actions/Actions';
 
 const initialState = {
@@ -23,8 +24,13 @@ const initialState = {
     lastAdd: {},
     cart: [],
     userData: {},
+<<<<<<< HEAD
     buyproducts: [],
     filteredBy: ""
+=======
+    isAdmin: {},
+    buyproducts: []
+>>>>>>> 8b1f223ff580cd875b3210cd0f4498c13198a5f9
 
 };
 
@@ -93,7 +99,12 @@ const rootReducer = (state = initialState, action) => {
 
         case ADD_PRODUCT:
             let productToAdd = action.payload;
+<<<<<<< HEAD
             let productInCart = state.cart.find((product) => product.id == productToAdd.id);
+=======
+            console.log("productToAdd: ", productToAdd);
+            let productInCart = state.cart.find((product) => product.id === productToAdd.id);
+>>>>>>> 8b1f223ff580cd875b3210cd0f4498c13198a5f9
             if (productInCart) {
                 return {
                     ...state,
@@ -188,6 +199,15 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state, buyproducts: [...action.payload]
             }
+
+        case IS_ADMIN:
+            if (action.payload.isAdmin === true) {
+                return {
+                    ...state, isAdmin: [true]
+            }} else {
+                return {
+                    ...state, isAdmin: [false]
+            }}
 
 
         default:
