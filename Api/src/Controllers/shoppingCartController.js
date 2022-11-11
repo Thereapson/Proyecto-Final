@@ -62,7 +62,8 @@ const addProductToShoppingCart = async (req, res, next) => {
                 }
             })
             if( updated || added) {
-                res.status(200).send(updated || added)
+                const ShoppingCart = await shoppingCartModel.findOne({ user_id: userId })
+                res.status(200).send(ShoppingCart)
             } else {
                 res.status(400).send("The Product can't be added")
             }
