@@ -17,14 +17,14 @@ import {
 
 const initialState = {
     products: [],
-    filteredProducts: [],
     productsRender: [],
     DetailProduct: [],
     categories: [],
     lastAdd: {},
     cart: [],
     userData: {},
-    buyproducts: []
+    buyproducts: [],
+    filteredBy: ""
 
 };
 
@@ -34,19 +34,22 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 products: action.payload,
+                productsRender: action.payload
             };
         case GET_PRODUCTS_BY_SEARCH:
             let search = action.payload;
-            console.log("search: ", search);
             let filteredByName = state.products.filter((product) => product.name?.toLowerCase().includes(search.toLowerCase()));
             let filteredByBrand = state.products.filter((product) => product.brand?.toLowerCase().includes(search.toLowerCase()));
             let filteredByCategory = state.products.filter((product) => product.category?.toLowerCase().includes(search.toLowerCase()));
 
             let filteredProducts = [...filteredByName, ...filteredByCategory, ...filteredByBrand];
+            let filteredProductsUnique = filteredProducts.filter((product, index) => filteredProducts.indexOf(product) === index);
+
             if (filteredProducts.length > 0) {
                 return {
                     ...state,
-                    productsRender: filteredProducts,
+                    productsRender: filteredProductsUnique,
+                    filteredBy: search
                 };
             } else {
                 return {
@@ -57,11 +60,11 @@ const rootReducer = (state = initialState, action) => {
 
         case GET_PRODUCTS_BY_CATEGORY:
             let category = action.payload;
-            console.log("category: ", category);
             let filterByCategory = state.products.filter((product) => product.category.toLowerCase().includes(category.toLowerCase()));
             return {
                 ...state,
                 productsRender: filterByCategory,
+                filteredBy: category
             };
 
         case GET_PRODUCT_BY_ID:
@@ -87,15 +90,9 @@ const rootReducer = (state = initialState, action) => {
                     cart: state.cart.filter((product) => product.id !== productToRemove.id),
                 };
             }
-            
+
         case ADD_PRODUCT:
-            // from action
-            // return {
-            //     type: ADD_PRODUCT,
-            //     payload: products,
-            // };
             let productToAdd = action.payload;
-            console.log("productToAdd: ", productToAdd);
             let productInCart = state.cart.find((product) => product.id == productToAdd.id);
             if (productInCart) {
                 return {
@@ -118,16 +115,51 @@ const rootReducer = (state = initialState, action) => {
         case GET_PRODUCTS_BY_MIN_MAX:
             let min = action.payload.min;
             let max = action.payload.max;
-            if (state.productsRender.length > 0) {
+            let filteredby = state.filteredBy;
+            if (filteredby === "") {
+                let filteredByPrice = state.products.filter((product) => product.price >= min && product.price <= max);
+                if (filteredByPrice.length > 0) {
+                    return {
+                        ...state,
+                        productsRender: filteredByPrice
+                    };
+                } else {
+                    return {
+                        ...state,
+                        productsRender: ["No Products Found"],
+                    };
+                }
+            } else {
+                let filteredByPrice = state.products.filter((product) => product.price >= min && product.price <= max && product.category.toLowerCase().includes(filteredby.toLowerCase()));
+                if (filteredByPrice.length > 0) {
+                    return {
+                        ...state,
+                        productsRender: filteredByPrice
+                    };
+                }
+                else {
+                    return {
+                        ...state,
+                        productsRender: ["No Products Found"],
+                    };
+                }
+            }
+
+        case 'GET_PRODUCT_BY_ORDER':
+            let order = action.payload;
+
+            console.log('order', order)
+
+            if (order === "asc") {
                 return {
                     ...state,
-                    productsRender: state.productsRender.filter((product) => product.price >= min && product.price <= max)
-                }
+                    productsRender: state.productsRender.sort((a, b) => a.price - b.price)
+                };
             } else {
                 return {
                     ...state,
-                    products: state.products.filter((product) => product.price >= min && product.price <= max)
-                }
+                    productsRender: state.productsRender.sort((a, b) => b.price - a.price)
+                };
             }
 
         case GET_USER:

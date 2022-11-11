@@ -86,6 +86,13 @@ export const getProductsByMinMax = (min, max) => {
     };
 };
 
+export const getProductByOrder = (order) => {
+    return {
+        type: 'GET_PRODUCT_BY_ORDER',
+        payload: order
+    };
+};
+
 // add product to cart, if the product is already in the cart, increase the quantity by +1
 export const addProduct = (data) => {
     console.log("Desde la action: ", data)
