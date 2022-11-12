@@ -113,7 +113,7 @@ export const getCart = (id) => {
             .then((response) => {
                 console.log("response.data: ", response.data)
                 dispatch({ type: "GET_CART", payload: response.data })
-                window.localStorage.setItem("userID", response.data.user)
+
             })
     };
 }
@@ -165,10 +165,20 @@ export const getUser = (email) => {
 };
 export const buyAllProducts = (array) => {
     return async (dispatch) => {
+        console.log('como llega el array:', array)
+        let arreglofixed = [];
         let arreglo = [];
-        for (let i = 0; i < array.length; i++) {
-            await axios.get(`/products/detail/${array[i]}`)
+        array.forEach(element => {
+            if (element != "") {
+                arreglofixed.push(element)
+            }
+        });
+        console.log('despues de fixearlo:', arreglofixed)
+
+        for (let i = 0; i < arreglofixed.length; i++) {
+            await axios.get(`/products/detail/${arreglofixed[i]}`)
                 .then((response) => {
+                    console.log("resultado de la busqueda", response)
                     let respuesta = response.data
                     arreglo.push(respuesta)
                 })
@@ -181,8 +191,8 @@ export const buyAllProducts = (array) => {
 
 export const isAdmin = (email) => {
     console.log("valida si es admin")
-    return async (dispatch) => { 
-                let admin = await axios.get(`/users/isadmin/${email}`)
+    return async (dispatch) => {
+        let admin = await axios.get(`/users/isadmin/${email}`)
         dispatch({ type: IS_ADMIN, payload: admin.data })
     }
 }

@@ -25,6 +25,14 @@ const Cart = ({ setShowCart, showCart }) => {
         // console.log("cart", cart);
     }, [cart])
 
+    const URLCREATOR = function (string, cantidad) {
+        var compuesta = '';
+        for (let i = 0; i < cantidad; i++) {
+            compuesta = compuesta + ',' + string
+
+        }
+        return compuesta
+    }
     const total = () => {
         console.log("pase total")
         let total = 0;
@@ -187,11 +195,11 @@ const Cart = ({ setShowCart, showCart }) => {
                                             </div>
                                             <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                                             <div className="mt-6">
-                                                {/* <Link to={'/checkout' + (products.length > 0 ? '?products=' + products.map(product => product.id).join(',') : '')}> */}
-                                                <button type="button" className="w-full flex justify-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 inline-flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700">
-                                                    Checkout
-                                                </button>
-                                                {/* </Link> */}
+                                                <Link to={'/checkout' + (products.length > 0 ? '?products=' + products.map(product => URLCREATOR(product.product_id["_id"], product.quantity)) : '')}>
+                                                    <button type="button" className="w-full flex justify-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 inline-flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700">
+                                                        Checkout
+                                                    </button>
+                                                </Link>
                                             </div>
                                             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                                 <p>
