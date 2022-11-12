@@ -18,7 +18,7 @@ const stripePromise = loadStripe("pk_test_51LzkQ9EsbLOetD4WD60JMd2sSsaEOSnizWXhG
 const CheckoutForm = (props) => {
     const stripe = useStripe()
     const elements = useElements()
-    const useremail = window.localStorage.getItem('email')
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -44,7 +44,7 @@ const CheckoutForm = (props) => {
                 id: paymentMethod.id,
                 amount: props.amount,
                 detail: props.detail,
-                email: useremail || "andrefe13808@hotmail.com"
+                email: "andrefe13808@hotmail.com"
 
             })
             modal.style.display = "block"

@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 function Card({ product }) {
   const dispatch = useDispatch();
   const user = useSelector(state => state.userData);
-  const [quantity, setQuantity] = React.useState(1);
   const handleAddProduct = () => {
     swal({
       title: "Product added to cart",
@@ -22,7 +21,7 @@ function Card({ product }) {
       "products_id": [
         {
           "product_id": productId,
-          "quantity": quantity
+          "quantity": 1
         }
       ]
     }
@@ -33,7 +32,7 @@ function Card({ product }) {
   }
 
   return (
-    <div className="relative w-80 h-96 shadow-md">
+    <div className="p-4 relative w-80" >
       <button
         type="button"
         className="absolute right-4 top-4 rounded-full bg-black p-2 text-white"
@@ -58,10 +57,10 @@ function Card({ product }) {
         <img
           alt="Toy"
           src={product.image}
-          className="h-56 w-full object-cover rounded-t-md"
+          className="h-56 w-full object-contain"
         />
       </Link>
-      <div className="p-6 bg-gray-100 rounded-b-md p-2 gap-3">
+      <div className="p-6">
         <p className="text-sm font-medium text-gray-600">${product.price}</p>
 
         <h3 className="mt-1 text-lg font-bold">{product.name}</h3>

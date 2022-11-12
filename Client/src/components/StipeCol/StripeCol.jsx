@@ -42,20 +42,15 @@ const CheckoutForm = (props) => {
 
         if (!error) {
             props.products.forEach(async (product) => {
-                if (product !== "") {
-                    const { data } = await axios.post('/products/payment', {
-                        id: paymentMethod.id,
-                        amount: product.price * 100,
-                        detail: product.name,
-                        email: props.email
+                const { data } = await axios.post('/products/payment', {
+                    id: paymentMethod.id,
+                    amount: product.price * 100,
+                    detail: product.name,
+                    email: "andresalt1808@hotmail.com"
 
-                    })
-                    modal.style.display = "block"
-                    console.log(data)
-                } else {
-                    console.log('No es un id correcto')
-                }
-
+                })
+                modal.style.display = "block"
+                console.log(data)
             });
 
 
@@ -75,11 +70,10 @@ const CheckoutForm = (props) => {
     </form>
 }
 function StripeCol() {
-    const useremail = window.localStorage.getItem('email')
     const dispatch = useDispatch();
     const allproducts = useSelector((state) => state.buyproducts)
     const [params, setParams] = useSearchParams();
-    let array = params.get('products').trim().split(',')
+    let array = params.get('products').split(',')
     useEffect(() => {
         dispatch(buyAllProducts(array))
     }, [])
@@ -91,7 +85,7 @@ function StripeCol() {
                 Checkout
             </h1>
             <Elements stripe={stripePromise}>
-                <CheckoutForm products={allproducts} email={useremail || "alternativemail@gmail.com"}>
+                <CheckoutForm products={allproducts}>
 
                 </CheckoutForm>
             </Elements>
@@ -106,7 +100,6 @@ function StripeCol() {
                 </div>
 
             </div>
-        
         </div>
     );
 }

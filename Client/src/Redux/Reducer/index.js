@@ -18,19 +18,16 @@ import {
 
 const initialState = {
     products: [],
+    filteredProducts: [],
     productsRender: [],
     DetailProduct: [],
     categories: [],
     lastAdd: {},
     cart: [],
     userData: {},
-<<<<<<< HEAD
-    buyproducts: [],
-    filteredBy: ""
-=======
     isAdmin: {},
-    buyproducts: []
->>>>>>> 8b1f223ff580cd875b3210cd0f4498c13198a5f9
+    buyproducts: [],
+    filterBy: "",
 
 };
 
@@ -81,41 +78,6 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 categories: action.payload,
             };
-
-        case REMOVE_FROM_CART:
-            let productToRemove = action.payload;
-            let productInCartToRemove = state.cart.find((product) => product.id === productToRemove.id);
-            if (productInCartToRemove.quantity > 1) {
-                return {
-                    ...state,
-                    cart: state.cart.map((product) => (product.id === productToRemove.id ? { ...product, quantity: product.quantity - 1 } : product)),
-                };
-            } else {
-                return {
-                    ...state,
-                    cart: state.cart.filter((product) => product.id !== productToRemove.id),
-                };
-            }
-
-        case ADD_PRODUCT:
-            let productToAdd = action.payload;
-<<<<<<< HEAD
-            let productInCart = state.cart.find((product) => product.id == productToAdd.id);
-=======
-            console.log("productToAdd: ", productToAdd);
-            let productInCart = state.cart.find((product) => product.id === productToAdd.id);
->>>>>>> 8b1f223ff580cd875b3210cd0f4498c13198a5f9
-            if (productInCart) {
-                return {
-                    ...state,
-                    cart: state.cart.map((product) => (product.id === productToAdd.id ? { ...product, quantity: product.quantity + 1 } : product)),
-                };
-            } else {
-                return {
-                    ...state,
-                    cart: [...state.cart, { ...productToAdd, quantity: 1 }],
-                };
-            }
 
         case CLEAN_DETAILS:
             return {
@@ -200,14 +162,17 @@ const rootReducer = (state = initialState, action) => {
                 ...state, buyproducts: [...action.payload]
             }
 
+
         case IS_ADMIN:
             if (action.payload.isAdmin === true) {
                 return {
                     ...state, isAdmin: [true]
-            }} else {
+                }
+            } else {
                 return {
                     ...state, isAdmin: [false]
-            }}
+                }
+            }
 
 
         default:
