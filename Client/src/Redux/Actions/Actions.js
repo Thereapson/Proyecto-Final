@@ -106,7 +106,6 @@ export const getCart = (id) => {
             .then((response) => {
                 console.log("response.data: ", response.data)
                 dispatch({ type: "GET_CART", payload: response.data })
-
             })
     };
 }

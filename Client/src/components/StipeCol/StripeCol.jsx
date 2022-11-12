@@ -106,7 +106,7 @@ function StripeCol() {
                 </div>
 
             </div>
-        
+
         </div>
     );
 }
