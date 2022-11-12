@@ -103,7 +103,7 @@ const rootReducer = (state = initialState, action) => {
                     };
                 }
             } else {
-                let filteredByPrice = state.products.filter((product) => product.price >= min && product.price <= max && product.category.toLowerCase().includes(filteredby.toLowerCase()));
+                let filteredByPrice = state.products.filter((product) => product.price >= min && product.price <= max && product.category.toLowerCase().includes(filteredby?.toLowerCase()));
                 if (filteredByPrice.length > 0) {
                     return {
                         ...state,
@@ -162,7 +162,6 @@ const rootReducer = (state = initialState, action) => {
                 ...state, buyproducts: [...action.payload]
             }
 
-
         case IS_ADMIN:
             if (action.payload.isAdmin === true) {
                 return {
@@ -173,7 +172,6 @@ const rootReducer = (state = initialState, action) => {
                     ...state, isAdmin: [false]
                 }
             }
-
 
         default:
             return { ...state };

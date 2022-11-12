@@ -36,7 +36,6 @@ export const Login2 = () => {
         window.localStorage.setItem('email', email)
         if (data.status === 'ok') {
           alert('login succesful');
-          // window.localStorage.setItem('token', data.data);
           window.location.href = '/userDetail'
         } else {
           alert('invalid email or password ')
@@ -45,54 +44,11 @@ export const Login2 = () => {
       })
   }
 
-  // function handleSubmit(e) {
-  //   e.preventDefault()
-  //   let email = user?.email
-  //   let password = user?.password
-  //   console.log(user?.email, user?.password)
-  //   fetch ('https://compudevs.herokuapp.com/users/login', {
-  //     method: 'POST',
-  //     crossDomain: true,
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Accept: 'application/json',
-  //       'Access-Control-Allow-Origin': '*'
-  //     },
-  //     body: JSON.stringify({
-  //       email,
-  //       password
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log(data, 'login')
-  //       window.localStorage.setItem('token', data.data);
-  //       window.localStorage.setItem('isLogged', true);
-  //       window.localStorage.setItem('id', data.id);
-  //       window.localStorage.setItem('email', email)
-  //       if (data.status === 'ok') {
-  //         alert('login succesful');
-  //         // window.localStorage.setItem('token', data.data);
-  //         window.location.href = '/userDetail'
-  //       } else {
-  //         alert('invalid email or password ')
-
-  //       }
-  //     })
-  // }
-
-
   function handleChange(e) {
     userState({ ...user, [e.target.name]: e.target.value })
     console.log(user)
   }
 
-
-
-  // logOut = () => {
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("isLogged");
-  // }
   return (
     <div>
       <Navbar />
@@ -226,5 +182,3 @@ export const Login2 = () => {
     </div>
   );
 }
-
-

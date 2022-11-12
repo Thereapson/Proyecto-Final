@@ -33,7 +33,7 @@ const addProductToShoppingCart = async (req, res, next) => {
         const productData = req.body
         const userId = productData.user_id
         const products = productData.products_id
-        console.log("Desde el controller: ",productData)
+        console.log("Desde el controller: ", productData)
         const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
         let updated = {}
         let added = {}
@@ -49,7 +49,7 @@ const addProductToShoppingCart = async (req, res, next) => {
                     updated = await shoppingCartModel.updateOne(
                         { user_id: userId, "products_id.product_id": productFound.product_id },
                         { $set: { "products_id.$.quantity": updateQuantity } }
-                        )
+                    )
                 } else {
                     newArrayProduct = {
                         product_id: product.product_id,
@@ -58,11 +58,12 @@ const addProductToShoppingCart = async (req, res, next) => {
                     added = await shoppingCartModel.updateOne(
                         { user_id: userId },
                         { $push: { products_id: newArrayProduct } }
-                        )
+                    )
                 }
             })
-            if( updated || added) {
-                res.status(200).send(updated || added)
+            if (updated || added) {
+                const ShoppingCart = await shoppingCartModel.findOne({ user_id: userId })
+                res.status(200).send(ShoppingCart)
             } else {
                 res.status(400).send("The Product can't be added")
             }
@@ -94,9 +95,9 @@ const getShoppingCartByUser = async (req, res, next) => {
     try {
         const userId = req.params.id
         const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId }).populate({
-                path: 'products_id.product_id',
-                select: '_id name image price'
-            })
+            path: 'products_id.product_id',
+            select: '_id name image price'
+        })
         if (shoppingCartFound) {
             const ShoppingCart = {
                 user: shoppingCartFound.user_id,
