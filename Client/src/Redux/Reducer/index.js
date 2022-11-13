@@ -28,6 +28,8 @@ const initialState = {
     isAdmin: {},
     buyproducts: [],
     filterBy: "",
+    userFavorites: [],
+    quantityFromCart: 0
 
 };
 
@@ -142,19 +144,25 @@ const rootReducer = (state = initialState, action) => {
             }
 
         case "ADD_PRODUCT":
-            console.log("action.payload: ", action.payload);
+            return {
+                ...state,
+                cart: action.payload,
+                quantityFromCart: action.payload.products?.length
+            }
 
         case "GET_CART":
             console.log("GET_CART: ", action.payload)
             return {
                 ...state,
-                cart: action.payload
+                cart: action.payload,
+                quantityFromCart: action.payload.products?.length
             }
 
         case "REMOVE_CART":
             return {
                 ...state,
-                cart: action.payload
+                cart: action.payload,
+                quantityFromCart: action.payload.products?.length
             }
 
         case GET_ALL_PRODUCTS_BY_ID:
@@ -171,6 +179,24 @@ const rootReducer = (state = initialState, action) => {
                 return {
                     ...state, isAdmin: [false]
                 }
+            }
+
+        case "ADD_FAVORITE":
+            return {
+                ...state,
+                userFavorites: action.payload
+            }
+
+        case "REMOVE_FAVORITE":
+            return {
+                ...state,
+                userFavorites: action.payload
+            }
+        case "GET_FAVORITES":
+            const favorites = action.payload;
+            return {
+                ...state,
+                userFavorites: favorites
             }
 
         default:
