@@ -13,8 +13,10 @@ export const ADD_PRODUCT = "ADD_PRODUCT";
 export const GET_CART = "GET_CART";
 export const GET_ALL_PRODUCTS_BY_ID = "GET_ALL_PRODUCTS_BY_ID";
 export const IS_ADMIN = "IS_ADMIN";
-
 export const GET_USER = "GET_USER";
+export const ADD_FAVORITE = "ADD_FAVORITE";
+export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
+
 
 
 export const getProducts = () => {
@@ -144,6 +146,42 @@ export const removeCart = (id) => {
             })
     };
 }
+
+// get favorites
+export const getFavorites = (id) => {
+    // let id = "63681baa20ab92251bb85fd9"
+    return async (dispatch) => {
+        await axios.get(`/users/favorites/${id}`)
+            .then((response) => {
+                console.log(response.data)
+                dispatch({ type: "GET_FAVORITES", payload: response.data })
+            })
+    };
+}
+
+// add favorite
+export const addFavorite = (data) => {
+    return async (dispatch) => {
+        await axios.post("/users/favorites", data)
+            .then((response) => {
+                console.log(response.data)
+                dispatch({ type: "ADD_FAVORITE", payload: response.data })
+            })
+    };
+}
+
+// remove favorite
+export const removeFavorite = (body) => {
+    return async (dispatch) => {
+        await axios.post("/users/favorites/delete", body)
+            .then((response) => {
+                dispatch({ type: "REMOVE_FAVORITE", payload: response.data })
+            })
+    };
+}
+
+
+
 
 // get user
 export const getUser = (email) => {

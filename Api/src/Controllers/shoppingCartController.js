@@ -33,7 +33,6 @@ const addProductToShoppingCart = async (req, res, next) => {
         const productData = req.body
         const userId = productData.user_id
         const products = productData.products_id
-        console.log("Desde el controller: ", productData)
         const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
         let updated = {}
         let added = {}
@@ -62,8 +61,11 @@ const addProductToShoppingCart = async (req, res, next) => {
                 }
             })
             if (updated || added) {
-                const ShoppingCart = await shoppingCartModel.findOne({ user_id: userId })
-                res.status(200).send(ShoppingCart)
+                const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId }).populate({
+                    path: 'products_id.product_id',
+                    select: '_id name image price'
+                })
+                res.status(200).send(shoppingCartFound)
             } else {
                 res.status(400).send("The Product can't be added")
             }

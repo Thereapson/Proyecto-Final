@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { getProductsByCategory, getProductsBySearch, getCategories, getProducts, getUser, getCart, isAdmin } from "../../Redux/Actions/Actions";
+import { getProductsByCategory, getProductsBySearch, getCategories, getProducts, getUser, getCart, isAdmin, getFavorites } from "../../Redux/Actions/Actions";
 import Cart from "../cart/cart";
+import Favorites from "../favorites/Favorites";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 
@@ -51,10 +52,13 @@ const Navbar = ({ setCurrentPage }) => {
 
     useEffect(() => {
         dispatch(getCategories());
-        console.log('categories', categories);
-        dispatch(getProducts(window.localStorage.getItem('email')));
+        // console.log('categories', categories);
+        dispatch(getProducts());
         dispatch(isAdmin(window.localStorage.getItem('email')));  // action para validar si el usuario es admin o no
+        dispatch(getFavorites(window.localStorage.getItem('id')));
     }, [dispatch]);
+
+    const favorites = useSelector(state => state.userFavorites);
 
     const submitSearch = (e) => {
         e.preventDefault();
@@ -86,7 +90,7 @@ const Navbar = ({ setCurrentPage }) => {
         setShowCart(true);
     };
 
-    const quantityInCart = useSelector(state => state.cart.products?.length);
+    const quantityInCart = useSelector(state => state.quantityFromCart);
 
     const handleLogOut = () => {
         localStorage.removeItem("token");
@@ -94,9 +98,17 @@ const Navbar = ({ setCurrentPage }) => {
         localStorage.removeItem("email");
         localStorage.removeItem("id");
         localStorage.removeItem("userID");
-        dispatch(isAdmin(window.localStorage.getItem('email')));                         
+        dispatch(isAdmin(window.localStorage.getItem('email')));
         navigate("/products")
     };
+
+    // favorites 
+    const [showFavorites, setShowFavorites] = useState(false);
+    const handleFavorites = () => {
+        setShowFavorites(true);
+    };
+
+    const quantityInFavorites = useSelector(state => state.userFavorites.length);
 
     return (
         <div className="bg-white relative">
@@ -183,6 +195,20 @@ const Navbar = ({ setCurrentPage }) => {
                             {quantityInCart > 0 && <div className="absolute bottom-5 left-3 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">{quantityInCart}</div>}
                         </div>
                     </div>
+                    {/* favorites */}
+                    <div className="flex items-center hover:cursor-pointer">
+                        <div className="relative">
+                            {/* favorites */}
+                            <button className="focus:outline-none focus:shadow-outline" onClick={() => handleFavorites()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+                                </svg>
+                            </button>
+                            {showFavorites && <Favorites setShowFavorites={setShowFavorites} showFavorites={showFavorites} />}
+                            {quantityInFavorites > 0 && <div className="absolute bottom-5 left-3 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">{quantityInFavorites}</div>}
+                        </div>
+                    </div>
                     {/* user */}
                     <div className="flex items-center">
                         <Link to={isLogin ? "/userDetail" : "/login"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={handleLogin}>
@@ -201,11 +227,11 @@ const Navbar = ({ setCurrentPage }) => {
                     </div>
                     <div className="flex items-center">
                         {
-                            admin[0] === true && 
+                            admin[0] === true &&
                             <Link to={"/admin"} className="text-gray-700 font-bold text-lg ml-2 flex items-center">
-                            {/* <AdminPanelSettingsIcon/>  */}
-                            Admin
-                        </Link> 
+                                {/* <AdminPanelSettingsIcon/>  */}
+                                Admin
+                            </Link>
                         }
                     </div>
                 </div>

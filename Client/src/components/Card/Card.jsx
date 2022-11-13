@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import swal from 'sweetalert';
-import { addProduct, getCart } from "../../Redux/Actions/Actions";
+import { addProduct, getCart, addFavorite, removeFavorite } from "../../Redux/Actions/Actions";
 import { useSelector } from "react-redux";
 
 function Card({ product }) {
@@ -25,10 +25,37 @@ function Card({ product }) {
         }
       ]
     }
-
-    console.log("productsToadd", productsToadd);
     dispatch(addProduct(productsToadd));
-    dispatch(getCart(userId));
+    dispatch(getCart(user.id || localStorage.getItem("id")));
+  }
+  const handleAddFavorite = () => {
+    swal({
+      title: "Product added to favorites",
+      icon: "success",
+      button: "Ok",
+    });
+    let userId = localStorage.getItem("id");
+    let productId = product.id;
+    let productsToadd = {
+      "userId": userId,
+      "productId": productId
+    }
+    console.log("productsToadd", productsToadd)
+    dispatch(addFavorite(productsToadd));
+  }
+  const handleRemoveFavorite = () => {
+    swal({
+      title: "Product removed from favorites",
+      icon: "success",
+      button: "Ok",
+    });
+    let userId = localStorage.getItem("id");
+    let productId = product.id;
+    let productsToadd = {
+      "userId": userId,
+      "productId": productId
+    }
+    dispatch(removeFavorite(productsToadd));
   }
 
   return (
@@ -36,6 +63,7 @@ function Card({ product }) {
       <button
         type="button"
         className="absolute right-4 top-4 rounded-full bg-black p-2 text-white"
+        onClick={handleAddFavorite}
       >
         <span className="sr-only">Wishlist</span>
         <svg
