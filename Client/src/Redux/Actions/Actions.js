@@ -22,7 +22,6 @@ export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
 export const getProducts = () => {
     return async (dispatch) => {
         const response = await axios.get("/products");
-        console.log("response: ", response);
         return dispatch({
             type: GET_PRODUCTS,
             payload: response.data,
@@ -63,10 +62,8 @@ export const getProductById = (id) => {
 };
 
 export const getCategories = () => {
-    console.log("pasé actions")
     return async (dispatch) => {
         const response = await axios.get("/categorys");
-        console.log("response: ", response);
         return dispatch({
             type: GET_CATEGORIES,
             payload: response.data,
@@ -91,24 +88,45 @@ export const getProductsByMinMax = (min, max) => {
 
 // add product to cart, if the product is already in the cart, increase the quantity by +1
 export const addProduct = (data) => {
-    console.log("Desde la action: ", data)
     return async (dispatch) => {
-        await axios.post("/shoppingCarts/addProductToShoppingCart", data)
+        if(data.user_id) {
+            await axios.post("/shoppingCarts/addProductToShoppingCart", data)
             .then((response) => {
-                console.log(response.data)
-                dispatch({ type: "ADD_PRODUCT", payload: response.data })
+                    console.log(response.data)
+                    dispatch({ type: "ADD_PRODUCT", payload: response.data })
+                })
+            } else {
+                const product_id = data.products_id[0].product_id
+                const product = await axios.get(`/products//detail/${product_id}`)
+                const localCart = {
+                    user_id: "LocalCart",
+                    products: [{
+                        product_id: product.data,
+                        quantity: data.products_id[0].quantity
+                    }]
+                }
+            dispatch({
+                type: "ADDPRODUCT_LOCALCART",
+                payload: localCart
             })
+        }
     };
 }
 
 // get cart by user
 export const getCart = (id) => {
     return async (dispatch) => {
-        await axios.get(`/shoppingCarts/detail/${id}`)
-            .then((response) => {
-                console.log("response.data: ", response.data)
-                dispatch({ type: "GET_CART", payload: response.data })
+        if(id) {
+            await axios.get(`/shoppingCarts/detail/${id}`)
+                .then((response) => {
+                    console.log("response.data: ", response.data)
+                    dispatch({ type: "GET_CART", payload: response.data })
+                })
+        } else {
+            dispatch({
+                type: "GET_CART"
             })
+        }
     };
 }
 
@@ -116,11 +134,22 @@ export const getCart = (id) => {
 export const removeQuantity = (data) => {
     console.log("Desde la action: ", data)
     return async (dispatch) => {
-        await axios.post("/shoppingCarts/deleteProductFromShoppingCart", data)
-            .then((response) => {
-                console.log(response.data)
-                dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
+        if(data.user_id) {
+            await axios.post("/shoppingCarts/deleteProductFromShoppingCart", data)
+                .then((response) => {
+                    console.log(response.data)
+                    dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
+                })
+        } else {
+            const localCart = {
+                user_id: "LocalCart",
+                product_id: data.product_id,
+            }
+            dispatch({
+                type: "REMOVEQUANTITY_LOCALCART",
+                payload: localCart
             })
+        }
     };
 }
 
@@ -128,11 +157,22 @@ export const removeQuantity = (data) => {
 export const removeProduct = (data) => {
     console.log("desde la action: ", data)
     return async (dispatch) => {
-        await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
-            .then((response) => {
-                console.log(response.data)
-                dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
+        if(data.user_id) {
+            await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
+                .then((response) => {
+                    console.log(response.data)
+                    dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
+                })
+        } else {
+            const localCart = {
+                user_id: "LocalCart",
+                products: data.product_id,
+            }
+            dispatch({
+                type: "REMOVEPRODUCT_LOCALCART",
+                payload: localCart
             })
+        }
     };
 }
 

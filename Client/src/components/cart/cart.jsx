@@ -22,15 +22,15 @@ const Cart = ({ setShowCart, showCart }) => {
         if (cart.products) {
             setProducts(cart.products)
         }
+        window.localStorage.setItem('localCart', cart)
+        console.log("agregué el carrito al local: ", window.localStorage.getItem('localCart'))
     }, [cart])
 
     const total = () => {
-        console.log("pase total")
         let total = 0;
         products.forEach(product => {
             total += product.product_id.price * product.quantity
         })
-        console.log(total)
         return total
     }
 

@@ -52,6 +52,7 @@ const Navbar = ({ setCurrentPage }) => {
 
     useEffect(() => {
         dispatch(getCategories());
+        // dispatch(getProducts(window.localStorage.getItem('email')));
         // console.log('categories', categories);
         dispatch(getProducts());
         dispatch(isAdmin(window.localStorage.getItem('email')));  // action para validar si el usuario es admin o no
