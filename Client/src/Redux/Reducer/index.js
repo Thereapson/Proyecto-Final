@@ -27,9 +27,9 @@ const initialState = {
     userData: {},
     isAdmin: {},
     buyproducts: [],
-    filterBy: "",
+    filteredBy: "",
     userFavorites: [],
-    quantityFromCart: 0
+    quantityFromCart: 0,
 
 };
 
@@ -123,8 +123,6 @@ const rootReducer = (state = initialState, action) => {
         case 'GET_PRODUCT_BY_ORDER':
             let order = action.payload;
 
-            console.log('order', order)
-
             if (order === "asc") {
                 return {
                     ...state,
@@ -146,23 +144,25 @@ const rootReducer = (state = initialState, action) => {
         case "ADD_PRODUCT":
             return {
                 ...state,
-                cart: action.payload,
-                quantityFromCart: action.payload.products?.length
+                cart: action.payload
+            }
+
+        case "GET_QUANTITY":
+            return {
+                ...state,
+                quantityFromCart: action.payload.quantity
             }
 
         case "GET_CART":
-            console.log("GET_CART: ", action.payload)
             return {
                 ...state,
-                cart: action.payload,
-                quantityFromCart: action.payload.products?.length
+                cart: action.payload
             }
 
         case "REMOVE_CART":
             return {
                 ...state,
-                cart: action.payload,
-                quantityFromCart: action.payload.products?.length
+                cart: action.payload
             }
 
         case GET_ALL_PRODUCTS_BY_ID:

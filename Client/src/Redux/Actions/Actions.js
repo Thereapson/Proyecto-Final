@@ -22,7 +22,6 @@ export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
 export const getProducts = () => {
     return async (dispatch) => {
         const response = await axios.get("/products");
-        console.log("response: ", response);
         return dispatch({
             type: GET_PRODUCTS,
             payload: response.data,
@@ -63,10 +62,8 @@ export const getProductById = (id) => {
 };
 
 export const getCategories = () => {
-    console.log("pasé actions")
     return async (dispatch) => {
         const response = await axios.get("/categorys");
-        console.log("response: ", response);
         return dispatch({
             type: GET_CATEGORIES,
             payload: response.data,
@@ -91,12 +88,15 @@ export const getProductsByMinMax = (min, max) => {
 
 // add product to cart, if the product is already in the cart, increase the quantity by +1
 export const addProduct = (data) => {
-    console.log("Desde la action: ", data)
     return async (dispatch) => {
         await axios.post("/shoppingCarts/addProductToShoppingCart", data)
             .then((response) => {
-                console.log(response.data)
                 dispatch({ type: "ADD_PRODUCT", payload: response.data })
+            })
+        let id = window.localStorage.getItem("id")
+        await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
             })
     };
 }
@@ -106,8 +106,14 @@ export const getCart = (id) => {
     return async (dispatch) => {
         await axios.get(`/shoppingCarts/detail/${id}`)
             .then((response) => {
-                console.log("response.data: ", response.data)
                 dispatch({ type: "GET_CART", payload: response.data })
+            })
+
+        // let id = window.localStorage.getItem("id")
+
+        await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
             })
     };
 }
@@ -118,8 +124,13 @@ export const removeQuantity = (data) => {
     return async (dispatch) => {
         await axios.post("/shoppingCarts/deleteProductFromShoppingCart", data)
             .then((response) => {
-                console.log(response.data)
                 dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
+            })
+        let id = window.localStorage.getItem("id")
+
+        await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
             })
     };
 }
@@ -130,8 +141,12 @@ export const removeProduct = (data) => {
     return async (dispatch) => {
         await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
             .then((response) => {
-                console.log(response.data)
                 dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
+            })
+        let id = window.localStorage.getItem("id")
+        await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
             })
     };
 }
@@ -141,11 +156,25 @@ export const removeCart = (id) => {
     return async (dispatch) => {
         await axios.delete(`/shoppingCarts/deleteShoppingCart/${id}`)
             .then((response) => {
-                console.log(response.data)
                 dispatch({ type: "REMOVE_CART", payload: [] })
+            })
+        let quantity = { quantity: 0 }
+        dispatch({ type: "GET_QUANTITY", payload: quantity })
+
+    };
+}
+
+// get quantity of products in cart
+
+export const getQuantity = (id) => {
+    return async (dispatch) => {
+        await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
             })
     };
 }
+
 
 // get favorites
 export const getFavorites = (id) => {
@@ -153,7 +182,6 @@ export const getFavorites = (id) => {
     return async (dispatch) => {
         await axios.get(`/users/favorites/${id}`)
             .then((response) => {
-                console.log(response.data)
                 dispatch({ type: "GET_FAVORITES", payload: response.data })
             })
     };
@@ -164,7 +192,6 @@ export const addFavorite = (data) => {
     return async (dispatch) => {
         await axios.post("/users/favorites", data)
             .then((response) => {
-                console.log(response.data)
                 dispatch({ type: "ADD_FAVORITE", payload: response.data })
             })
     };
@@ -188,7 +215,6 @@ export const getUser = (email) => {
     return async (dispatch) => {
         await axios.get(`/users/email/${email}`)
             .then((response) => {
-                console.log("user: ", response.data)
                 dispatch({ type: GET_USER, payload: response.data })
             })
     };
@@ -208,7 +234,6 @@ export const buyAllProducts = (array) => {
         for (let i = 0; i < arreglofixed.length; i++) {
             await axios.get(`/products/detail/${arreglofixed[i]}`)
                 .then((response) => {
-                    console.log("resultado de la busqueda", response)
                     let respuesta = response.data
                     arreglo.push(respuesta)
                 })
@@ -220,7 +245,6 @@ export const buyAllProducts = (array) => {
 }
 
 export const isAdmin = (email) => {
-    console.log("valida si es admin")
     return async (dispatch) => {
         let admin = await axios.get(`/users/isadmin/${email}`)
         dispatch({ type: IS_ADMIN, payload: admin.data })
