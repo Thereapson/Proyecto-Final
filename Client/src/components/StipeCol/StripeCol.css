@@ -3,29 +3,27 @@
 
 }
 
-.prueba {
+.pruebaxd {
 
     display: flex;
     flex-direction: column;
-    align-content: space-around;
     align-items: center;
-    justify-content: space-around;
-    height: 400px;
 
 }
 
-.prueba form {
+.pruebaxd form {
+
     height: 200px;
     width: 459px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid #000;
+
 
 }
 
-.prueba form div {
+.pruebaxd form div {
 
     width: 400px;
     height: 20px;
@@ -33,6 +31,7 @@
 }
 
 h1 {
+
     font-size: 35px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: bold;
@@ -42,24 +41,64 @@ h1 {
 .modal-content {
 
     width: 350px;
-
 }
 
 .modal-content p {
 
     margin-left: 40px;
-
 }
 
 .modal-content img {
 
     margin-left: 60px;
-
 }
 
 .parrafo {
+
     font-size: 18px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: bold;
     color: rgb(30, 209, 45);
+}
+
+.containerxd {
+
+    display: flex;
+    width: 65%;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    border: 1px solid #000;
+    align-content: center;
+    align-items: center;
+    height: auto;
+}
+
+.titulo {
+
+    font-size: 18px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(0 0 0 / 85%);
+}
+
+.pagarcantidad {
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    align-items: baseline;
+    height: 100px;
+    margin-right: 150px;
+    width: 100px;
+
+}
+
+.place {
+    margin-left: 255px;
+    margin-top: 50px;
+}
+
+.cantidadapagar {
+    font-weight: bold;
 }

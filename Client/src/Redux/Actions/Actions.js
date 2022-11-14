@@ -16,6 +16,7 @@ export const IS_ADMIN = "IS_ADMIN";
 export const GET_USER = "GET_USER";
 export const ADD_FAVORITE = "ADD_FAVORITE";
 export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
+export const SHOW_PRODUCTS = "SHOW_PRODUCTS";
 
 
 
@@ -235,7 +236,7 @@ export const getUser = (email) => {
 };
 export const buyAllProducts = (array) => {
     return async (dispatch) => {
-        console.log('como llega el array:', array)
+
         let arreglofixed = [];
         let arreglo = [];
         array.forEach(element => {
@@ -243,7 +244,7 @@ export const buyAllProducts = (array) => {
                 arreglofixed.push(element)
             }
         });
-        console.log('despues de fixearlo:', arreglofixed)
+
 
         for (let i = 0; i < arreglofixed.length; i++) {
             await axios.get(`/products/detail/${arreglofixed[i]}`)
@@ -266,3 +267,30 @@ export const isAdmin = (email) => {
         dispatch({ type: IS_ADMIN, payload: admin.data })
     }
 }
+
+export const showBuyProduct = (array) => {
+    return async (dispatch) => {
+
+        let arreglofixed = [];
+        let arreglofinal = [];
+        array.forEach(element => {
+            if (element != "") {
+                arreglofixed.push(element)
+            }
+        });
+        let dataArr = [...new Set(arreglofixed)];
+      
+        for (let i = 0; i < dataArr.length; i++) {
+            await axios.get(`/products/detail/${dataArr[i]}`)
+                .then((response) => {
+                    console.log("resultado de la busqueda filtrada: ", response)
+                    let respuesta = response.data
+                    arreglofinal.push(respuesta)
+                })
+
+        }
+
+        dispatch({ type: SHOW_PRODUCTS, payload: arreglofinal })
+    }
+}
+

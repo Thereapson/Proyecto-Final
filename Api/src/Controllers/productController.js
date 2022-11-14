@@ -211,10 +211,10 @@ const doPayment = async (req, res, next) => {
       description: detail,
       amount: amount,
       customer: customer.id,
-
+      
       //booleano que representa si la transaccion fue exitosa, no se debe hardcodear
     })
-    console.log(payment.id)
+    console.log(payment)
     res.json({
       message: "Success"
     })

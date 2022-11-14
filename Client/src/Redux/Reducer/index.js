@@ -14,6 +14,7 @@ import {
     CLEAN_PRODUCTS_RENDER,
     GET_ALL_PRODUCTS_BY_ID,
     IS_ADMIN,
+    SHOW_PRODUCTS
 } from '../Actions/Actions';
 
 const initialState = {
@@ -29,7 +30,8 @@ const initialState = {
     buyproducts: [],
     filterBy: "",
     userFavorites: [],
-    quantityFromCart: 0
+    quantityFromCart: 0,
+    abouttobuyproducts:[]
 
 };
 
@@ -245,7 +247,11 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 userFavorites: favorites
             }
-
+ 
+            case SHOW_PRODUCTS: 
+            return{
+                ...state, abouttobuyproducts: action.payload
+            }
         default:
             return { ...state };
     }
