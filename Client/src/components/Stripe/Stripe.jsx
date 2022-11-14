@@ -6,7 +6,8 @@ import { CardElement, Elements, useStripe, useElements, } from '@stripe/react-st
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { cleanDetails, getProductById, } from "../../Redux/Actions/Actions";
-import paloma from './palomita1.png'
+import paloma from './palomita1.png';
+import StripeDetailCard from '../StripeDetailCard/StripeDetailCard.jsx'
 
 
 
@@ -57,10 +58,9 @@ const CheckoutForm = (props) => {
 
     return <form onSubmit={handleSubmit} >
         <CardElement />
-        <button className='px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
+        <button className='margenorgan px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
             Pay
         </button>
-        <h2>Total Price: ${props.amount / 100}</h2>
     </form>
 }
 function Stripe() {
@@ -79,9 +79,11 @@ function Stripe() {
 
     return (
         <div className='prueba'>
-            <h1>
+            <h1 className='arreglotitulo'>
                 Checkout
             </h1>
+
+            {details ? <StripeDetailCard price={details.price} name={details.name} img={details.image} /> : null}
             <Elements stripe={stripePromise}>
                 <CheckoutForm amount={details.price * 100} detail={details.name}>
 
