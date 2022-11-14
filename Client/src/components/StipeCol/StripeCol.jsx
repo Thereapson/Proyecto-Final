@@ -7,7 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import { buyAllProducts, getCart, removeCart, showBuyProduct } from "../../Redux/Actions/Actions";
 import { useDispatch, useSelector } from 'react-redux';
 import paloma from './palomita1.png'
-import Stripecard from "../stripecard/stripecard.jsx";
+import Stripecard from "../Stripecard/stripecard.jsx";
 
 
 const stripePromise = loadStripe("pk_test_51LzkQ9EsbLOetD4WD60JMd2sSsaEOSnizWXhGa6FTKgFnZM8HOvtnJdQlDLmJNGwcntCURvyjEYgGjNXqejdOFSM004Y9xSLvY")
@@ -30,12 +30,12 @@ const CheckoutForm = (props) => {
         var span = document.getElementsByClassName("close")[0];
 
         span.onclick = function () {
-            window.location.replace('/products');
+            window.location.replace('https://compudevs-lne9v251e-thereapson.vercel.app/products');
         }
 
         window.onclick = function (event) {
             if (event.target == modal) {
-                window.location.replace('/products');
+                window.location.replace('https://compudevs-lne9v251e-thereapson.vercel.app/products');
             }
         }
 
