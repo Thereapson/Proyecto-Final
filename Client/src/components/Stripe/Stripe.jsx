@@ -26,12 +26,12 @@ const CheckoutForm = (props) => {
         var span = document.getElementsByClassName("close")[0];
 
         span.onclick = function () {
-            window.location.replace('https://compudevs.vercel.app/products');
+            window.location.replace('https://compudevs-lne9v251e-thereapson.vercel.app/products');
         }
 
         window.onclick = function (event) {
             if (event.target == modal) {
-                window.location.replace('https://compudevs.vercel.app/products');
+                window.location.replace('https://compudevs-lne9v251e-thereapson.vercel.app/products');
             }
         }
         const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -44,10 +44,11 @@ const CheckoutForm = (props) => {
                 id: paymentMethod.id,
                 amount: props.amount,
                 detail: props.detail,
-                email: useremail || "andrefe13808@hotmail.com"
+                email: useremail || "alternativemail@hotmail.com"
 
             })
             modal.style.display = "block"
+            console.log(data)
             console.log(data)
         } else {
             console.log(error)
@@ -59,6 +60,7 @@ const CheckoutForm = (props) => {
         <button className='px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
             Pay
         </button>
+        <h2>Total Price: ${props.amount / 100}</h2>
     </form>
 }
 function Stripe() {

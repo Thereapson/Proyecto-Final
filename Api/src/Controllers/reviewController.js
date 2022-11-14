@@ -30,7 +30,10 @@ const getReviewByProduct = async (product) => {
         console.log(product)
         const response = await reviewModel.find({
             product_id: product,
-        }).populate({ path: 'User' })
+        }).populate({
+            path: 'user_id',
+            select: 'id full_name'
+        })
         const reviews = response?.map(r => {
             const re = {
                 id: r._id,

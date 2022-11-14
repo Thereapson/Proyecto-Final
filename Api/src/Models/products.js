@@ -13,6 +13,9 @@ const productSchema = new Schema({
     price: {
         type: Number,
     },
+    lastPrice: {
+        type: Number,
+    },
     weight: {
         type: Number,
     },

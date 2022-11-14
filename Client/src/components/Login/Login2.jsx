@@ -54,6 +54,7 @@ export const Login2 = () => {
   function handleChange(e) {
     userState({ ...user, [e.target.name]: e.target.value })
     console.log(user)
+    console.log(user)
   }
 
   return (

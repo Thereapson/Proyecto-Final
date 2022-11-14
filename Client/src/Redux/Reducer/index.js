@@ -14,6 +14,7 @@ import {
     CLEAN_PRODUCTS_RENDER,
     GET_ALL_PRODUCTS_BY_ID,
     IS_ADMIN,
+    SHOW_PRODUCTS
 } from '../Actions/Actions';
 
 const initialState = {
@@ -30,6 +31,7 @@ const initialState = {
     filteredBy: "",
     userFavorites: [],
     quantityFromCart: 0,
+    abouttobuyproducts: []
 
 };
 
@@ -154,15 +156,52 @@ const rootReducer = (state = initialState, action) => {
             }
 
         case "GET_CART":
+            console.log("GET_CART: ", action.payload)
             return {
                 ...state,
                 cart: action.payload
             }
 
-        case "REMOVE_CART":
+        case "ADDPRODUCT_LOCALCART":
+            let localCart = state.cart;
+            const productsLocal = localCart.products
+            const products = action.payload.products
+            productsLocal
+                ? products.forEach(product => {
+                    let found = productsLocal.find(p => p.product_id._id === product.product_id._id)
+                    if (!found) {
+                        localCart.products.push(product)
+                    }
+                })
+                : localCart = action.payload
             return {
                 ...state,
-                cart: action.payload
+                cart: localCart
+            }
+
+        case "REMOVEQUANTITY_LOCALCART":
+            let localCartb = state.cart;
+            const productsLocalb = localCartb.products_id
+            const product = action.payload.product_id
+            let index = productsLocalb.indexof(product)
+            const found = productsLocal.find(p => p.product_id === product)
+            found.quantity > 1
+                ? localCartb.products_id[index].quantity = found.quantity - 1
+                : localCartb.products_id = productsLocalb.filter(p => p.product_id !== product)
+            return {
+                ...state,
+                cart: localCartb
+            }
+
+        case "REMOVEPRODUCT_LOCALCART":
+            let localCartc = state.cart;
+            const productsLocalc = localCartc.products_id
+            const productc = action.payload.product_id
+            localCartc.products_id = productsLocalc.filter(p => p.product_id !== productc)
+            return {
+                ...state,
+                cart: action.payload,
+                quantityFromCart: action.payload.products?.length
             }
 
         case GET_ALL_PRODUCTS_BY_ID:
@@ -199,6 +238,10 @@ const rootReducer = (state = initialState, action) => {
                 userFavorites: favorites
             }
 
+        case SHOW_PRODUCTS:
+            return {
+                ...state, abouttobuyproducts: action.payload
+            }
         default:
             return { ...state };
     }
