@@ -2,27 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import swal from 'sweetalert';
-import { addProduct, getCart } from "../../Redux/Actions/Actions";
+import { addProduct, getCart, addFavorite, removeFavorite } from "../../Redux/Actions/Actions";
 import { useSelector } from "react-redux";
-
-//
-// {
-//   "user_id": "63655ee42e2e013aabe52aaf",
-//     "products_id": [
-//       {
-//         "product_id": "635d7eae6d25de9b14540274",
-//         "quantity": 7
-//       },
-//       {
-//         "product_id": "635d7eca6d25de9b14540276",
-//         "quantity": 9
-//       },
-//       {
-//         "product_id": "635f329a8c2248183912c15e",
-//         "quantity": 3
-//       }
-//     ]
-// }
 
 function Card({ product }) {
   const dispatch = useDispatch();
@@ -44,9 +25,37 @@ function Card({ product }) {
         }
       ]
     }
-
     dispatch(addProduct(productsToadd));
-    dispatch(getCart(userId));
+    dispatch(getCart(user.id || localStorage.getItem("id")));
+  }
+  const handleAddFavorite = () => {
+    swal({
+      title: "Product added to favorites",
+      icon: "success",
+      button: "Ok",
+    });
+    let userId = localStorage.getItem("id");
+    let productId = product.id;
+    let productsToadd = {
+      "userId": userId,
+      "productId": productId
+    }
+    console.log("productsToadd", productsToadd)
+    dispatch(addFavorite(productsToadd));
+  }
+  const handleRemoveFavorite = () => {
+    swal({
+      title: "Product removed from favorites",
+      icon: "success",
+      button: "Ok",
+    });
+    let userId = localStorage.getItem("id");
+    let productId = product.id;
+    let productsToadd = {
+      "userId": userId,
+      "productId": productId
+    }
+    dispatch(removeFavorite(productsToadd));
   }
 
   return (
@@ -54,6 +63,7 @@ function Card({ product }) {
       <button
         type="button"
         className="absolute right-4 top-4 rounded-full bg-black p-2 text-white"
+        onClick={handleAddFavorite}
       >
         <span className="sr-only">Wishlist</span>
         <svg
@@ -79,7 +89,6 @@ function Card({ product }) {
         />
       </Link>
       <div className="p-6">
-        {/* price with symol usd */}
         <p className="text-sm font-medium text-gray-600">${product.price}</p>
 
         <h3 className="mt-1 text-lg font-bold">{product.name}</h3>
