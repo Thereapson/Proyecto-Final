@@ -26,14 +26,14 @@ import { useSelector } from "react-redux";
 
 function Card({ product }) {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.userData);
+  // const user = useSelector(state => state.userData);
   const handleAddProduct = () => {
     swal({
       title: "Product added to cart",
       icon: "success",
       button: "Ok",
     });
-    let userId = localStorage.getItem("userID");
+    let userId = localStorage.getItem("id");
     let productId = product.id;
     let productsToadd = {
       "user_id": userId,

@@ -51,7 +51,7 @@ const Navbar = ({ setCurrentPage }) => {
 
     useEffect(() => {
         dispatch(getCategories());
-        console.log('categories', categories);
+        // console.log('categories', categories);
         dispatch(getProducts());
     }, [dispatch]);
 
