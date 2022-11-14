@@ -91,23 +91,41 @@ export const getProductsByMinMax = (min, max) => {
 export const addProduct = (data) => {
     console.log("Desde la action: ", data)
     return async (dispatch) => {
-        await axios.post("/shoppingCarts/addProductToShoppingCart", data)
-            .then((response) => {
-                console.log(response.data)
-                dispatch({ type: "ADD_PRODUCT", payload: response.data })
+        console.log("id_user en Action: " ,data.user_id)
+        if(data.user_id) {
+            await axios.post("/shoppingCarts/addProductToShoppingCart", data)
+                .then((response) => {
+                    console.log(response.data)
+                    dispatch({ type: "ADD_PRODUCT", payload: response.data })
+                })
+        } else {
+            console.log("Pase sin ID")
+            const localCart = {
+                user_id: "LocalCart",
+                products: data.products_id,
+            }
+            dispatch({
+                type: "ADDPRODUCT_LOCALCART",
+                payload: localCart
             })
+        }
     };
 }
 
 // get cart by user
 export const getCart = (id) => {
     return async (dispatch) => {
-        await axios.get(`/shoppingCarts/detail/${id}`)
-            .then((response) => {
-                console.log("response.data: ", response.data)
-                dispatch({ type: "GET_CART", payload: response.data })
-                window.localStorage.setItem("userID", response.data.user)
+        if(id) {
+            await axios.get(`/shoppingCarts/detail/${id}`)
+                .then((response) => {
+                    console.log("response.data: ", response.data)
+                    dispatch({ type: "GET_CART", payload: response.data })
+                })
+        } else {
+            dispatch({
+                type: "GET_CART"
             })
+        }
     };
 }
 
@@ -115,11 +133,22 @@ export const getCart = (id) => {
 export const removeQuantity = (data) => {
     console.log("Desde la action: ", data)
     return async (dispatch) => {
-        await axios.post("/shoppingCarts/deleteProductFromShoppingCart", data)
-            .then((response) => {
-                console.log(response.data)
-                dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
+        if(data.user_id) {
+            await axios.post("/shoppingCarts/deleteProductFromShoppingCart", data)
+                .then((response) => {
+                    console.log(response.data)
+                    dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
+                })
+        } else {
+            const localCart = {
+                user_id: "LocalCart",
+                product_id: data.product_id,
+            }
+            dispatch({
+                type: "REMOVEQUANTITY_LOCALCART",
+                payload: localCart
             })
+        }
     };
 }
 
@@ -127,11 +156,22 @@ export const removeQuantity = (data) => {
 export const removeProduct = (data) => {
     console.log("desde la action: ", data)
     return async (dispatch) => {
-        await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
-            .then((response) => {
-                console.log(response.data)
-                dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
+        if(data.user_id) {
+            await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
+                .then((response) => {
+                    console.log(response.data)
+                    dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
+                })
+        } else {
+            const localCart = {
+                user_id: "LocalCart",
+                products: data.product_id,
+            }
+            dispatch({
+                type: "REMOVEPRODUCT_LOCALCART",
+                payload: localCart
             })
+        }
     };
 }
 

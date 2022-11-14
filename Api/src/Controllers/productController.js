@@ -13,6 +13,7 @@ const getAllProducts = async (req, res, next) => {
           sku: p.sku,
           name: p.name,
           price: p.price,
+          lastPrice: p.lastPrice,
           weight: p.weight,
           description: p.description,
           image: p.image,
@@ -80,6 +81,7 @@ const addProduct = async (req, res, next) => {
         sku,
         name,
         price,
+        lastPrice: 0,
         weight: weight || 0,
         description: description || name,
         status: true,
@@ -125,12 +127,15 @@ const editProduct = async (req, res, next) => {
       category,
       stock,
     } = productData;
+    const product = await productModel.findById(id)
+    const oldPrice = product.price
     const editProduct = await productModel.findByIdAndUpdate(
       id,
       {
         sku,
         name,
         price,
+        lastPrice: oldPrice,
         weight,
         description,
         status,
@@ -144,14 +149,10 @@ const editProduct = async (req, res, next) => {
     );
     console.log(editProduct);
     if (editProduct) {
-      res.status(200).send("Product Successfully Updated");
+      const updatedProduct = await productModel.findById(id)
+      res.status(200).send({ msg: "Product Successfully Updated", updatedProduct});
     } else res.status(400).send("Product can't be created");
 
-    if (!newProduct) {
-      res.status(400).send("The New Product can't be created");
-    } else {
-      res.status(200).send({ msg: "New Product Added", newProduct });
-    }
   } catch (error) {
     console.error(error);
     next(error);

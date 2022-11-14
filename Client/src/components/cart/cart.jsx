@@ -22,7 +22,7 @@ const Cart = ({ setShowCart, showCart }) => {
         if (cart.products) {
             setProducts(cart.products)
         }
-        // console.log("cart", cart);
+        console.log("cart", cart);
     }, [cart])
 
     const total = () => {

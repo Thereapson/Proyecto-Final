@@ -142,16 +142,69 @@ const rootReducer = (state = initialState, action) => {
             console.log("action.payload: ", action.payload);
 
         case "GET_CART":
-            console.log("GET_CART: ", action.payload)
-            return {
-                ...state,
-                cart: action.payload
+            let LocalCart0 = action.payload
+            if(LocalCart0) {
+                return {
+                    ...state,
+                    cart: action.payload
+                }
+            } else {
+                return {
+                    ...state,
+                }
             }
+
 
         case "REMOVE_CART":
             return {
                 ...state,
                 cart: action.payload
+            }
+
+        case "ADDPRODUCT_LOCALCART":
+            console.log(action.payload)
+            let localCart = state.cart;
+            const productsLocal = localCart.products_id
+            const products = action.payload.products_id
+            productsLocal
+            ? products.forEach(product => {
+                let found = productsLocal.find(p => p.product_id === product.product_id)
+                if(found) {
+                    let updateQuantity = found.quantity + product.quantity
+                    let index = productsLocal.indexof(found)
+                    localCart.products_id[index].quantity = updateQuantity
+                } else {
+                    localCart.products_id.push(product)
+                }
+            }) 
+            : localCart = action.payload
+            return {
+                ...state,
+                cart: localCart
+            }
+
+        case "REMOVEQUANTITY_LOCALCART":
+            let localCartb = state.cart;
+            const productsLocalb = localCartb.products_id
+            const product = action.payload.product_id
+            let index = productsLocalb.indexof(product)
+            const found = productsLocal.find(p => p.product_id === product)
+            found.quantity > 1
+            ? localCartb.products_id[index].quantity = found.quantity - 1
+            : localCartb.products_id = productsLocalb.filter(p => p.product_id !== product)
+            return {
+                ...state,
+                cart: localCartb
+            }
+
+        case "REMOVEPRODUCT_LOCALCART":
+            let localCartc = state.cart;
+            const productsLocalc = localCartc.products_id
+            const productc = action.payload.product_id
+            localCartc.products_id = productsLocalc.filter(p => p.product_id !== productc)
+            return {
+                ...state,
+                cart: localCartc
             }
 
         case GET_ALL_PRODUCTS_BY_ID:
