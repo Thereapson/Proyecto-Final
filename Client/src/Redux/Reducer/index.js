@@ -162,20 +162,15 @@ const rootReducer = (state = initialState, action) => {
             }
 
         case "ADDPRODUCT_LOCALCART":
-            console.log(action.payload)
             let localCart = state.cart;
-            const productsLocal = localCart.products_id
-            const products = action.payload.products_id
+            const productsLocal = localCart.products
+            const products = action.payload.products
             productsLocal
             ? products.forEach(product => {
-                let found = productsLocal.find(p => p.product_id === product.product_id)
-                if(found) {
-                    let updateQuantity = found.quantity + product.quantity
-                    let index = productsLocal.indexof(found)
-                    localCart.products_id[index].quantity = updateQuantity
-                } else {
-                    localCart.products_id.push(product)
-                }
+                let found = productsLocal.find(p => p.product_id._id === product.product_id._id)
+                if(!found) {
+                    localCart.products.push(product)
+                } 
             }) 
             : localCart = action.payload
             return {

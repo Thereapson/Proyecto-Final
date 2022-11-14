@@ -20,7 +20,6 @@ export const GET_USER = "GET_USER";
 export const getProducts = () => {
     return async (dispatch) => {
         const response = await axios.get("/products");
-        console.log("response: ", response);
         return dispatch({
             type: GET_PRODUCTS,
             payload: response.data,
@@ -61,10 +60,8 @@ export const getProductById = (id) => {
 };
 
 export const getCategories = () => {
-    console.log("pasé actions")
     return async (dispatch) => {
         const response = await axios.get("/categorys");
-        console.log("response: ", response);
         return dispatch({
             type: GET_CATEGORIES,
             payload: response.data,
@@ -89,21 +86,23 @@ export const getProductsByMinMax = (min, max) => {
 
 // add product to cart, if the product is already in the cart, increase the quantity by +1
 export const addProduct = (data) => {
-    console.log("Desde la action: ", data)
     return async (dispatch) => {
-        console.log("id_user en Action: " ,data.user_id)
         if(data.user_id) {
             await axios.post("/shoppingCarts/addProductToShoppingCart", data)
-                .then((response) => {
+            .then((response) => {
                     console.log(response.data)
                     dispatch({ type: "ADD_PRODUCT", payload: response.data })
                 })
-        } else {
-            console.log("Pase sin ID")
-            const localCart = {
-                user_id: "LocalCart",
-                products: data.products_id,
-            }
+            } else {
+                const product_id = data.products_id[0].product_id
+                const product = await axios.get(`/products//detail/${product_id}`)
+                const localCart = {
+                    user_id: "LocalCart",
+                    products: [{
+                        product_id: product.data,
+                        quantity: data.products_id[0].quantity
+                    }]
+                }
             dispatch({
                 type: "ADDPRODUCT_LOCALCART",
                 payload: localCart
