@@ -195,7 +195,7 @@ export const getUser = (email) => {
 };
 export const buyAllProducts = (array) => {
     return async (dispatch) => {
-        console.log('como llega el array:', array)
+       
         let arreglofixed = [];
         let arreglo = [];
         array.forEach(element => {
@@ -203,7 +203,7 @@ export const buyAllProducts = (array) => {
                 arreglofixed.push(element)
             }
         });
-        console.log('despues de fixearlo:', arreglofixed)
+        
 
         for (let i = 0; i < arreglofixed.length; i++) {
             await axios.get(`/products/detail/${arreglofixed[i]}`)
