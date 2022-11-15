@@ -98,6 +98,12 @@ export const addProduct = (data) => {
                     console.log(response.data)
                     dispatch({ type: "ADD_PRODUCT", payload: response.data })
                 })
+            let id = window.localStorage.getItem("id")
+            await axios.get(`/shoppingCarts/quantity/${id}`)
+                .then((response) => {
+                    console.log("response.data: ", response.data)
+                    dispatch({ type: "GET_QUANTITY", payload: response.data })
+                })
             } else {
                 const product_id = data.products_id[0].product_id
                 const product = await axios.get(`/products//detail/${product_id}`)
@@ -175,7 +181,12 @@ export const removeProduct = (data) => {
                 type: "REMOVEPRODUCT_LOCALCART",
                 payload: localCart
             })
-        }
+        let id = window.localStorage.getItem("id")
+        await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                console.log("response.data: ", response.data)
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
+            })
     };
 }
 
@@ -189,6 +200,11 @@ export const removeCart = (id) => {
                 })
                 let quantity = { quantity: 0 }
                 dispatch({ type: "GET_QUANTITY", payload: quantity })
+                await axios.get(`/shoppingCarts/quantity/${id}`)
+                    .then((response) => {
+                console.log("response.data: ", response.data)
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
+            })
         }
         dispatch({ type: "REMOVE_CART", payload: [] })
     };
@@ -212,7 +228,6 @@ export const getQuantity = (id) => {
 
 // get favorites
 export const getFavorites = (id) => {
-    // let id = "63681baa20ab92251bb85fd9"
     return async (dispatch) => {
         if(id) {
             await axios.get(`/users/favorites/${id}`)

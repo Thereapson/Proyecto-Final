@@ -31,17 +31,25 @@ const initialState = {
     filteredBy: "",
     userFavorites: [],
     quantityFromCart: 0,
-    abouttobuyproducts: []
+    abouttobuyproducts: [],
+    brands: [],
 
 };
 
 const rootReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_PRODUCTS:
+            let brands = action.payload.map((product) => {
+                return product.brand
+            });
+            let brandsSet = new Set(brands);
+            let brandsArray = [...brandsSet];
+
             return {
                 ...state,
                 products: action.payload,
-                productsRender: action.payload
+                productsRender: action.payload,
+                brands: brandsArray
             };
         case GET_PRODUCTS_BY_SEARCH:
             let search = action.payload;

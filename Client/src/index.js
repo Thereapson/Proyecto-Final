@@ -7,7 +7,7 @@ import store from "./Redux/Store";
 import axios from 'axios';
 
 
-axios.defaults.baseURL = "http://localhost:3001" || "https://compudevs.herokuapp.com"
+axios.defaults.baseURL = "https://compudevs.herokuapp.com"
 
 // "https://compudevs.herokuapp.com" || 
 
