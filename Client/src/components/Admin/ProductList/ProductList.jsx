@@ -1,5 +1,7 @@
-
 import * as React from "react";
+import {useState} from "react";
+import CloudinaryUploadWidget from "../CloudinaryUploadWidget/CloudinaryUploadWidget";
+import {uploadImage} from "../../../utils/utils"
 import { 
         List,
         Datagrid,
@@ -16,23 +18,41 @@ import {
         BooleanField,
         BooleanInput,
         NumberInput,
-        ImageInput
+        ImageInput,
+        required,
+        minLength,
+        maxLength,
+        minValue,
+        maxValue,
+        number,
+        regex,
+        email,
+        choices,
+        Box
+
         } from 'react-admin';
 
-const PostTitle = () => {
-    const record = useRecordContext()
-    return <span> Post {record? `"${record.title}`: ""}</span>
-}
 
 const productFilters = [
     <TextInput source="q" label="Search" alwaysOn />,
-    <ReferenceInput source="_id" label="productId" reference="products" />,
-    // <ReferenceInput source="title" label="Title" reference="title" />
+    <ReferenceInput source="category" label="Category" reference="category" />,
+    <ReferenceInput source="name" label="Name" reference="name"/>
 ]
 
+const validateSku = [required(), minLength(10), maxLength(20)]
+const validateName = [required(), minLength(5), maxLength(30)]
+const validatePrice = [required()]
+const validateWeight = []
+const validateDescription = [required(), minLength(20), maxLength(200)]
+const validateImage = []
+const validateBrand = []
+const validateStock = [required()]
 
 export const ProductList = () => (
-    <List perPage={15} sort={{field: 'name', order: 'desc'}}>
+    <List perPage={5}
+          sort={{field: 'name', order: 'desc'}}
+          filters={productFilters}
+          >
         <Datagrid 
                 sx={{
                 '& .column-id': {letterSpacing:1, maxWidth: 100, textOverflow: 'ellipsis | ', overflow: 'hidden'},
@@ -63,12 +83,40 @@ export const ProductEdit = () => (
     <Edit>
         <SimpleForm>
             <TextInput disabled source="id" />
-            <TextInput source="sku" />
-            <TextInput source="name" />
-            <NumberInput source="price" />
+            <TextInput source="sku" validate={validateSku}/>
+            <TextInput source="name" validate={validateName}/>
+            <NumberInput source="price" validate={validatePrice}/>
             <NumberInput source="weight" />
             <TextInput source="description" />
             <TextInput source="image" />
+            {/* <CloudinaryUploadWidget /> */}
+            <BooleanInput source="status" />
+            <TextInput source="brand" />
+            <NumberInput source="benchmark" />
+            <ReferenceInput source="category" reference="category" />
+            {/* <TextInput source="category" /> */}
+            <NumberInput source="stock" />
+            {/* <ReferenceInput source="userId" reference="users" /> */}
+            {/* <TextInput source="id" /> */}
+            {/* <TextInput disabled source="title" /> */}
+            {/* <TextInput source="title" /> */}
+            {/* <TextInput source="body" /> */}
+            {/* <TextInput source="body" /> */}
+        </SimpleForm>
+    </Edit>
+);
+
+export const ProductCreate= (props) => (
+
+    <Create {...props}>
+        <SimpleForm>
+            <TextInput disabled source="id" />
+            <TextInput source="sku" validate={validateSku}/>
+            <TextInput source="name" validate={validateName}/>
+            <NumberInput source="price" validate={validatePrice}/>
+            <NumberInput source="weight" />
+            <TextInput source="description" />
+            <ImageInput source="image" />
             <BooleanInput source="status" />
             <TextInput source="brand" />
             <NumberInput source="benchmark" />
@@ -82,19 +130,6 @@ export const ProductEdit = () => (
             {/* <TextInput source="title" /> */}
             {/* <TextInput source="body" /> */}
             {/* <TextInput source="body" /> */}
-        </SimpleForm>
-    </Edit>
-);
-
-export const ProductCreate= (props) => (
-    <Create {...props}>
-        <SimpleForm>
-            {/* <TextInput disabled source="id" /> */}
-            <ReferenceInput source="userId" reference="users" />
-            {/* <TextInput disabled source="title" /> */}
-            <TextInput source="title" />
-            {/* <TextInput source="body" /> */}
-            <TextInput source="body" />
         </SimpleForm>
     </Create>
 );

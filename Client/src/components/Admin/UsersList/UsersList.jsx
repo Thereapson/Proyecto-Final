@@ -18,9 +18,18 @@ import {
         } from 'react-admin';
 
 
+const userFilters = [
+    <TextInput source="q" label="Search" alwaysOn />,
+    // <ReferenceInput source="categoryId" label="category" reference="products" />,
+    // <ReferenceInput source="name" label="name" reference="name"/>
+]
 
 export const UsersList = () => (
-    <List>
+    <List
+          perPage={5}
+          sort={{field: 'name', order: 'desc'}}
+          filters={userFilters}
+          >
         <Datagrid >
             <TextField source="id" />
             <TextField source="full_name" />

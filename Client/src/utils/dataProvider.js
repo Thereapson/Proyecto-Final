@@ -4,9 +4,16 @@ import axios from "axios"
 
 const apiUrl = '/admin';
 const httpClient = fetchUtils.fetchJson;
+console.log("httpClient",httpClient)
+const baseUrl = //"https://compudevs.herokuapp.com" || 
+"http://localhost:3001";
+
+
 
 const dataProvider = {
     getList: (resource, params) => {
+        console.log("params", params)
+        console.log("resource", resource)
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
         const query = {
@@ -16,13 +23,13 @@ const dataProvider = {
             _start: (page - 1) * perPage,
             _end: page * perPage,
         };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
+        console.log('query', query)
+        const url = `${baseUrl}${apiUrl}/${resource}?${stringify(query)}`;
         // const url = `${apiUrl}/${resource}`;
         console.table("getList",page, perPage, field, order, query, url)
-
         return httpClient(url).then(({ headers, json }) => {
             if (!headers.has('x-total-count')) {
-                console.log(headers.get('x-total-count'))
+                //console.log(headers.get('x-total-count'))
                 throw new Error(
                     'The X-Total-Count header is missing in the HTTP Response. The jsonServer Data Provider expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare X-Total-Count in the Access-Control-Expose-Headers header?'
                 );
@@ -33,14 +40,48 @@ const dataProvider = {
                     parseInt(headers.get('x-total-count').split('/').pop(), 10), 10
                 ),
             };
-        });
+        }
+        );
     },
+
+    // getList: (resource, params) => {
+    //     console.log("params", params)
+    //     console.log("resource", resource)
+    //     const { page, perPage } = params.pagination;
+    //     const { field, order } = params.sort;
+    //     const query = {
+    //         ...fetchUtils.flattenObject(params.filter),
+    //         _sort: field,
+    //         _order: order,
+    //         _start: (page - 1) * perPage,
+    //         _end: page * perPage,
+    //     };
+    //     console.log('query', query)
+    //     const url = `${apiUrl}/${resource}?${stringify(query)}`;
+    //     // const url = `${apiUrl}/${resource}`;
+    //     console.table("getList",page, perPage, field, order, query, url)
+
+    //     return httpClient(url).then(({ headers, json }) => {
+    //         if (!headers.has('x-total-count')) {
+    //             console.log(headers.get('x-total-count'))
+    //             throw new Error(
+    //                 'The X-Total-Count header is missing in the HTTP Response. The jsonServer Data Provider expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare X-Total-Count in the Access-Control-Expose-Headers header?'
+    //             );
+    //         }
+    //         return {
+    //             data: json,
+    //             total: parseInt(
+    //                 parseInt(headers.get('x-total-count').split('/').pop(), 10), 10
+    //             ),
+    //         };
+    //     });
+    // },
 
     getOne: async (resource, params) => {
         console.log("resource:",resource, "params:" , params)
         console.log(`${apiUrl}/${resource}/${params.id}`)
         try {
-            const response = await axios.get(`${apiUrl}/${resource}/${params.id}`)
+            const response = await axios.get(`${baseUrl}${apiUrl}/${resource}/${params.id}`)
             // console.log("response",response.data) 
             console.table("getOne",resource, params, response)
             return ({data: response.data}) 
@@ -64,7 +105,7 @@ const dataProvider = {
         const query = {
             filter: JSON.stringify({ ids: params.ids }),
         };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
+        const url = `${baseUrl}${apiUrl}/${resource}?${stringify(query)}`;
         return httpClient(url).then(({ json }) => ({ data: json }));
     },
 
@@ -80,7 +121,7 @@ const dataProvider = {
                 [params.target]: params.id,
             }),
         };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
+        const url = `${baseUrl}${apiUrl}/${resource}?${stringify(query)}`;
 
         return httpClient(url).then(({ headers, json }) => ({
             data: json,
@@ -98,11 +139,11 @@ const dataProvider = {
 
 
     create: async (resource, params) => {
-        console.log("create")
+        console.log("create", resource, params.data)
         try {
-            const response = await axios.post(`${apiUrl}/${resource}/add`)
-            // console.log("response",response.data) 
-            console.table("create",resource, params, response)
+            const response = await axios.post(`${baseUrl}${apiUrl}/${resource}/add/`, params.data)
+            console.log("response",response.data) 
+            //console.table("create",resource, params, response)
             return ({data: response.data}) 
         } catch (error) {
             return ({error: error.message})
@@ -118,7 +159,7 @@ const dataProvider = {
     update: async (resource, params) => {
         // console.log("update", resource, params)
          try {
-            const response = await axios.put(`${apiUrl}/${resource}/update/${params.id}`, params.data)
+            const response = await axios.put(`${baseUrl}${apiUrl}/${resource}/update/${params.id}`, params.data)
             // console.log("response",response.data) 
             console.table("update",resource, params, response)
             return ({data: response.data}) 
@@ -132,7 +173,7 @@ const dataProvider = {
         const query = {
             filter: JSON.stringify({ id: params.ids}),
         };
-        return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
+        return httpClient(`${baseUrl}${apiUrl}/${resource}?${stringify(query)}`, {
             method: 'PUT',
             body: JSON.stringify(params.data),
         }).then(({ json }) => ({ data: json }));
@@ -141,8 +182,9 @@ const dataProvider = {
 
     delete: async (resource, params) => {
         console.log("delete", resource, params)
+        //console.log(`${baseUrl}${apiUrl}/${resource}/delete/${params.id}`)
         try {
-            const response = await axios.get(`${apiUrl}/${resource}/${params.id}`)
+            const response = await axios.get(`${baseUrl}${apiUrl}/${resource}/delete/${params.id}`)
             // console.log("response",response.data) 
             console.table("delete",resource, params, response)
             return ({data: response.data}) 
@@ -161,7 +203,7 @@ const dataProvider = {
         const query = {
             filter: JSON.stringify({ id: params.ids}),
         };
-        return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
+        return httpClient(`${baseUrl}${apiUrl}/${resource}?${stringify(query)}`, {
             method: 'DELETE',
             body: JSON.stringify(params.data),
         }).then(({ json }) => ({ data: json }));
