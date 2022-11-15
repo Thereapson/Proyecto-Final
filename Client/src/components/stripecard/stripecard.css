@@ -24,3 +24,32 @@
     border-radius: 10px;
 }
 
+.organhoriz {
+
+    display: flex;
+    flex-direction: row;
+
+    padding-bottom: 10px;
+
+    width: 450px;
+
+
+}
+
+.imagecontainer {
+
+    height: 210px;
+
+}
+
+.textos {
+
+    display: flex;
+    width: 150px;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: space-between;
+    justify-content: center;
+    align-items: center;
+
+}

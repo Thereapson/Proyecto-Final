@@ -19,7 +19,7 @@ import AdminPage from './components/Admin/AdminPage';
 
 function App() {
   return (
-    <div className="App container">
+    <div className="App container ">
       <BrowserRouter>
         <Routes>
           {/* rutas publicas */}

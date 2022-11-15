@@ -44,7 +44,7 @@ function DetailCard() {
   return (
     <div className="DetailCard">
       <Navbar />
-      <section className="bg-white dark:bg-gray-900">
+      <section className="bg-white dark:bg-gray-900 container bg-lightMode min-h-screen">
         <div className="container px-6 py-10 mx-auto">
           <div className="lg:-mx-6 lg:flex lg:items-center">
             <img className="espaciado object-cover object-center lg:h-[31rem]" src={details.image} alt="NOIMG" />
