@@ -7,7 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import { buyAllProducts, getCart, removeCart, showBuyProduct } from "../../Redux/Actions/Actions";
 import { useDispatch, useSelector } from 'react-redux';
 import paloma from './palomita1.png'
-import Stripecard from "../stripecard/stripecard";
+import Stripecard from "../Stripecard/stripecard";
 
 
 const stripePromise = loadStripe("pk_test_51LzkQ9EsbLOetD4WD60JMd2sSsaEOSnizWXhGa6FTKgFnZM8HOvtnJdQlDLmJNGwcntCURvyjEYgGjNXqejdOFSM004Y9xSLvY")
@@ -68,9 +68,9 @@ const CheckoutForm = (props) => {
 
     }
 
-    return <form onSubmit={handleSubmit} >
+    return <form className="bg-lightMode" onSubmit={handleSubmit} >
         <CardElement />
-        <div className="pagarcantidad">
+        <div className="pagarcantidad   ">
             {props.cantidadapagar ? <p className="cantidadapagar">${props.cantidadapagar}</p> : null}
             <button className='place px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
                 Pay
@@ -128,7 +128,7 @@ function StripeCol() {
 
 
     return (
-        <div className='pruebaxd'>
+        <div className='pruebaxd '>
             <h1>
                 Checkout
             </h1>

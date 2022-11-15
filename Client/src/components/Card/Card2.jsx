@@ -137,7 +137,10 @@ const Card2 = ({ product }) => {
             </button >
             {/* img hover scale 1.1 but overflow in conatiner and heigh 60% of full heigh*/}
             <div className="overflow-hidden h-3/5">
-                <img src={product.image} alt="Sunset in the mountains" className="w-full h-full object-cover transform hover:scale-110 transition duration-300 ease-in-out" />
+                <Link to={`/product/${product.id}`}>
+                    <img src={product.image} alt="Sunset in the mountains" className="w-full h-full object-cover transform hover:scale-110 transition duration-300 ease-in-out" />
+                </Link >
+
             </div>
             {/* product name */}
             <div className="flex items-center justify-center">

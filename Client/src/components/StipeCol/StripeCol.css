@@ -64,13 +64,12 @@ h1 {
 }
 
 .containerxd {
-
     display: flex;
-    width: 65%;
+    width: 50%;
     flex-wrap: wrap;
     justify-content: center;
     flex-direction: column;
-    border: 1px solid #000;
+    border: 1px solid #9ca3af;
     align-content: center;
     align-items: center;
     height: auto;
