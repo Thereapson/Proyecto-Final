@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import swal from 'sweetalert';
-import { addProduct, addFavorite, removeFavorite, getFavorites } from "../../Redux/Actions/Actions";
+import { addProduct, addFavorite, removeFavorite, getFavorites, getQuantity } from "../../Redux/Actions/Actions";
 import { useSelector } from "react-redux";
 
 const Card2 = ({ product }) => {
@@ -28,6 +28,7 @@ const Card2 = ({ product }) => {
             ]
         }
         dispatch(addProduct(productsToadd));
+        dispatch(getQuantity())
         setQuantity(1);
     }
 
