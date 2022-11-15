@@ -10,13 +10,16 @@ const {
     editUser,
     blockUser,
     addFavorites,
+    removeFavorites,
     registerUser,
     loginUser,
     userData,
     getUserByEmail,
     forgotPassword,
     resetPassword,
-    resetPasswordToken
+    resetPasswordToken,
+    getAdminByEmail,
+    getFavorites
 } = require("../Controllers/userController");
 
 // configuramos las rutas
@@ -40,10 +43,16 @@ router.post('/resetPassword/:id/:token', resetPasswordToken)
 
 router.put("/update", editUser);
 
-router.put("/favorites/:user_id", addFavorites);
+router.post("/favorites", addFavorites);
+
+router.post("/favorites/delete", removeFavorites);
+
+router.get("/favorites/:id", getFavorites);
 
 router.put("/block/:id", blockUser)
 
 router.get("/email/:email", getUserByEmail)
+
+router.get("/isadmin/:email", getAdminByEmail)
 
 module.exports = router;

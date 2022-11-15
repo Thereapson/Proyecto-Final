@@ -13,7 +13,7 @@ function ForgotPassword() {
         //   email:email
         // }
         console.log(email)
-       fetch('http://localhost:3001/users/forgotPassword', {
+       fetch('/users/forgotPassword', {
         method: "POST",
         crossDomain: true,
         headers: {

@@ -33,7 +33,6 @@ const addProductToShoppingCart = async (req, res, next) => {
         const productData = req.body
         const userId = productData.user_id
         const products = productData.products_id
-        console.log("Desde el controller: ",productData)
         const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId })
         let updated = {}
         let added = {}
@@ -49,7 +48,7 @@ const addProductToShoppingCart = async (req, res, next) => {
                     updated = await shoppingCartModel.updateOne(
                         { user_id: userId, "products_id.product_id": productFound.product_id },
                         { $set: { "products_id.$.quantity": updateQuantity } }
-                        )
+                    )
                 } else {
                     newArrayProduct = {
                         product_id: product.product_id,
@@ -58,11 +57,15 @@ const addProductToShoppingCart = async (req, res, next) => {
                     added = await shoppingCartModel.updateOne(
                         { user_id: userId },
                         { $push: { products_id: newArrayProduct } }
-                        )
+                    )
                 }
             })
-            if( updated || added) {
-                res.status(200).send(updated || added)
+            if (updated || added) {
+                const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId }).populate({
+                    path: 'products_id.product_id',
+                    select: '_id name image price'
+                })
+                res.status(200).send(shoppingCartFound)
             } else {
                 res.status(400).send("The Product can't be added")
             }
@@ -94,9 +97,9 @@ const getShoppingCartByUser = async (req, res, next) => {
     try {
         const userId = req.params.id
         const shoppingCartFound = await shoppingCartModel.findOne({ user_id: userId }).populate({
-                path: 'products_id.product_id',
-                select: '_id name image price'
-            })
+            path: 'products_id.product_id',
+            select: '_id name image price'
+        })
         if (shoppingCartFound) {
             const ShoppingCart = {
                 user: shoppingCartFound.user_id,
@@ -104,13 +107,34 @@ const getShoppingCartByUser = async (req, res, next) => {
             }
             res.status(200).send(ShoppingCart)
         } else {
-            res.status(400).send("There's no Shopping Cart to show")
+            res.status(200).send({ msg: "There's no Shopping Cart to show" })
         }
     } catch (error) {
         console.error(error);
         next(error)
     }
 }
+
+const getQuantityOfProductsInShoppingCart = async (req, res, next) => {
+    try {
+        const userId = req.params.id
+        const shoppingCartFound = await shoppingCartModel.findOne
+            ({ user_id: userId }).populate({
+                path: 'products_id.product_id',
+                select: '_id name image price'
+            })
+        if (shoppingCartFound) {
+            res.status(200).send({ quantity: shoppingCartFound.products_id.length })
+        } else {
+            res.status(200).send({ quantity: 0 })
+        }
+    } catch (error) {
+        console.error(error);
+        next(error)
+    }
+}
+
+
 
 // delete a shopping cart by user
 const deleteShoppingCart = async (req, res, next) => {
@@ -228,5 +252,6 @@ module.exports = {
     addProductToShoppingCart,
     deleteProductFromShoppingCart,
     deleteShoppingCart,
-    deleteProductFromShoppingCartAndDeleteShoppingCart
+    deleteProductFromShoppingCartAndDeleteShoppingCart,
+    getQuantityOfProductsInShoppingCart
 }

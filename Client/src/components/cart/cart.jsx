@@ -11,27 +11,35 @@ const Cart = ({ setShowCart, showCart }) => {
     const setOpen = setShowCart
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart);
-    
+    const id = window.localStorage.getItem('id')
     const [products, setProducts] = useState([])
 
     useEffect(() => {
-        dispatch(getCart(window.localStorage.getItem('id')));
+        dispatch(getCart(id));
     }, [dispatch])
 
     useEffect(() => {
         if (cart.products) {
             setProducts(cart.products)
         }
-        // console.log("cart", cart);
+        window.localStorage.setItem('localCart', cart)
+        console.log("agregué el carrito al local: ", window.localStorage.getItem('localCart'))
     }, [cart])
 
+    const URLCREATOR = function (string, cantidad) {
+        var compuesta = '';
+        for (let i = 0; i < cantidad; i++) {
+            compuesta = compuesta + ',' + string
+
+        }
+        return compuesta
+    }
+
     const total = () => {
-        console.log("pase total")
         let total = 0;
         products.forEach(product => {
             total += product.product_id.price * product.quantity
         })
-        console.log(total)
         return total
     }
 
@@ -44,7 +52,7 @@ const Cart = ({ setShowCart, showCart }) => {
     const handleRemoveToCartProduct = (product) => {
         console.log(product)
         const productToRemove = {
-            user_id: window.localStorage.getItem('id'),
+            user_id: id,
             product_id: product.product_id._id
         }
         dispatch(removeProduct(productToRemove))
@@ -52,14 +60,14 @@ const Cart = ({ setShowCart, showCart }) => {
     }
 
     const handleRemoveQuantity = (product) => {
-        const id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
+        const product_id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
         const productToRemove = {
-            user_id: window.localStorage.getItem('id'),
-            product_id: id
+            user_id: id,
+            product_id: product_id
         }
         dispatch(removeQuantity(productToRemove))
         setProducts(products.map(p => {
-            if (p.product_id._id === id) {
+            if (p.product_id._id === product_id) {
                 p.quantity--
             }
             return p
@@ -67,17 +75,17 @@ const Cart = ({ setShowCart, showCart }) => {
     }
 
     const handleAddQuantity = (product) => {
-        const id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
+        const product_id = product.target.outerHTML.split("name=")[1].split(" ")[0].split('"')[1]
         const productToAdd = {
-            user_id: window.localStorage.getItem('id'),
+            user_id: id,
             products_id: [{
-                product_id: id,
+                product_id: product_id,
                 quantity: 1
             }]
         }
         dispatch(addProduct(productToAdd))
         setProducts(products.map(p => {
-            if (p.product_id._id === id) {
+            if (p.product_id._id === product_id) {
                 p.quantity++
             }
             return p
@@ -149,7 +157,6 @@ const Cart = ({ setShowCart, showCart }) => {
                                                                             </h3>
                                                                             <p className="ml-4">{product.product_id.price}</p>
                                                                         </div>
-                                                                        {/* <p className="mt-1 text-sm text-gray-500">{product.color}</p> */}
                                                                     </div>
                                                                     <div className="flex flex-1 items-end justify-between text-sm gap-4">
                                                                         <p className="text-gray-500"> Quantity: {product.quantity}</p>
@@ -172,7 +179,6 @@ const Cart = ({ setShowCart, showCart }) => {
                                                             </li>
                                                         ))}
                                                     </ul>
-                                                    {/* button remove all products */}
                                                     <button type="button" className="font-medium text-indigo-200 hover:text-indigo-500" onClick={() => handleRemoveAll()}>
                                                         Remove All
                                                     </button>
@@ -187,11 +193,11 @@ const Cart = ({ setShowCart, showCart }) => {
                                             </div>
                                             <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                                             <div className="mt-6">
-                                                {/* <Link to={'/checkout' + (products.length > 0 ? '?products=' + products.map(product => product.id).join(',') : '')}> */}
-                                                <button type="button" className="w-full flex justify-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 inline-flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700">
-                                                    Checkout
-                                                </button>
-                                                {/* </Link> */}
+                                                <Link to={'/checkout' + (products.length > 0 ? '?products=' + products.map(product => URLCREATOR(product.product_id["_id"], product.quantity)) : '')}>
+                                                    <button type="button" className="w-full flex justify-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 inline-flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700">
+                                                        Checkout
+                                                    </button>
+                                                </Link>
                                             </div>
                                             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                                 <p>

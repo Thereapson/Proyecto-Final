@@ -8,6 +8,8 @@ const shoppingCarts = require("./shoppingCarts");
 const users = require("./users");
 const payments = require("./payments");
 const reviews = require("./reviews");
+const admin = require("./admin");
+const purchases = require("./purchases");
 
 router.use("/products", products);
 router.use("/categorys", categorys);
@@ -15,6 +17,8 @@ router.use("/shoppingCarts", shoppingCarts)
 router.use("/users", users)
 router.use("/payments", payments); // ruta pasarela de pago
 router.use("/reviews", reviews);
+router.use("/admin", admin);
+router.use("/purchases", purchases)
 
 
 router.get("/", (req, res) => {

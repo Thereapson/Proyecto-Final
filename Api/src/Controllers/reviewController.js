@@ -13,10 +13,10 @@ const getAllReviews = async () => {
                 date: r.date
             }
         })
-        if(reviews.length > 0) {
+        if (reviews.length > 0) {
             return reviews
         } else {
-            return { msg: "There's no Reviews in the DB"}
+            return { msg: "There's no Reviews in the DB" }
         }
 
     } catch (e) {
@@ -28,9 +28,12 @@ const getAllReviews = async () => {
 const getReviewByProduct = async (product) => {
     try {
         console.log(product)
-        const response = await reviewModel.find({ 
-            product_id: product, 
-        }).populate({ path: 'User' })
+        const response = await reviewModel.find({
+            product_id: product,
+        }).populate({
+            path: 'user_id',
+            select: 'id full_name'
+        })
         const reviews = response?.map(r => {
             const re = {
                 id: r._id,
@@ -42,10 +45,10 @@ const getReviewByProduct = async (product) => {
             }
             return re
         })
-        if(reviews.length > 0) {
+        if (reviews.length > 0) {
             return reviews
         } else {
-            return { msg: "There's no Reviews in the DB with that Product id"}
+            return { msg: "There's no Reviews in the DB with that Product id" }
         }
 
     } catch (e) {
@@ -56,8 +59,8 @@ const getReviewByProduct = async (product) => {
 
 const getReviewByUser = async (user) => {
     try {
-        const response = await reviewModel.find({ 
-            user_id: user, 
+        const response = await reviewModel.find({
+            user_id: user,
         }).populate({ path: 'Product' })
         const reviews = response?.map(r => {
             return {
@@ -69,10 +72,10 @@ const getReviewByUser = async (user) => {
                 date: r.date
             }
         })
-        if(reviews.length > 0) {
+        if (reviews.length > 0) {
             return reviews
         } else {
-            return { msg: "There's no Reviews in the DB with that user id"}
+            return { msg: "There's no Reviews in the DB with that user id" }
         }
 
     } catch (e) {
@@ -86,7 +89,7 @@ const addReview = async (reviewData) => {
         const { user, product, score, review } = reviewData
         const newReview = await reviewModel.create({
             user_id: user,
-            product_id: product, 
+            product_id: product,
             score,
             review,
             date: new Date(),
@@ -98,14 +101,14 @@ const addReview = async (reviewData) => {
         const total = scores.reduce((acc, val) => {
             return acc = acc + val
         })
-        const rating = total/scores.length
+        const rating = total / scores.length
         await productModel.findByIdAndUpdate(product, {
             score: rating
-        }, { new : true})
+        }, { new: true })
 
-        if(newReview) {
+        if (newReview) {
             return newReview
-        } else return { msg: "The new review can't be created"}
+        } else return { msg: "The new review can't be created" }
 
     } catch (e) {
         console.error(e);

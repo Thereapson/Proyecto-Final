@@ -12,7 +12,7 @@ const [password, setPassword] = useState("");
 const [message, setMessage] = useState(""); 
 
 const userValid = async() => {
-  const res = await fetch(`http://localhost:3001/users/resetPassword/${id}/${token}`, {
+  const res = await fetch(`/users/resetPassword/${id}/${token}`, {
     method :"GET",
     headers: {
       "Content-Type": "application/json"
@@ -29,7 +29,7 @@ const userValid = async() => {
 
 const sendPassword = async(e) => {
   e.preventDefault();
-fetch(`http://localhost:3001/users/resetPassword/${id}/${token}`, {
+fetch(`/users/resetPassword/${id}/${token}`, {
     method :"POST",
     headers: {
       "Content-Type": "application/json",

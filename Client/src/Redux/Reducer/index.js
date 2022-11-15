@@ -12,7 +12,9 @@ import {
     REMOVE_FROM_CART,
     CLEAN_PRODUCTS,
     CLEAN_PRODUCTS_RENDER,
-    GET_ALL_PRODUCTS_BY_ID
+    GET_ALL_PRODUCTS_BY_ID,
+    IS_ADMIN,
+    SHOW_PRODUCTS
 } from '../Actions/Actions';
 
 const initialState = {
@@ -24,7 +26,12 @@ const initialState = {
     lastAdd: {},
     cart: [],
     userData: {},
-    buyproducts: []
+    isAdmin: {},
+    buyproducts: [],
+    filteredBy: "",
+    userFavorites: [],
+    quantityFromCart: 0,
+    abouttobuyproducts: []
 
 };
 
@@ -34,19 +41,22 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 products: action.payload,
+                productsRender: action.payload
             };
         case GET_PRODUCTS_BY_SEARCH:
             let search = action.payload;
-            console.log("search: ", search);
             let filteredByName = state.products.filter((product) => product.name?.toLowerCase().includes(search.toLowerCase()));
             let filteredByBrand = state.products.filter((product) => product.brand?.toLowerCase().includes(search.toLowerCase()));
             let filteredByCategory = state.products.filter((product) => product.category?.toLowerCase().includes(search.toLowerCase()));
 
             let filteredProducts = [...filteredByName, ...filteredByCategory, ...filteredByBrand];
+            let filteredProductsUnique = filteredProducts.filter((product, index) => filteredProducts.indexOf(product) === index);
+
             if (filteredProducts.length > 0) {
                 return {
                     ...state,
-                    productsRender: filteredProducts,
+                    productsRender: filteredProductsUnique,
+                    filteredBy: search
                 };
             } else {
                 return {
@@ -57,11 +67,11 @@ const rootReducer = (state = initialState, action) => {
 
         case GET_PRODUCTS_BY_CATEGORY:
             let category = action.payload;
-            console.log("category: ", category);
             let filterByCategory = state.products.filter((product) => product.category.toLowerCase().includes(category.toLowerCase()));
             return {
                 ...state,
                 productsRender: filterByCategory,
+                filteredBy: category
             };
 
         case GET_PRODUCT_BY_ID:
@@ -73,42 +83,6 @@ const rootReducer = (state = initialState, action) => {
                 categories: action.payload,
             };
 
-        case REMOVE_FROM_CART:
-            let productToRemove = action.payload;
-            let productInCartToRemove = state.cart.find((product) => product.id === productToRemove.id);
-            if (productInCartToRemove.quantity > 1) {
-                return {
-                    ...state,
-                    cart: state.cart.map((product) => (product.id === productToRemove.id ? { ...product, quantity: product.quantity - 1 } : product)),
-                };
-            } else {
-                return {
-                    ...state,
-                    cart: state.cart.filter((product) => product.id !== productToRemove.id),
-                };
-            }
-            
-        case ADD_PRODUCT:
-            // from action
-            // return {
-            //     type: ADD_PRODUCT,
-            //     payload: products,
-            // };
-            let productToAdd = action.payload;
-            console.log("productToAdd: ", productToAdd);
-            let productInCart = state.cart.find((product) => product.id == productToAdd.id);
-            if (productInCart) {
-                return {
-                    ...state,
-                    cart: state.cart.map((product) => (product.id === productToAdd.id ? { ...product, quantity: product.quantity + 1 } : product)),
-                };
-            } else {
-                return {
-                    ...state,
-                    cart: [...state.cart, { ...productToAdd, quantity: 1 }],
-                };
-            }
-
         case CLEAN_DETAILS:
             return {
                 ...state,
@@ -118,16 +92,49 @@ const rootReducer = (state = initialState, action) => {
         case GET_PRODUCTS_BY_MIN_MAX:
             let min = action.payload.min;
             let max = action.payload.max;
-            if (state.productsRender.length > 0) {
+            let filteredby = state.filteredBy;
+            if (filteredby === "") {
+                let filteredByPrice = state.products.filter((product) => product.price >= min && product.price <= max);
+                if (filteredByPrice.length > 0) {
+                    return {
+                        ...state,
+                        productsRender: filteredByPrice
+                    };
+                } else {
+                    return {
+                        ...state,
+                        productsRender: ["No Products Found"],
+                    };
+                }
+            } else {
+                let filteredByPrice = state.products.filter((product) => product.price >= min && product.price <= max && product.category.toLowerCase().includes(filteredby?.toLowerCase()));
+                if (filteredByPrice.length > 0) {
+                    return {
+                        ...state,
+                        productsRender: filteredByPrice
+                    };
+                }
+                else {
+                    return {
+                        ...state,
+                        productsRender: ["No Products Found"],
+                    };
+                }
+            }
+
+        case 'GET_PRODUCT_BY_ORDER':
+            let order = action.payload;
+
+            if (order === "asc") {
                 return {
                     ...state,
-                    productsRender: state.productsRender.filter((product) => product.price >= min && product.price <= max)
-                }
+                    productsRender: state.productsRender.sort((a, b) => a.price - b.price)
+                };
             } else {
                 return {
                     ...state,
-                    products: state.products.filter((product) => product.price >= min && product.price <= max)
-                }
+                    productsRender: state.productsRender.sort((a, b) => b.price - a.price)
+                };
             }
 
         case GET_USER:
@@ -137,7 +144,16 @@ const rootReducer = (state = initialState, action) => {
             }
 
         case "ADD_PRODUCT":
-            console.log("action.payload: ", action.payload);
+            return {
+                ...state,
+                cart: action.payload
+            }
+
+        case "GET_QUANTITY":
+            return {
+                ...state,
+                quantityFromCart: action.payload.quantity
+            }
 
         case "GET_CART":
             console.log("GET_CART: ", action.payload)
@@ -146,10 +162,46 @@ const rootReducer = (state = initialState, action) => {
                 cart: action.payload
             }
 
-        case "REMOVE_CART":
+        case "ADDPRODUCT_LOCALCART":
+            let localCart = state.cart;
+            const productsLocal = localCart.products
+            const products = action.payload.products
+            productsLocal
+                ? products.forEach(product => {
+                    let found = productsLocal.find(p => p.product_id._id === product.product_id._id)
+                    if (!found) {
+                        localCart.products.push(product)
+                    }
+                })
+                : localCart = action.payload
             return {
                 ...state,
-                cart: action.payload
+                cart: localCart
+            }
+
+        case "REMOVEQUANTITY_LOCALCART":
+            let localCartb = state.cart;
+            const productsLocalb = localCartb.products_id
+            const product = action.payload.product_id
+            let index = productsLocalb.indexof(product)
+            const found = productsLocal.find(p => p.product_id === product)
+            found.quantity > 1
+                ? localCartb.products_id[index].quantity = found.quantity - 1
+                : localCartb.products_id = productsLocalb.filter(p => p.product_id !== product)
+            return {
+                ...state,
+                cart: localCartb
+            }
+
+        case "REMOVEPRODUCT_LOCALCART":
+            let localCartc = state.cart;
+            const productsLocalc = localCartc.products_id
+            const productc = action.payload.product_id
+            localCartc.products_id = productsLocalc.filter(p => p.product_id !== productc)
+            return {
+                ...state,
+                cart: action.payload,
+                quantityFromCart: action.payload.products?.length
             }
 
         case GET_ALL_PRODUCTS_BY_ID:
@@ -157,7 +209,39 @@ const rootReducer = (state = initialState, action) => {
                 ...state, buyproducts: [...action.payload]
             }
 
+        case IS_ADMIN:
+            if (action.payload.isAdmin === true) {
+                return {
+                    ...state, isAdmin: [true]
+                }
+            } else {
+                return {
+                    ...state, isAdmin: [false]
+                }
+            }
 
+        case "ADD_FAVORITE":
+            return {
+                ...state,
+                userFavorites: action.payload
+            }
+
+        case "REMOVE_FAVORITE":
+            return {
+                ...state,
+                userFavorites: action.payload
+            }
+        case "GET_FAVORITES":
+            const favorites = action.payload;
+            return {
+                ...state,
+                userFavorites: favorites
+            }
+
+        case SHOW_PRODUCTS:
+            return {
+                ...state, abouttobuyproducts: action.payload
+            }
         default:
             return { ...state };
     }

@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 // Controller de Users
-const { userModel } = require("../Models/index")
+const { userModel, productModel } = require("../Models/index")
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
 const cookieParser = require('cookie-parser')
@@ -11,15 +11,15 @@ const nodemailer = require("nodemailer");
 //NOTIFICACIONES POR MAIL
 
 var transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "compudevs2022@gmail.com",
-      pass: "ftmgoxulpwshhfak",
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
+  service: "gmail",
+  auth: {
+    user: "compudevs2022@gmail.com",
+    pass: "ftmgoxulpwshhfak",
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 const getAllUsers = async (req, res, next) => {
   try {
     const response = await userModel.find({})//.populate("Product");
@@ -67,12 +67,13 @@ const getUserByEmail = async (req, res, next) => {
   try {
     const { email } = req.params;
     const user = await userModel.findOne({ email: email })
+    let products = await productModel.find({ _id: { $in: user.favorites } })
     if (user) {
       let userToSend = {
         id: user._id,
         full_name: user.full_name,
         email: user.email,
-        favorites: user.favorites
+        favorites: products,
       }
       res.status(200).send(userToSend)
     } else {
@@ -132,23 +133,23 @@ const createToken = (id) => {
 const registerUser = async (req, res, next) => {
   const { full_name, email, password, isAdmin } = req.body;
 
-    const salt = await bcrypt.genSalt(10);
-    const encryptedPassword = await bcrypt.hash(password, salt);
-    try{
-        const oldUser = await userModel.findOne({email})
-        if(oldUser){
-          return res.json({error:'User Exists'}) 
-        }
-        const newUser = await userModel.create({
-            full_name,
-            email,
-            password: encryptedPassword,
-        });
-        var register = {
-            from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
-            to: newUser.email,
-            subject: "CompuDevs -Te has registrado con exito",
-            html: `<html
+  const salt = await bcrypt.genSalt(10);
+  const encryptedPassword = await bcrypt.hash(password, salt);
+  try {
+    const oldUser = await userModel.findOne({ email })
+    if (oldUser) {
+      return res.json({ error: 'User Exists' })
+    }
+    const newUser = await userModel.create({
+      full_name,
+      email,
+      password: encryptedPassword,
+    });
+    var register = {
+      from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
+      to: newUser.email,
+      subject: "CompuDevs -Te has registrado con exito",
+      html: `<html
               xmlns="http://www.w3.org/1999/xhtml"
               xmlns:v="urn:schemas-microsoft-com:vml"
               xmlns:o="urn:schemas-microsoft-com:office:office"
@@ -1060,22 +1061,22 @@ const registerUser = async (req, res, next) => {
               </body>
             </html>
             `,
-          };
-        //NOTIFICACION DE REGISTRO
-        console.log(newUser.email, 'email')
-        transporter.sendMail(register, function (error, info) {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log("Email de verificacion es enviado a tu correo");
-            }
-          });
-        // res.send({status:'ok'})
+    };
+    //NOTIFICACION DE REGISTRO
+    console.log(newUser.email, 'email')
+    transporter.sendMail(register, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email de verificacion es enviado a tu correo");
+      }
+    });
+    // res.send({status:'ok'})
 
-        
-    }catch(error){
-        res.send({status:'error'})
-    }
+
+  } catch (error) {
+    res.send({ status: 'error' })
+  }
 }
 
 const loginUser = async (req, res, next) => {
@@ -1125,11 +1126,11 @@ const loginUser = async (req, res, next) => {
 const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
 
-  try{
+  try {
     const oldUser = await userModel.findOne({
-       
-        email: email,
-      },
+
+      email: email,
+    },
     );
     if (!oldUser) {
       return res.json({ status: "Usuario no existe" });
@@ -1176,7 +1177,7 @@ const forgotPassword = async (req, res, next) => {
     console.log(oldUser.full_name);
 
     console.log(link);
-  }catch(e){
+  } catch (e) {
     console.log(err);
   }
 }
@@ -1184,9 +1185,9 @@ const resetPassword = async (req, res, next) => {
   const { id, token } = req.params;
   console.log(req.params);
   const oldUser = await userModel.findOne({
-   
+
     _id: id,
-    
+
   });
   if (!oldUser) {
     return res.json({ status: "Usuario no existe" });
@@ -1208,9 +1209,9 @@ const resetPasswordToken = async (req, res, next) => {
   const { id, token } = req.params;
   const { password } = req.body;
   const oldUser = await userModel.findOne({
-    
-      _id: id,
-    
+
+    _id: id,
+
   });
   if (!oldUser) {
     return res.json({ status: "Usuario no existe" });
@@ -1219,14 +1220,14 @@ const resetPasswordToken = async (req, res, next) => {
   try {
     const verify = jwt.verify(token, secret);
     const encryptedPassword = await bcrypt.hash(password, 10);
-   await userModel.updateOne({
-    _id: id,
-   },
-   {
-    $set:{
-      password: encryptedPassword,
+    await userModel.updateOne({
+      _id: id,
     },
-   })
+      {
+        $set: {
+          password: encryptedPassword,
+        },
+      })
     // res.render("index", { email: verify.email, status: "verificado" });
     res.status(201).send('verified')
 
@@ -1308,7 +1309,86 @@ const blockUser = async (req, res, next) => {
 
 const addFavorites = async (req, res, next) => {
   try {
+    const { userId, productId } = req.body;
+    const user = await userModel.findById(userId);
+    const product = await productModel.findOne({ cid: productId });
+    if (!user || !product) {
+      return res.status(404).send({ message: 'User or product not found' });
+    } else {
+      if (user.favorites.includes(productId)) {
+        return res.status(400).send({ message: 'Product already in favorites' });
+      } else {
+        await userModel.findByIdAndUpdate(userId, { $push: { favorites: productId } }); // add product to favorites
+        const user = await userModel.findById
+          (userId)
+          .populate('favorites')
+          .exec();
+        return res.status(200).send(user.favorites);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
+}
 
+const removeFavorites = async (req, res, next) => {
+  try {
+    const { userId, productId } = req.body;
+    const user = await userModel.findById(userId);
+    const product = await productModel.findById(productId);
+    if (!user || !product) {
+      return res.status(404).send({ message: 'User or product not found' });
+    } else {
+      if (!user.favorites.includes(productId)) {
+        return res.status(400).send({ message: 'Product not in favorites' });
+      } else {
+        await userModel.findByIdAndUpdate(userId, { $pull: { favorites: productId } }); // remove product from favorites
+        const user = await userModel.findById
+          (userId)
+          .populate('favorites')
+          .exec();
+        return res.status(200).send(user.favorites);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
+}
+
+const getFavorites = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const user = await userModel.findById
+      (userId)
+      .populate('favorites')
+      .exec();
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' });
+    } else {
+      return res.status(200).send(user.favorites);
+    }
+  } catch (error) {
+    console.error(error);
+    next(error)
+  }
+}
+
+const getAdminByEmail = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    const user = await userModel.findOne({ email: email })
+    if (user) {
+      let userToSend = {
+        id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin
+      }
+      res.status(200).send(userToSend)
+    } else {
+      res.status(400).send("There's no User with that Email")
+    }
   } catch (error) {
     console.error(error);
     next(error)
@@ -1316,17 +1396,20 @@ const addFavorites = async (req, res, next) => {
 }
 
 module.exports = {
-    getAllUsers,
-    getUserById,
-    getUserByEmail,
-    createUser,
-    editUser,
-    blockUser,
-    addFavorites,
-    registerUser,
-    loginUser,
-    userData,
-    forgotPassword,
-    resetPassword,
-    resetPasswordToken
+  getAllUsers,
+  getUserById,
+  getUserByEmail,
+  createUser,
+  editUser,
+  blockUser,
+  addFavorites,
+  removeFavorites,
+  registerUser,
+  loginUser,
+  userData,
+  forgotPassword,
+  resetPassword,
+  resetPasswordToken,
+  getAdminByEmail,
+  getFavorites
 };
