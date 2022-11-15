@@ -155,22 +155,22 @@ const Cart = ({ setShowCart, showCart }) => {
                                                                             <h3>
                                                                                 <Link to={`/product/${product.product_id.id}`}> {product.product_id.name}</Link>
                                                                             </h3>
-                                                                            <p className="ml-4">{product.product_id.price}</p>
+                                                                            <p className="ml-4">${product.product_id.price}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div className="flex flex-1 items-end justify-between text-sm gap-4">
                                                                         <p className="text-gray-500"> Quantity: {product.quantity}</p>
-                                                                        <div className="flex">
-                                                                            <button onClick={handleRemoveQuantity} className="text-gray-400 hover:text-gray-500">
+                                                                        <div className="flex gap-2">
+                                                                            <button onClick={handleRemoveQuantity} className="text-gray-400 hover:text-primary">
                                                                                 <span name={product.product_id._id} className="font-bold text-xl">-</span>
                                                                             </button>
-                                                                            <button onClick={handleAddQuantity} className="text-gray-400 hover:text-gray-500">
+                                                                            <button onClick={handleAddQuantity} className=" text-gray-400 hover:text-primary">
                                                                                 <span name={product.product_id._id} className="font-bold text-xl">+</span>
                                                                             </button>
                                                                         </div>
 
                                                                         <div className="flex">
-                                                                            <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleRemoveToCartProduct(product)}>
+                                                                            <button type="button" className="font-medium text-primary hover:text-opacity-75" onClick={() => handleRemoveToCartProduct(product)}>
                                                                                 Remove
                                                                             </button>
                                                                         </div>
@@ -179,9 +179,15 @@ const Cart = ({ setShowCart, showCart }) => {
                                                             </li>
                                                         ))}
                                                     </ul>
-                                                    <button type="button" className="font-medium text-indigo-200 hover:text-indigo-500" onClick={() => handleRemoveAll()}>
-                                                        Remove All
-                                                    </button>
+                                                    {products.length > 0 ? (
+                                                        <button type="button" className="font-medium text-primary hover:text-opacity-75 p-2 rounded-md" onClick={() => handleRemoveAll()}>
+                                                            Remove all products
+                                                        </button>
+                                                    ) : (
+                                                        <>
+                                                            <p className="text-center text-gray-500">No products in the cart</p>
+                                                        </>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -189,12 +195,12 @@ const Cart = ({ setShowCart, showCart }) => {
                                         <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                                             <div className="flex justify-between text-base font-medium text-gray-900">
                                                 <p>Subtotal</p>
-                                                {total()}
+                                                ${total()}
                                             </div>
                                             <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                                             <div className="mt-6">
                                                 <Link to={'/checkout' + (products.length > 0 ? '?products=' + products.map(product => URLCREATOR(product.product_id["_id"], product.quantity)) : '')}>
-                                                    <button type="button" className="w-full flex justify-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 inline-flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700">
+                                                    <button type="button" className="w-full flex justify-center bg-primary border border-transparent rounded-md py-3 px-8 inline-flex items-center justify-center text-base font-medium text-white hover:bg-opacity-75">
                                                         Checkout
                                                     </button>
                                                 </Link>
