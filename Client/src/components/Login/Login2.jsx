@@ -6,6 +6,7 @@ import swal from 'sweetalert';
 import { gapi } from "gapi-script"
 import LoginGoogle from "./LoginGoogle/LoginGoogle";
 import { useNavigate } from "react-router-dom";
+import { addProduct, removeCart } from '../../Redux/Actions/Actions'
 
 
 const clientId = "650713409200-ugee25co9jjpjkp8ufhob0odo9vdn5a9.apps.googleusercontent.com"
@@ -14,6 +15,8 @@ const clientId = "650713409200-ugee25co9jjpjkp8ufhob0odo9vdn5a9.apps.googleuserc
 export const Login2 = () => {
 
   // const [user, userState] = useState({})
+  const [user, userState] = useState({})
+  const dispatch = useDispatch()
 
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const [mensaje, setMensaje] = useState();
@@ -88,20 +91,41 @@ export const Login2 = () => {
         .then((res) => {
           const { data } = res;
           setMensaje(data.mensaje);
-          setTimeout(() => {
-            setMensaje("")
-            console.log(data, 'login')
-            localStorage.setItem('token', data.data);
-            localStorage.setItem('isLogged', true);
-            localStorage.setItem('id', data.id);
-            localStorage.setItem('email', email)
+          if(data.isActive === false){
             swal({
-              title: "Login successful",
-              icon: "success",
+              title: "Sorry. Your User is Banned",
+              icon: "error",
               button: "Ok",
             });
-            navigate('/userDetail')
-          }, 2000)
+            navigate('/login')
+          } else {
+            setTimeout(() => {
+              setMensaje("")
+              console.log(data, 'login')
+              localStorage.setItem('token', data.data);
+              localStorage.setItem('isLogged', true);
+              localStorage.setItem('id', data.id);
+              localStorage.setItem('email', email)
+              // funcion para guardar carrito en la db
+              const localCart = window.sessionStorage.getItem('localCart')
+              const id = window.localStorage.getItem('id')
+              if(localCart) {
+                const newCart = {
+                  "user_id": id,
+                  "products_id": JSON.parse(localCart)
+                }
+                dispatch(addProduct(newCart))
+                dispatch(removeCart)
+                window.sessionStorage.removeItem('localCart')
+              }
+              swal({
+                title: "Login successful",
+                icon: "success",
+                button: "Ok",
+              });
+              navigate('/userDetail')
+            }, 2000)
+          }
         })
         .catch((error) => {
           console.error(error);

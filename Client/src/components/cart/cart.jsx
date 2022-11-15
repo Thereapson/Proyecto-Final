@@ -22,8 +22,7 @@ const Cart = ({ setShowCart, showCart }) => {
         if (cart.products) {
             setProducts(cart.products)
         }
-        window.localStorage.setItem('localCart', cart)
-        console.log("agregué el carrito al local: ", window.localStorage.getItem('localCart'))
+        window.sessionStorage.setItem('localCart', JSON.stringify(cart.products))
     }, [cart])
 
     const URLCREATOR = function (string, cantidad) {
@@ -44,7 +43,6 @@ const Cart = ({ setShowCart, showCart }) => {
     }
 
     const handleRemoveAll = () => {
-        console.log(cart)
         dispatch(removeCart(cart.user))
         setProducts([])
     }

@@ -14,9 +14,10 @@ const Navbar = ({ setCurrentPage }) => {
     const categories = useSelector(state => state.categories);
     const admin = useSelector(state => state.isAdmin);
     const islogin = useSelector(state => state.userData)
+    const user_id = window.localStorage.getItem('id')
 
     useEffect(() => {
-        window.localStorage.getItem('id') && dispatch(getCart(window.localStorage.getItem('id')));
+        window.localStorage.getItem('id') && dispatch(getCart(user_id));
         window.localStorage.getItem('email') && dispatch(getUser(window.localStorage.getItem('email')));
     }, [dispatch]);
 
@@ -44,8 +45,8 @@ const Navbar = ({ setCurrentPage }) => {
         dispatch(getCategories());
         dispatch(getProducts());
         dispatch(isAdmin(window.localStorage.getItem('email')));  // action para validar si el usuario es admin o no
-        dispatch(getFavorites(window.localStorage.getItem('id')));
-        dispatch(getQuantity(window.localStorage.getItem('id')));
+        dispatch(getFavorites(user_id));
+        dispatch(getQuantity(user_id));
     }, [dispatch]);
 
     const favorites = useSelector(state => state.userFavorites);
@@ -77,7 +78,7 @@ const Navbar = ({ setCurrentPage }) => {
     const [showCart, setShowCart] = useState(false);
     const handleCart = () => {
         setShowCart(true);
-        dispatch(getQuantity(window.localStorage.getItem('id')));
+        dispatch(getQuantity(user_id));
     };
 
     const quantityInCart = useSelector(state => state.quantityFromCart);
@@ -176,8 +177,10 @@ const Navbar = ({ setCurrentPage }) => {
                         </div>
                     </div>
                 </div>
+                {/* cart */}
                 <div className="flex items-center hover:cursor-pointer">
                     <div className="relative">
+                        {/* cart */}
                         <button className="focus:outline-none focus:shadow-outline" onClick={() => handleCart()}>
                             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -191,18 +194,24 @@ const Navbar = ({ setCurrentPage }) => {
                         {quantityInCart > 0 && <div className="absolute bottom-5 left-3 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">{quantityInCart}</div>}
                     </div>
                 </div>
-                <div className="flex items-center hover:cursor-pointer">
-                    <div className="relative">
-                        <button className="focus:outline-none focus:shadow-outline" onClick={() => handleFavorites()}>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
-                            </svg>
-                        </button>
-                        {showFavorites && <Favorites setShowFavorites={setShowFavorites} showFavorites={showFavorites} />}
-                        {quantityInFavorites > 0 && <div className="absolute bottom-5 left-3 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">{quantityInFavorites}</div>}
+                {/* favorites */}
+                {user_id?
+                    <div className="flex items-center hover:cursor-pointer">
+                        <div className="relative">
+                            {/* favorites */}
+                            <button className="focus:outline-none focus:shadow-outline" onClick={() => handleFavorites()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+                                </svg>
+                            </button>
+                            {showFavorites && <Favorites setShowFavorites={setShowFavorites} showFavorites={showFavorites} />}
+                            {quantityInFavorites > 0 && <div className="absolute bottom-5 left-3 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">{quantityInFavorites}</div>}
+                        </div>
                     </div>
-                </div>
+                    : <></>
+                }
+                {/* user */}
                 <div className="flex items-center">
                     <Link to={isLogin === null || !isLogin ? "/login" : "/userDetail"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={handleLogin}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-user-circle" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -212,7 +221,7 @@ const Navbar = ({ setCurrentPage }) => {
                             <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                         </svg>
                         {
-                            isLogin === null || isLogin
+                            !isLogin
                                 ? <button onClick={handleLogin}>Log In</button>
                                 : <button onClick={handleLogOut}>Log Out</button>
 
