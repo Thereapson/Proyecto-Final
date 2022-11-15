@@ -19,41 +19,62 @@ import {
 } from "../Actions/Actions";
 
 const initialState = {
-  products: [],
-  filteredProducts: [],
-  productsRender: [],
-  DetailProduct: [],
-  categories: [],
-  lastAdd: {},
-  cart: [],
-  userData: {},
-  isAdmin: {},
-  buyproducts: [],
-  filteredBy: "",
-  userFavorites: [],
-  quantityFromCart: 0,
-  abouttobuyproducts: [],
+
+    products: [],
+    filteredProducts: [],
+    productsRender: [],
+    DetailProduct: [],
+    categories: [],
+    lastAdd: {},
+    cart: [],
+    userData: {},
+    isAdmin: {},
+    buyproducts: [],
+    filteredBy: "",
+    userFavorites: [],
+    quantityFromCart: 0,
+    abouttobuyproducts: [],
+    brands: [],
+
 };
 
 const rootReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case GET_PRODUCTS:
-      return {
-        ...state,
-        products: action.payload,
-        productsRender: action.payload,
-      };
-    case GET_PRODUCTS_BY_SEARCH:
-      let search = action.payload;
-      let filteredByName = state.products.filter((product) =>
-        product.name?.toLowerCase().includes(search.toLowerCase())
-      );
-      let filteredByBrand = state.products.filter((product) =>
-        product.brand?.toLowerCase().includes(search.toLowerCase())
-      );
-      let filteredByCategory = state.products.filter((product) =>
-        product.category?.toLowerCase().includes(search.toLowerCase())
-      );
+    switch (action.type) {
+        case GET_PRODUCTS:
+            let brands = action.payload.map((product) => {
+                return product.brand
+            });
+            let brandsSet = new Set(brands);
+            let brandsArray = [...brandsSet];
+
+            return {
+                ...state,
+                products: action.payload,
+                productsRender: action.payload,
+                brands: brandsArray
+            };
+        case GET_PRODUCTS_BY_SEARCH:
+            let search = action.payload;
+            let filteredByName = state.products.filter((product) => product.name?.toLowerCase().includes(search.toLowerCase()));
+            let filteredByBrand = state.products.filter((product) => product.brand?.toLowerCase().includes(search.toLowerCase()));
+            let filteredByCategory = state.products.filter((product) => product.category?.toLowerCase().includes(search.toLowerCase()));
+
+            let filteredProducts = [...filteredByName, ...filteredByCategory, ...filteredByBrand];
+            let filteredProductsUnique = filteredProducts.filter((product, index) => filteredProducts.indexOf(product) === index);
+
+            if (filteredProducts.length > 0) {
+                return {
+                    ...state,
+                    productsRender: filteredProductsUnique,
+                    filteredBy: search
+                };
+            } else {
+                return {
+                    ...state,
+                    productsRender: ["No Products Found"],
+                };
+            }
+
 
       let filteredProducts = [
         ...filteredByName,

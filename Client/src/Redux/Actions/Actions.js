@@ -86,15 +86,23 @@ export const getProductsByMinMax = (min, max) => {
 
 // add product to cart, if the product is already in the cart, increase the quantity by +1
 export const addProduct = (data) => {
-  console.log("Desde la action: ", data);
-  return async (dispatch) => {
-    if (data.user_id) {
-      await axios
-        .post("/shoppingCarts/addProductToShoppingCart", data)
-        .then((response) => {
-          console.log(response.data);
-          dispatch({ type: "ADD_PRODUCT", payload: response.data });
-        });
+
+    console.log("Desde la action: ", data)
+    return async (dispatch) => {
+        if (data.user_id) {
+            await axios.post("/shoppingCarts/addProductToShoppingCart", data)
+                .then((response) => {
+                    console.log(response.data)
+                    dispatch({ type: "ADD_PRODUCT", payload: response.data })
+                })
+            let id = window.localStorage.getItem("id")
+            await axios.get(`/shoppingCarts/quantity/${id}`)
+                .then((response) => {
+                    console.log("response.data: ", response.data)
+                    dispatch({ type: "GET_QUANTITY", payload: response.data })
+                })
+        };
+
     }
   };
 };
@@ -123,32 +131,41 @@ export const removeQuantity = (data) => {
 
 // delete product from cart
 export const removeProduct = (data) => {
-  console.log("desde la action: ", data);
-  return async (dispatch) => {
-    await axios
-      .post(
-        "/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart",
-        data
-      )
-      .then((response) => {
-        console.log(response.data);
-        dispatch({ type: "REMOVE_PRODUCT", payload: response.data });
-      });
-  };
-};
+
+
+    console.log("desde la action: ", data)
+    return async (dispatch) => {
+        await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
+            .then((response) => {
+                console.log(response.data)
+                dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
+            })
+        let id = window.localStorage.getItem("id")
+        await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                console.log("response.data: ", response.data)
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
+            })
+    };
+}
 
 // delete cart
 export const removeCart = (id) => {
-  return async (dispatch) => {
-    await axios
-      .delete(`/shoppingCarts/deleteShoppingCart/${id}`)
-      .then((response) => {
-        dispatch({ type: "REMOVE_CART", payload: [] });
-      });
-    let quantity = { quantity: 0 };
-    dispatch({ type: "GET_QUANTITY", payload: quantity });
-  };
-};
+    return async (dispatch) => {
+        await axios.delete(`/shoppingCarts/deleteShoppingCart/${id}`)
+            .then((response) => {
+                dispatch({ type: "REMOVE_CART", payload: [] })
+            })
+        let quantity = { quantity: 0 }
+        dispatch({ type: "GET_QUANTITY", payload: quantity })
+        await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                console.log("response.data: ", response.data)
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
+            })
+    };
+}
+
 
 // get quantity of products in cart
 
@@ -162,13 +179,15 @@ export const getQuantity = (id) => {
 
 // get favorites
 export const getFavorites = (id) => {
-  // let id = "63681baa20ab92251bb85fd9"
-  return async (dispatch) => {
-    await axios.get(`/users/favorites/${id}`).then((response) => {
-      dispatch({ type: "GET_FAVORITES", payload: response.data });
-    });
-  };
-};
+
+    return async (dispatch) => {
+        await axios.get(`/users/favorites/${id}`)
+            .then((response) => {
+                dispatch({ type: "GET_FAVORITES", payload: response.data })
+            })
+    };
+}
+
 
 // add favorite
 export const addFavorite = (data) => {

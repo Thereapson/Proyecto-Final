@@ -1,4 +1,4 @@
-// import './App.css';
+import './App.css';
 import Products from "./components/products/products";
 import {Login2} from "./components/Login/Login2";
 import React from "react";
@@ -15,11 +15,13 @@ import Resetpassword from "./components/Login/ResetPassword";
 import ProtectedRouter from "./components/router/ProtectedRouter";
 import StripeCol from "./components/StipeCol/StripeCol";
 import AdminPage from './components/Admin/AdminPage';
+import Footer1 from "./components/Footer/Footer";
+import { About } from "./components/About/About";
 
 
 function App() {
   return (
-    <div className="App container">
+    <div className="App container ">
       <BrowserRouter>
         <Routes>
           {/* rutas publicas */}
@@ -35,6 +37,7 @@ function App() {
             path="/resetPassword/:id/:token"
             element={<Resetpassword />}
           />
+          <Route path="/about" element = {<About/>}/>
           {/* rutas privadas */}
           <Route element={<ProtectedRouter />}>
             <Route path="/userDetail" element={<UserDetail />} />
@@ -48,6 +51,7 @@ function App() {
 
           {/* <Route path="/detail/:id" element={<DetailCard />} />           */}
         </Routes>
+        <Footer1/>
       </BrowserRouter>
     </div>
   );

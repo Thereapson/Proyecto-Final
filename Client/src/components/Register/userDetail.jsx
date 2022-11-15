@@ -17,7 +17,7 @@ const userDetail = () => {
 
     useEffect(() => {
         // const token = this.state
-        fetch('/users/userData', {
+        fetch('https://compudevs.herokuapp.com/users/userData', {
             method: 'POST',
             crossDomain: true,
             headers: {
@@ -34,6 +34,7 @@ const userDetail = () => {
                 console.log(data, 'userData')
                 setUser({ userData: data.data })
             })
+
     }, [])
 
     return (
@@ -46,6 +47,7 @@ const userDetail = () => {
                     </div>
                     <div class="flex justify-center px-5  -mt-12">
                         <img class="h-32 w-32 bg-white p-2 rounded-full   " src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80" alt="" />
+
 
                     </div>
                     <div class=" ">

@@ -14,7 +14,7 @@ function Stripecard(props) {
 
 
     return (
-        <Card className="w-96">
+        <Card className="w-96 bg-lightMode">
             <CardHeader floated={true} className="h-80">
                 {props.img ? <img className='imagen' src={props.img} alt="NOIMG" /> : null}
             </CardHeader>

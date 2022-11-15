@@ -1,0 +1,88 @@
+.chico{
+    display: none;
+}
+
+.mediano{
+    display: none;
+}
+
+
+.carrusel{
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+    position: relative;
+    /* outline: solid rgb(224, 224, 224) 2px ; */
+}
+
+.but{
+    position: absolute;
+    background-color: rgb(231, 231, 231);
+    color: white;
+    font-size: 24px;
+    padding: 0 11px;
+    /* z-index: 1; */
+    border-radius: 50px;
+    bottom: 130px;
+    margin: 10px;
+}
+
+.back{
+    left: 0;
+}
+
+.next{
+    right: 0;
+}
+
+.slider{
+    background-color: rgb(255, 255, 255);
+    width: 94%;
+}
+
+.card{
+    margin: 8%;
+    height: 300px;
+    background-color: rgb(255, 255, 255);
+    border: solid rgb(204, 204, 204) 2px;
+    border-radius: 15px;
+}
+
+.link{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .grande{
+        display: none;
+    }
+
+    .mediano{
+        display: none;
+    }
+
+    .chico{
+        display: block;
+    }
+
+  }
+
+
+  @media (max-width: 1000px) and (min-width: 600px) {
+    .grande{
+        display: none;
+    }
+
+    .mediano{
+        display: block;
+    }
+    
+    .chico{
+        display: none;
+    }
+
+  }
