@@ -1,4 +1,4 @@
-// import './App.css';
+import './App.css';
 import Products from "./components/products/products";
 import {Login2} from "./components/Login/Login2";
 import React from "react";
