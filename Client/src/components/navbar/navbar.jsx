@@ -5,6 +5,7 @@ import { getProductsByCategory, getProductsBySearch, getCategories, getProducts,
 import Cart from "../cart/cart";
 import Favorites from "../favorites/Favorites";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import Logo from '../../images/Logo.png'
 
 
 const Navbar = ({ setCurrentPage }) => {
@@ -114,6 +115,7 @@ const Navbar = ({ setCurrentPage }) => {
         <div className="relative overflow-hidden relative">
             <div className="flex justify-evenly items-center py-3">
                 <div className="flex items-center">
+                    <img src={Logo} class="max-w-20 h-20" alt="..." />
                     <div className="text-xl font-bold text-gray-700 ml-2">
                         <NavLink to="/products">CompuDevs</NavLink>
                     </div>
