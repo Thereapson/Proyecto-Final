@@ -14,12 +14,12 @@ const Favorites = ({ setShowFavorites, showFavorites }) => {
     }, [dispatch])
 
     const handleRemoveFavorite = (id) => {
-        console.log('id', id)
         let body = {
             "userId": localStorage.getItem('id'),
             "productId": id
         }
         dispatch(removeFavorite(body))
+        dispatch(getFavorites(localStorage.getItem('id')))
     }
 
     return (
@@ -50,7 +50,7 @@ const Favorites = ({ setShowFavorites, showFavorites }) => {
                                 leaveTo="translate-x-full"
                             >
                                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                                    <div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
+                                    <div className="h-full flex flex-col shadow-xl overflow-y-scroll bg-white">
                                         <div className="flex-1">
                                             <div className="flex justify-between px-4 pt-4">
                                                 <h2 className="text-lg font-medium text-gray-900">Favorites</h2>

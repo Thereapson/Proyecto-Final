@@ -28,10 +28,10 @@ const initialState = {
     userData: {},
     isAdmin: {},
     buyproducts: [],
-    filterBy: "",
+    filteredBy: "",
     userFavorites: [],
     quantityFromCart: 0,
-    abouttobuyproducts:[]
+    abouttobuyproducts: []
 
 };
 
@@ -125,8 +125,6 @@ const rootReducer = (state = initialState, action) => {
         case 'GET_PRODUCT_BY_ORDER':
             let order = action.payload;
 
-            console.log('order', order)
-
             if (order === "asc") {
                 return {
                     ...state,
@@ -148,29 +146,20 @@ const rootReducer = (state = initialState, action) => {
         case "ADD_PRODUCT":
             return {
                 ...state,
-                cart: action.payload,
-                quantityFromCart: action.payload.products?.length
+                cart: action.payload
+            }
+
+        case "GET_QUANTITY":
+            return {
+                ...state,
+                quantityFromCart: action.payload.quantity
             }
 
         case "GET_CART":
-            let LocalCart0 = action.payload
-            if(LocalCart0) {
-                return {
-                    ...state,
-                    cart: action.payload
-                }
-            } else {
-                return {
-                    ...state,
-                }
-            }
-
-
-        case "REMOVE_CART":
+            console.log("GET_CART: ", action.payload)
             return {
                 ...state,
-                cart: action.payload,
-                quantityFromCart: action.payload.products?.length
+                cart: action.payload
             }
 
         case "ADDPRODUCT_LOCALCART":
@@ -178,13 +167,13 @@ const rootReducer = (state = initialState, action) => {
             const productsLocal = localCart.products
             const products = action.payload.products
             productsLocal
-            ? products.forEach(product => {
-                let found = productsLocal.find(p => p.product_id._id === product.product_id._id)
-                if(!found) {
-                    localCart.products.push(product)
-                } 
-            }) 
-            : localCart = action.payload
+                ? products.forEach(product => {
+                    let found = productsLocal.find(p => p.product_id._id === product.product_id._id)
+                    if (!found) {
+                        localCart.products.push(product)
+                    }
+                })
+                : localCart = action.payload
             return {
                 ...state,
                 cart: localCart
@@ -197,8 +186,8 @@ const rootReducer = (state = initialState, action) => {
             let index = productsLocalb.indexof(product)
             const found = productsLocal.find(p => p.product_id === product)
             found.quantity > 1
-            ? localCartb.products_id[index].quantity = found.quantity - 1
-            : localCartb.products_id = productsLocalb.filter(p => p.product_id !== product)
+                ? localCartb.products_id[index].quantity = found.quantity - 1
+                : localCartb.products_id = productsLocalb.filter(p => p.product_id !== product)
             return {
                 ...state,
                 cart: localCartb
@@ -211,7 +200,8 @@ const rootReducer = (state = initialState, action) => {
             localCartc.products_id = productsLocalc.filter(p => p.product_id !== productc)
             return {
                 ...state,
-                cart: localCartc
+                cart: action.payload,
+                quantityFromCart: action.payload.products?.length
             }
 
         case GET_ALL_PRODUCTS_BY_ID:
@@ -247,9 +237,9 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 userFavorites: favorites
             }
- 
-            case SHOW_PRODUCTS: 
-            return{
+
+        case SHOW_PRODUCTS:
+            return {
                 ...state, abouttobuyproducts: action.payload
             }
         default:

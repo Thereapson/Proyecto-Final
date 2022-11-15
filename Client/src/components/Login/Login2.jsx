@@ -2,6 +2,7 @@ import React, { Component, useState } from "react";
 import Navbar from '../navbar/navbar';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
+import swal from 'sweetalert';
 
 
 
@@ -35,8 +36,14 @@ export const Login2 = () => {
         window.localStorage.setItem('id', data.id);
         window.localStorage.setItem('email', email)
         if (data.status === 'ok') {
-          alert('login succesful');
-          window.location.href = '/userDetail'
+          swal({
+            title: "Login successful",
+            icon: "success",
+            button: "Ok",
+          });
+          setTimeout(() => {
+            window.location.href = '/userDetail'
+          }, 2000)
         } else {
           alert('invalid email or password ')
 
