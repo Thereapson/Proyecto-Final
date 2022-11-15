@@ -102,165 +102,165 @@ export const addProduct = (data) => {
                 })
         };
     }
-
-    // get cart by user
-    export const getCart = (id) => {
-        return async (dispatch) => {
-            await axios.get(`/shoppingCarts/detail/${id}`)
-                .then((response) => {
-                    console.log("response.data: ", response.data)
-                    dispatch({ type: "GET_CART", payload: response.data })
-                })
-        };
-    }
-
-    // delete 1 quantity of product from cart
-    export const removeQuantity = (data) => {
-        console.log("Desde la action: ", data)
-        return async (dispatch) => {
-            await axios.post("/shoppingCarts/deleteProductFromShoppingCart", data)
-                .then((response) => {
-                    console.log(response.data)
-                    dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
-                })
-        };
-    }
-
-    // delete product from cart
-    export const removeProduct = (data) => {
-        console.log("desde la action: ", data)
-        return async (dispatch) => {
-            await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
-                .then((response) => {
-                    console.log(response.data)
-                    dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
-                })
-        };
-    }
-
-    // delete cart
-    export const removeCart = (id) => {
-        return async (dispatch) => {
-            await axios.delete(`/shoppingCarts/deleteShoppingCart/${id}`)
-                .then((response) => {
-                    dispatch({ type: "REMOVE_CART", payload: [] })
-                })
-            let quantity = { quantity: 0 }
-            dispatch({ type: "GET_QUANTITY", payload: quantity })
-
-        };
-    }
-
-    // get quantity of products in cart
-
-    export const getQuantity = (id) => {
-        return async (dispatch) => {
-            await axios.get(`/shoppingCarts/quantity/${id}`)
-                .then((response) => {
-                    dispatch({ type: "GET_QUANTITY", payload: response.data })
-                })
-        };
-    }
-
-
-    // get favorites
-    export const getFavorites = (id) => {
-        // let id = "63681baa20ab92251bb85fd9"
-        return async (dispatch) => {
-            await axios.get(`/users/favorites/${id}`)
-                .then((response) => {
-                    dispatch({ type: "GET_FAVORITES", payload: response.data })
-                })
-        };
-    }
-
-    // add favorite
-    export const addFavorite = (data) => {
-        return async (dispatch) => {
-            await axios.post("/users/favorites", data)
-                .then((response) => {
-                    dispatch({ type: "ADD_FAVORITE", payload: response.data })
-                })
-        };
-    }
-
-    // remove favorite
-    export const removeFavorite = (body) => {
-        return async (dispatch) => {
-            await axios.post("/users/favorites/delete", body)
-                .then((response) => {
-                    dispatch({ type: "REMOVE_FAVORITE", payload: response.data })
-                })
-        };
-    }
-
-
-
-
-    // get user
-    export const getUser = (email) => {
-        return async (dispatch) => {
-            await axios.get(`/users/email/${email}`)
-                .then((response) => {
-                    dispatch({ type: GET_USER, payload: response.data })
-                })
-        };
+}
+// get cart by user
+export const getCart = (id) => {
+    return async (dispatch) => {
+        await axios.get(`/shoppingCarts/detail/${id}`)
+            .then((response) => {
+                console.log("response.data: ", response.data)
+                dispatch({ type: "GET_CART", payload: response.data })
+            })
     };
-    export const buyAllProducts = (array) => {
-        return async (dispatch) => {
+}
 
-            let arreglofixed = [];
-            let arreglo = [];
-            array.forEach(element => {
-                if (element != "") {
-                    arreglofixed.push(element)
-                }
-            });
+// delete 1 quantity of product from cart
+export const removeQuantity = (data) => {
+    console.log("Desde la action: ", data)
+    return async (dispatch) => {
+        await axios.post("/shoppingCarts/deleteProductFromShoppingCart", data)
+            .then((response) => {
+                console.log(response.data)
+                dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
+            })
+    };
+}
+
+// delete product from cart
+export const removeProduct = (data) => {
+    console.log("desde la action: ", data)
+    return async (dispatch) => {
+        await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
+            .then((response) => {
+                console.log(response.data)
+                dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
+            })
+    };
+}
+
+// delete cart
+export const removeCart = (id) => {
+    return async (dispatch) => {
+        await axios.delete(`/shoppingCarts/deleteShoppingCart/${id}`)
+            .then((response) => {
+                dispatch({ type: "REMOVE_CART", payload: [] })
+            })
+        let quantity = { quantity: 0 }
+        dispatch({ type: "GET_QUANTITY", payload: quantity })
+
+    };
+}
+
+// get quantity of products in cart
+
+export const getQuantity = (id) => {
+    return async (dispatch) => {
+        await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
+            })
+    };
+}
 
 
-            for (let i = 0; i < arreglofixed.length; i++) {
-                await axios.get(`/products/detail/${arreglofixed[i]}`)
-                    .then((response) => {
-                        let respuesta = response.data
-                        arreglo.push(respuesta)
-                    })
+// get favorites
+export const getFavorites = (id) => {
+    // let id = "63681baa20ab92251bb85fd9"
+    return async (dispatch) => {
+        await axios.get(`/users/favorites/${id}`)
+            .then((response) => {
+                dispatch({ type: "GET_FAVORITES", payload: response.data })
+            })
+    };
+}
 
+// add favorite
+export const addFavorite = (data) => {
+    return async (dispatch) => {
+        await axios.post("/users/favorites", data)
+            .then((response) => {
+                dispatch({ type: "ADD_FAVORITE", payload: response.data })
+            })
+    };
+}
+
+// remove favorite
+export const removeFavorite = (body) => {
+    return async (dispatch) => {
+        await axios.post("/users/favorites/delete", body)
+            .then((response) => {
+                dispatch({ type: "REMOVE_FAVORITE", payload: response.data })
+            })
+    };
+}
+
+
+
+
+// get user
+export const getUser = (email) => {
+    return async (dispatch) => {
+        await axios.get(`/users/email/${email}`)
+            .then((response) => {
+                dispatch({ type: GET_USER, payload: response.data })
+            })
+    };
+};
+export const buyAllProducts = (array) => {
+    return async (dispatch) => {
+
+        let arreglofixed = [];
+        let arreglo = [];
+        array.forEach(element => {
+            if (element != "") {
+                arreglofixed.push(element)
             }
+        });
 
-            dispatch({ type: GET_ALL_PRODUCTS_BY_ID, payload: arreglo })
+
+        for (let i = 0; i < arreglofixed.length; i++) {
+            await axios.get(`/products/detail/${arreglofixed[i]}`)
+                .then((response) => {
+                    let respuesta = response.data
+                    arreglo.push(respuesta)
+                })
+
         }
+
+        dispatch({ type: GET_ALL_PRODUCTS_BY_ID, payload: arreglo })
     }
+}
 
-    export const isAdmin = (email) => {
-        return async (dispatch) => {
-            let admin = await axios.get(`/users/isadmin/${email}`)
-            dispatch({ type: IS_ADMIN, payload: admin.data })
-        }
+export const isAdmin = (email) => {
+    return async (dispatch) => {
+        let admin = await axios.get(`/users/isadmin/${email}`)
+        dispatch({ type: IS_ADMIN, payload: admin.data })
     }
+}
 
-    export const showBuyProduct = (array) => {
-        return async (dispatch) => {
+export const showBuyProduct = (array) => {
+    return async (dispatch) => {
 
-            let arreglofixed = [];
-            let arreglofinal = [];
-            array.forEach(element => {
-                if (element != "") {
-                    arreglofixed.push(element)
-                }
-            });
-            let dataArr = [...new Set(arreglofixed)];
-
-            for (let i = 0; i < dataArr.length; i++) {
-                await axios.get(`/products/detail/${dataArr[i]}`)
-                    .then((response) => {
-                        console.log("resultado de la busqueda filtrada: ", response)
-                        let respuesta = response.data
-                        arreglofinal.push(respuesta)
-                    })
-
+        let arreglofixed = [];
+        let arreglofinal = [];
+        array.forEach(element => {
+            if (element != "") {
+                arreglofixed.push(element)
             }
+        });
+        let dataArr = [...new Set(arreglofixed)];
 
-            dispatch({ type: SHOW_PRODUCTS, payload: arreglofinal })
+        for (let i = 0; i < dataArr.length; i++) {
+            await axios.get(`/products/detail/${dataArr[i]}`)
+                .then((response) => {
+                    console.log("resultado de la busqueda filtrada: ", response)
+                    let respuesta = response.data
+                    arreglofinal.push(respuesta)
+                })
+
         }
+
+        dispatch({ type: SHOW_PRODUCTS, payload: arreglofinal })
     }
+}
 

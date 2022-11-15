@@ -7,7 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import { buyAllProducts, getCart, removeCart, showBuyProduct } from "../../Redux/Actions/Actions";
 import { useDispatch, useSelector } from 'react-redux';
 import paloma from './palomita1.png'
-import Stripecard from "../Stripecard/stripecard.jsx";
+import Stripecard from "../stripecard/stripecard";
 
 
 const stripePromise = loadStripe("pk_test_51LzkQ9EsbLOetD4WD60JMd2sSsaEOSnizWXhGa6FTKgFnZM8HOvtnJdQlDLmJNGwcntCURvyjEYgGjNXqejdOFSM004Y9xSLvY")
