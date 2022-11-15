@@ -5,13 +5,14 @@ import Noproductsfound from '../noproductsfound/noproductsfound';
 import Paginado from "../paginado/paginado";
 import Navbar from '../navbar/navbar';
 import Card from '../Card/Card2';
+import swal from 'sweetalert';
 
 
 const Products = () => {
     let productsRender = useSelector(state => state.productsRender);
     const dispatch = useDispatch();
     const categories = useSelector(state => state.categories);
-
+    const brands = useSelector(state => state.brands);
     // paginado 
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(9);
@@ -32,14 +33,28 @@ const Products = () => {
 
     const handleSort = (e) => {
         e.preventDefault();
-        console.log('sorted', sorted)
-        dispatch(getProductsByMinMax(sorted.min, sorted.max));
-        setCurrentPage(1);
-        setSorted({
-            min: '',
-            max: '',
-        });
+        if (sorted.min && sorted.max) {
+            let min = typeof sorted.min === 'string' ? parseInt(sorted.min) : sorted.min;
+            let max = typeof sorted.max === 'string' ? parseInt(sorted.max) : sorted.max;
+            dispatch(getProductsByMinMax(min, max));
+            setCurrentPage(1);
+            setSorted({
+                min: '',
+                max: ''
+            });
+        } else {
+            swal({
+                title: "Please, fill both fields",
+                icon: "warning",
+                button: "Ok",
+            });
+            setSorted({
+                min: false,
+                max: false
+            });
+        }
     }
+
     const [order, setOrder] = useState('');
     const handleOrder = (e) => {
         setCurrentPage(1);
@@ -61,33 +76,53 @@ const Products = () => {
     const handleFilter = (e) => {
         e.preventDefault();
         dispatch(getProductsByCategory(category));
-        setCategory('');
     }
 
     // search usin for filter by name and brand 
-    const [search, setSearch] = useState('');
-    const handleSearch = (e) => {
+    const [brand, setBrand] = useState('');
+    const handleBrand = (e) => {
         e.preventDefault();
-        dispatch(getProductsBySearch(search));
-        setSearch('');
+        dispatch(getProductsBySearch(brand));
+        setBrand('');
     }
 
-    const handleInputChangeSearch = (e) => {
-        setSearch(e.target.value);
+    const handleInputChangeBrand = (e) => {
+        setBrand(e.target.value);
+        console.log(brands)
     }
 
     return (
-        <div className="container bg-lightMode min-h-screen">
+        <div className="container min-h-screen">
+
             <Navbar setCurrentPage={setCurrentPage} />
+
             <div className="flex justify-center">
-                {/* sidebar filters and sorts */}
                 <div className="w-1/4">
                     <div className="flex flex-col justify-center items-center">
                         <div className="w-full flex flex-col justify-center items-center gap-3 p-5">
+                            <div className="bg-gray-100 rounded-md p-2 shadow-md flex flex-col justify-center items-center w-full">
+                                <div className="w-full flex justify-center items-center flex-col gap-2">
+                                    <label className='text-gray-500 text-sm md:text-base'>Filter by category:</label>
+                                    <div className="flex flex-row gap-4 justify-center items-center flex-wrap w-full">
+                                        {categories.map(c => (
+                                            <button onClick={handleCategory} value={c.name} disabled={category === c.name || productsRender[0] === "No Products Found" || c.name === category} className="bg-transparent text-black rounded-md px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed h-10 disabled:border-2 disabled:border-primary disabled:text-primary">{c.name}</button>
+                                        ))}
+                                    </div>
+                                    <div className="flex justify-center items-center gap-2">
+                                        <button onClick={handleFilter} disabled={category === '' || productsRender[0] === "No Products Found"} className="bg-primary text-white rounded-md px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed w-20 h-10">Filter</button>
+                                        <button onClick={() => window.location.reload()} disabled={!category} className="bg-primary text-white rounded-md px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed w-20 h-10">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
                             <form onSubmit={handleSort} className="flex flex-col md:flex-row justify-center items-center bg-gray-100 rounded-md p-2 shadow-md gap-3 w-full">
-                                <input type="number" name="min" value={sorted.min < 1 ? '' : sorted.min} onChange={handleInputChange} placeholder={`Min: $${minPrice ? minPrice : 0}`} className="w-full rounded-md p-2 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none" />
-                                <input type="number" name="max" value={sorted.max < 1 ? '' : sorted.max} onChange={handleInputChange} placeholder={`Max: $${maxPrice ? maxPrice : 0}`} className="w-full rounded-md p-2 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none" />
-                                <button type="submit" disabled={productsRender[0] === "No Products Found" || sorted.min === 0 || sorted.max === 0 || sorted.min < 0 || sorted.max < 0 || sorted.min > sorted.max ? true : false} className="bg-primary text-white rounded-md px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed w-20 h-10">Sort</button>
+                                <input type="number" name="min" value={sorted.min <= 0 ? '' : sorted.min} onChange={handleInputChange} placeholder={`Min: $${minPrice ? minPrice : 0}`} className="w-full rounded-md p-2 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none" />
+                                <input type="number" name="max" value={sorted.max <= 0 ? '' : sorted.max} onChange={handleInputChange} placeholder={`Max: $${maxPrice ? maxPrice : 0}`} className="w-full rounded-md p-2 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none" />
+                                {sorted.min && sorted.max
+                                    ?
+                                    <button type="submit" disabled={productsRender[0] === "No Products Found" || sorted.min <= 0 && sorted.max <= 0 || sorted.min == '' && sorted.max == '' ? true : false} className="bg-primary text-white rounded-md px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed w-20 h-10">Sort</button>
+                                    :
+                                    null
+                                }
                             </form>
                             <div className="gap-3 bg-gray-100 rounded-md p-2 shadow-md flex flex-col md:flex-row justify-center items-center w-full">
                                 <label className='text-gray-500 text-sm md:text-base'>Order by price:</label>
@@ -95,26 +130,27 @@ const Products = () => {
                                 <button onClick={handleOrder} value="desc" disabled={order === "desc" || productsRender[0] === "No Products Found"} className="bg-primary text-white rounded-md px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed w-20 h-10">Desc</button>
                             </div>
                             <div className="bg-gray-100 rounded-md p-2 shadow-md flex flex-col justify-center items-center w-full">
-                                {/* categories with <Accordion> by flowbite tailwind */}
-                                <form onSubmit={handleFilter} className="flex flex-col justify-center items-center w-full gap-3">
-                                    <label className='text-gray-500 text-sm md:text-base'>Filter by category:</label>
-                                    <select onChange={handleCategory} value={category} className="w-full rounded-md p-2 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none mt-2">
-                                        <option value="">Select a category</option>
-                                        {categories.map(category => <option key={category.id} value={category.name}>{category.name}</option>)}
-                                    </select>
-
-                                    <button type="submit" disabled={category === "" || productsRender[0] === "No Products Found"} className="bg-primary text-white rounded-md px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed w-20 h-10">Filter</button>
-                                </form>
+                                <div className="w-full flex justify-center items-center flex-col gap-2">
+                                    <label className='text-gray-500 text-sm md:text-base'>Filter by brand:</label>
+                                    <div className="flex flex-row gap-2 justify-center items-center flex-wrap w-full">
+                                        {brands && brands.map(b => (
+                                            <button onClick={handleInputChangeBrand} value={b} disabled={productsRender[0] === "No Products Found" || b === brand} className="bg-transparent text-black rounded-md px-4 py-1 disabled:opacity-50 disabled:cursor-not-allowed h-10 disabled:border-2 disabled:border-primary disabled:text-primary">{b}</button>
+                                        ))}
+                                    </div>
+                                    <div className="flex justify-center items-center gap-2">
+                                        <button onClick={handleBrand} disabled={brand === '' || productsRender[0] === "No Products Found"} className="bg-primary text-white rounded-md px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed w-20 h-10">Filter</button>
+                                        <button onClick={() => window.location.reload()} disabled={!brand} className="bg-primary text-white rounded-md px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed w-20 h-10">Clear</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {/* products render show 3 product per row */}
                 <div className=" w-3/4 flex flex-col justify-center items-center ">
                     <div className="flex flex-col justify-center items-center">
                         <div className="w-full flex flex-col justify-center items-center gap-3">
                             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 px-20 pt-6">
-                                {productsRender[0] === "No Products Found" ? <Noproductsfound />
+                                {productsRender[0] === "No Products Found" || productsRender.length <= 0 ? <Noproductsfound />
                                     :
                                     productsRender.sort((a, b) => {
                                         if (order === "asc") {
@@ -129,14 +165,18 @@ const Products = () => {
                                             <Card key={product.id} product={product} />
                                         )
                                     })}
+
                             </div>
-                            <Paginado
-                                productsPerPage={productsPerPage}
-                                productsRendered={productsRendered}
-                                currentPage={currentPage}
-                                setCurrentPage={setCurrentPage}
-                                max={max}
-                            />
+                            {productsRender[0] === "No Products Found" ? null
+                                :
+                                <Paginado
+                                    productsPerPage={productsPerPage}
+                                    productsRendered={productsRendered}
+                                    currentPage={currentPage}
+                                    setCurrentPage={setCurrentPage}
+                                    max={max}
+                                />
+                            }
                         </div>
                     </div>
                 </div>
@@ -144,32 +184,5 @@ const Products = () => {
         </div>
     )
 }
-
-//                 <div className="flex flex-wrap justify-center gap-4 p-4">
-//                     {
-//                         productsRender[0] === "No Products Found" ? <Noproductsfound /> // no products found
-//                             :
-//                             productsRender.sort((a, b) => {
-//                                 if (order === "asc") {
-//                                     return a.price - b.price;
-//                                 } else if (order === "desc") {
-//                                     return b.price - a.price;
-//                                 } else {
-//                                     return a.id - b.id;
-//                                 }
-//                             }).slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage).map((product) => {
-//                                 return (
-//                                     <Card key={product.id} product={product} />
-//                                 )
-//                             })
-//                     }
-//                 </div>
-//                 <div className='paginado'>
-//                     <Paginado currentPage={currentPage} max={max} setCurrentPage={setCurrentPage} />
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }
 
 export default Products;

@@ -94,6 +94,7 @@ function Card({ product }) {
 
 
 
+
   return (
     // card  responsive from tailwind css
     <div className="flex flex-col justify-center items-center gap-3">

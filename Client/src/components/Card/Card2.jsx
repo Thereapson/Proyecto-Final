@@ -92,29 +92,23 @@ const Card2 = ({ product }) => {
         }
     }
 
-    return (
-        // from product render:
-        // <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
-        //                         {productsRender[0] === "No Products Found" ? <Noproductsfound />
-        //                             :
-        //                             productsRender.sort((a, b) => {
-        //                                 if (order === "asc") {
-        //                                     return a.price - b.price;
-        //                                 } else if (order === "desc") {
-        //                                     return b.price - a.price;
-        //                                 } else {
-        //                                     return a.id - b.id;
-        //                                 }
-        //                             }).slice((currentPage - 1) * productsPerPage, currentPage * productsPerPage).map((product) => {
-        //                                 return (
-        //                                     <Card key={product.id} product={product} />
-        //                                 )
-        //                             })}
-        //                     </div>
+    let score = product.score ? product.score : 0;
+    let starts = [];
 
-        // card to render:
+    for (let i = 0; i < 5; i++) {
+        if (score > 0) {
+            starts.push(
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path>
+                </svg>
+            );
+        }
+    }
+
+
+    return (
         <div className="bg-white shadow-md rounded-lg overflow-hidden relative h-96 flex flex-col justify-between">
-            {/* svg button add to favorite*/}
             <button
                 type="button"
                 className="absolute right-4 top-4 rounded-full text-white p-1 bg-red-600 hover:bg-red-700 z-10"
@@ -135,33 +129,31 @@ const Card2 = ({ product }) => {
                     ></path>
                 </svg>
             </button >
-            {/* img hover scale 1.1 but overflow in conatiner and heigh 60% of full heigh*/}
             <div className="overflow-hidden h-3/5">
                 <Link to={`/product/${product.id}`}>
                     <img src={product.image} alt="Sunset in the mountains" className="w-full h-full object-cover transform hover:scale-110 transition duration-300 ease-in-out" />
                 </Link >
 
             </div>
-            {/* product name */}
             <div className="flex items-center justify-center">
-                {/* if name > 20 characters slice and set ...
-                    after if hover show full name */}
                 <span className="text-gray-700 text-lg font-medium hover:text-gray-900 transition duration-300 ease-in-out">{product.name.length > 20 ? product.name.slice(0, 20) + "..." : product.name}</span>
             </div>
             <div className="flex items-center justify-center flex-col bg-gray-100 py-2">
-
-                {/* product price */}
                 <div className="flex justify-between items-center px-4 w-full">
-                    <p className="text-gray-700 font-semibold text-lg">${quantity ? quantity * product.price : product.price} {product.lastPrice ? <span className="text-red-500 line-through">${product.lastPrice}</span> : <span className="text-red-500 line-through">${900}</span>}
+                    <p className="text-gray-700 font-semibold text-lg">${quantity ? quantity * product.price : product.price} {product.lastPrice ? <span className="text-red-500 line-through">${product.lastPrice}</span> : null}
                         {product.lastPrice ? <span className="absolute left-4 top-4 rounded-full text-white text-sm bg-green-600 hover:bg-green-700 z-10">
-                            {Math.round((product.lastPrice - (quantity ? quantity * product.price : product.price)) / product.lastPrice * 100)}%</span> :
-                            <span className="absolute left-4 top-4 rounded-full text-white p-1 text-sm bg-green-600 hover:bg-green-700 z-10">{Math.round((300 - (quantity ? quantity * product.price : product.price)) / 300 * 100)}%</span>}
+                            {Math.round((product.lastPrice - product.price) / product.lastPrice * 100)}%
+                        </span> : null}
                     </p>
-
+                    {
+                        product.score ?
+                            <div className="flex items-center">
+                                {starts}
+                            </div>
+                            : null
+                    }
                 </div>
-                {/* set quantity and add to cart */}
                 <div className="flex justify-between items-center px-4 py-2 bg-gray-100 w-full">
-                    {/* set quantity with input read only and button to increase or decrease */}
                     <div className="flex items-center space-x-4 text-gray-700">
                         <button className="text-white focus:outline-none bg-primary hover:bg-primary-light px-3 rounded-md pb-1" onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}>
                             -
@@ -171,7 +163,6 @@ const Card2 = ({ product }) => {
                             +
                         </button>
                     </div>
-                    {/* button add to cart */}
                     <button
                         type="button"
                         className="bg-primary group-hover:md:block hover:md:block hidden md:block text-white px-3 py-2 rounded-md text-sm font-medium"
