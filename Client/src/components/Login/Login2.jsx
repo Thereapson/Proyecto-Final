@@ -3,12 +3,15 @@ import Navbar from '../navbar/navbar';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import swal from 'sweetalert';
+import { addProduct, removeCart } from '../../Redux/Actions/Actions'
+
 
 
 
 export const Login2 = () => {
 
   const [user, userState] = useState({})
+  const dispatch = useDispatch()
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -36,17 +39,41 @@ export const Login2 = () => {
         window.localStorage.setItem('id', data.id);
         window.localStorage.setItem('email', email)
         if (data.status === 'ok') {
+          if(data.isActive === false){
+            swal({
+              title: "Your user is Banned",
+              icon: "error",
+              button: "Ok",
+            });
+          }
+          else {
+            swal({
+              title: "Login successful",
+              icon: "success",
+              button: "Ok",
+            });
+            // funcion para guardar carrito en la db
+            const localCart = window.sessionStorage.getItem('localCart')
+            const id = window.localStorage.getItem('id')
+            if(localCart) {
+              const newCart = {
+                "user_id": id,
+                "products_id": JSON.parse(localCart)
+              }
+              dispatch(addProduct(newCart))
+              dispatch(removeCart)
+              window.sessionStorage.removeItem('localCart')
+            }
+            setTimeout(() => {
+              window.location.href = '/userDetail'
+            }, 2000)
+          }
+        } else {
           swal({
-            title: "Login successful",
-            icon: "success",
+            title: "Can't access.",
+            icon: "error",
             button: "Ok",
           });
-          setTimeout(() => {
-            window.location.href = '/userDetail'
-          }, 2000)
-        } else {
-          alert('invalid email or password ')
-
         }
       })
   }

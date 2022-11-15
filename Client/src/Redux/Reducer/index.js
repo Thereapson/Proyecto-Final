@@ -150,16 +150,29 @@ const rootReducer = (state = initialState, action) => {
             }
 
         case "GET_QUANTITY":
+            const data = action.payload
+            const productsQuant = state.cart.products
+            console.log("Quantity: ", data)
+            let quantity = {}
+            !data?
+                quantity = state.cart.products.length || 0
+            :   quantity = data.quantity
             return {
                 ...state,
-                quantityFromCart: action.payload.quantity
+                quantityFromCart: quantity
             }
 
         case "GET_CART":
-            console.log("GET_CART: ", action.payload)
-            return {
-                ...state,
-                cart: action.payload
+            let LocalCart0 = action.payload
+            if(LocalCart0) {
+                return {
+                    ...state,
+                    cart: action.payload
+                }
+            } else {
+                return {
+                    ...state,
+                }
             }
 
         case "ADDPRODUCT_LOCALCART":
