@@ -9,7 +9,8 @@ const getAllPurchases = async () => {
                 user: p.user_id,
                 ammount: p.ammount,
                 date: p.date,
-                products: p.products,
+                address: p.delivery_address,
+                product: p.product,
                 payment: p.payment_id,
                 status: p.status
             }
