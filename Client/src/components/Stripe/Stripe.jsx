@@ -39,14 +39,14 @@ const CheckoutForm = (props) => {
             type: 'card',
             card: elements.getElement(CardElement)
         })
-
         if (!error) {
             const { data } = await axios.post('products/payment', {
                 id: paymentMethod.id,
                 amount: props.amount,
                 detail: props.detail,
-                email: useremail || "alternativemail@hotmail.com"
-
+                email: useremail || "alternativemail@hotmail.com",
+                user_id: props.user,
+                product_id: props.product
             })
             modal.style.display = "block"
             console.log(data)

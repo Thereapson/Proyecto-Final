@@ -16,13 +16,10 @@ const purchaseSchema = new Schema({
     delivery_address: {
         type: String
     },
-    products: [{
-        product_id: {
-            type: Schema.Types.ObjectId,
-            ref: 'Product',
-        },
-        quantity: Number
-    }],
+    product: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+    },
     payment_id: {
         type: String
     },
