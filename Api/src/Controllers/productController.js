@@ -1,5 +1,5 @@
 // Controller de Products
-const { productModel } = require("../Models/index");
+const { productModel, purchaseModel } = require("../Models/index");
 require("dotenv").config();
 const Stripe = require('stripe')
 
@@ -187,7 +187,8 @@ const deleteProduct = async (req, res, next) => {
 
 const doPayment = async (req, res, next) => {
   //El amount debe venir por body 
-  const { id, detail, amount, paymentMethod, email } = req.body;
+  console.log("Se está pagando algo: ", req.body)
+  const { id, detail, amount, paymentMethod, email, user_id, product_id } = req.body;
   const stripe = new Stripe(process.env.PAYMENT)
   try {
 
@@ -215,9 +216,21 @@ const doPayment = async (req, res, next) => {
       //booleano que representa si la transaccion fue exitosa, no se debe hardcodear
     })
     console.log(payment)
-    res.json({
-      message: "Success"
-    })
+    if(payment) {
+      const newPurchase = await purchaseModel.create({
+        user_id: user_id,
+        ammount: amount,
+        date: new Date(),
+        delivery_address: "",
+        product: product_id,
+        payment_id: token,
+        status: payment.status
+      })
+      if(newPurchase) {
+        res.status(200).send({ msg: "Payment succeeded!", newPurchase })
+      } else return { msg: "The Purchase can't be register", payment }
+    }
+    console.log(payment)
   } catch (error) {
     res.json({ messagge: error.raw.message });
   }

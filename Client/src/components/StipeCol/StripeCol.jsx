@@ -51,8 +51,9 @@ const CheckoutForm = (props) => {
                         id: paymentMethod.id,
                         amount: product.price * 100,
                         detail: product.name,
-                        email: props.email
-
+                        email: props.email,
+                        user_id: props.user,
+                        product_id: product._id
                     })
                     modal.style.display = "block"
                     console.log(data)
@@ -137,7 +138,7 @@ function StripeCol() {
             </div>
 
             <Elements stripe={stripePromise}>
-                <CheckoutForm products={allproducts} email={useremail || "alternativemail@gmail.com"} user={cart.user} cantidadapagar={calculartotal()}>
+                <CheckoutForm products={allproducts} email={useremail || "alternativemail@gmail.com"} user={window.localStorage.getItem('id')} cantidadapagar={calculartotal()}>
 
                 </CheckoutForm>
             </Elements>
