@@ -1,12 +1,13 @@
 require("dotenv").config();
 
 // Controller de Users
-const { userModel, productModel } = require("../Models/index")
-const jwt = require('jsonwebtoken');
+const { userModel, productModel } = require("../Models/index");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const cookieParser = require('cookie-parser')
-const JWT_SECRET = 'asjkdnajksfndjaksndasknd12123()239883smlkdsmad?)==(23'
+const cookieParser = require("cookie-parser");
+const JWT_SECRET = "asjkdnajksfndjaksndasknd12123()239883smlkdsmad?)==(23";
 const nodemailer = require("nodemailer");
+const config = require("config");
 // const register = require('../MailTemplates/Register')
 //NOTIFICACIONES POR MAIL
 
@@ -22,7 +23,7 @@ var transporter = nodemailer.createTransport({
 });
 const getAllUsers = async (req, res, next) => {
   try {
-    const response = await userModel.find({})//.populate("Product");
+    const response = await userModel.find({}); //.populate("Product");
     if (response.flat().length > 0) {
       const Users = response?.map((u) => {
         return {
@@ -34,69 +35,62 @@ const getAllUsers = async (req, res, next) => {
           phone: u.phone,
           status: u.status,
           isAdmin: u.isAdmin,
-        }
-      })
+        };
+      });
       res.status(200).send(Users);
     } else {
-      res.status(400).send("There's no Users to show")
+      res.status(400).send("There's no Users to show");
     }
-
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 
 const getUserById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const user = await userModel.findById(id).populate("product")
+    const user = await userModel.findById(id).populate("product");
     if (user) {
-      res.status(200).send(user)
+      res.status(200).send(user);
     } else {
-      res.status(400).send("There's no User with that ID")
+      res.status(400).send("There's no User with that ID");
     }
-
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 
 const getUserByEmail = async (req, res, next) => {
   try {
     const { email } = req.params;
-    const user = await userModel.findOne({ email: email })
-    let products = await productModel.find({ _id: { $in: user.favorites } })
+    const user = await userModel.findOne({ email: email });
+    let products = await productModel.find({ _id: { $in: user.favorites } });
     if (user) {
       let userToSend = {
         id: user._id,
         full_name: user.full_name,
         email: user.email,
         favorites: products,
-      }
-      res.status(200).send(userToSend)
+      };
+      res.status(200).send(userToSend);
     } else {
-      res.status(400).send("There's no User with that Email")
+      res.status(400).send("There's no User with that Email");
     }
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 
 const createUser = async (req, res, next) => {
   try {
     const userData = req.body;
-    const {
-      full_name,
-      email,
-      password,
-      isAdmin
-    } = userData;
-    const foundUser = await userModel.findOne({ email: email })
+    const { full_name, email, password, isAdmin } = userData;
+    const foundUser = await userModel.findOne({ email: email });
     if (foundUser) {
-      res.status(400).send("The User email already exists")
+      res.status(400).send("The User email already exists");
     } else if (full_name && email && password && isAdmin) {
       const newUser = await userModel.create({
         full_name,
@@ -106,45 +100,80 @@ const createUser = async (req, res, next) => {
         address: "",
         phone: "",
         status: true,
-        isAdmin: isAdmin || false
+        isAdmin: isAdmin || false,
       });
 
       if (!newUser) {
-        res.status(400).send("The new User can't be created")
+        res.status(400).send("The new User can't be created");
       } else {
-        res.status(200).send({ msg: "New User created", newUser })
+        res.status(200).send({ msg: "New User created", newUser });
       }
     } else {
-      res.status(400).send("The new User can't be created. Missing required Data")
+      res
+        .status(400)
+        .send("The new User can't be created. Missing required Data");
     }
-
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 ////////////////////autenticacion
 
 const createToken = (id) => {
   return jwt.sign({ id }, JWT_SECRET, {
-    expiresIn: "3600s"
-  })
-}
+    expiresIn: "3600s",
+  });
+};
 const registerUser = async (req, res, next) => {
-  const { full_name, email, password, isAdmin } = req.body;
+  const { full_name, email, password, confirmPassword } = req.body;
 
-  const salt = await bcrypt.genSalt(10);
-  const encryptedPassword = await bcrypt.hash(password, salt);
+  // const salt = await bcrypt.genSalt(10);
+  // const encryptedPassword = await bcrypt.hash(password, salt);
   try {
-    const oldUser = await userModel.findOne({ email })
-    if (oldUser) {
-      return res.json({ error: 'User Exists' })
+    // const oldUser = await userModel.findOne({ email })
+    // if (oldUser) {
+    //   return res.json({ error: 'User Exists' })
+    // }
+    // const newUser = await userModel.create({
+    //   full_name,
+    //   email,
+    //   password: encryptedPassword,
+    //   confirmPassword
+    // });
+
+    if (
+      full_name === "" ||
+      email === "" ||
+      password === "" ||
+      (password === confirmPassword && password.length >= 4)
+    ) {
+      const existinUser = await userModel.findOne({ email });
+
+      if (existinUser)
+        return res.status(400).json({ message: "User already exist!" });
+
+      const hashedPassword = await bcrypt.hash(password, 12);
+
+      const result = await userModel.create({
+        full_name,
+        email,
+        password: hashedPassword,
+      });
+
+      const token = jwt.sign(
+        {
+          email: result,
+          email,
+          id: result._id,
+        },
+        config.get("JWT_SECRET"),
+        { expiresIn: "1d" }
+      );
+
+      res.status(200).json({ result, token });
     }
-    const newUser = await userModel.create({
-      full_name,
-      email,
-      password: encryptedPassword,
-    });
+
     var register = {
       from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
       to: newUser.email,
@@ -1063,7 +1092,7 @@ const registerUser = async (req, res, next) => {
             `,
     };
     //NOTIFICACION DE REGISTRO
-    console.log(newUser.email, 'email')
+    console.log(newUser.email, "email");
     transporter.sendMail(register, function (error, info) {
       if (error) {
         console.log(error);
@@ -1072,15 +1101,13 @@ const registerUser = async (req, res, next) => {
       }
     });
     // res.send({status:'ok'})
-
-
   } catch (error) {
-    res.send({ status: 'error' })
+    res.send({ status: "error" });
   }
-}
+};
 
 const loginUser = async (req, res, next) => {
-  const { email, password } = req.body
+  const { email, password } = req.body;
   try {
     const user = await userModel.findOne({
       email,
@@ -1111,27 +1138,20 @@ const loginUser = async (req, res, next) => {
       });
     } else {
       const token = jwt.sign({ email: user.email }, JWT_SECRET);
-
       return res.json({ status: 'ok', data: token, id: user.id, isActive: user.status })
     }
-
-
   } catch (err) {
     res.send({ error: err.message });
   }
-
-
-}
+};
 //olvidar contraseñaa
 const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
 
   try {
     const oldUser = await userModel.findOne({
-
       email: email,
-    },
-    );
+    });
     if (!oldUser) {
       return res.json({ status: "Usuario no existe" });
     }
@@ -1146,7 +1166,7 @@ const forgotPassword = async (req, res, next) => {
         expiresIn: "5m",
       }
     );
-    const link = `http://localhost:3000/resetPassword/${oldUser._id}/${token}`
+    const link = `http://localhost:3000/resetPassword/${oldUser._id}/${token}`;
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -1180,14 +1200,12 @@ const forgotPassword = async (req, res, next) => {
   } catch (e) {
     console.log(err);
   }
-}
+};
 const resetPassword = async (req, res, next) => {
   const { id, token } = req.params;
   console.log(req.params);
   const oldUser = await userModel.findOne({
-
     _id: id,
-
   });
   if (!oldUser) {
     return res.json({ status: "Usuario no existe" });
@@ -1196,22 +1214,18 @@ const resetPassword = async (req, res, next) => {
   try {
     const verify = jwt.verify(token, secret);
     // res.render("index", { email: verify.email, status: "No verificado" });
-    res.status(201)
-
+    res.status(201);
   } catch (err) {
     res.send("No verificado");
     console.log(err);
   }
-
-}
+};
 
 const resetPasswordToken = async (req, res, next) => {
   const { id, token } = req.params;
   const { password } = req.body;
   const oldUser = await userModel.findOne({
-
     _id: id,
-
   });
   if (!oldUser) {
     return res.json({ status: "Usuario no existe" });
@@ -1220,22 +1234,23 @@ const resetPasswordToken = async (req, res, next) => {
   try {
     const verify = jwt.verify(token, secret);
     const encryptedPassword = await bcrypt.hash(password, 10);
-    await userModel.updateOne({
-      _id: id,
-    },
+    await userModel.updateOne(
+      {
+        _id: id,
+      },
       {
         $set: {
           password: encryptedPassword,
         },
-      })
+      }
+    );
     // res.render("index", { email: verify.email, status: "verificado" });
-    res.status(201).send('verified')
-
+    res.status(201).send("verified");
   } catch (err) {
     res.json({ status: "Algo salio mal" });
     console.log(err);
   }
-}
+};
 // const registerUser = async (req, res, next) => {
 //     try {
 //         const {email, password} = req.body;
@@ -1280,32 +1295,33 @@ const userData = async (req, res, next) => {
   try {
     const user = jwt.verify(token, JWT_SECRET);
     const userEmail = user.email;
-    userModel.findOne({ email: userEmail }).then((data) => {
-      res.send({ status: 'ok', data: data })
-    }).catch((error) => {
-      res.send({ status: 'error', data: error })
-    })
+    userModel
+      .findOne({ email: userEmail })
+      .then((data) => {
+        res.send({ status: "ok", data: data });
+      })
+      .catch((error) => {
+        res.send({ status: "error", data: error });
+      });
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
+};
 const editUser = async (req, res, next) => {
   try {
-
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 
 const blockUser = async (req, res, next) => {
   try {
-
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 
 const addFavorites = async (req, res, next) => {
   try {
@@ -1313,24 +1329,28 @@ const addFavorites = async (req, res, next) => {
     const user = await userModel.findById(userId);
     const product = await productModel.findOne({ cid: productId });
     if (!user || !product) {
-      return res.status(404).send({ message: 'User or product not found' });
+      return res.status(404).send({ message: "User or product not found" });
     } else {
       if (user.favorites.includes(productId)) {
-        return res.status(400).send({ message: 'Product already in favorites' });
+        return res
+          .status(400)
+          .send({ message: "Product already in favorites" });
       } else {
-        await userModel.findByIdAndUpdate(userId, { $push: { favorites: productId } }); // add product to favorites
-        const user = await userModel.findById
-          (userId)
-          .populate('favorites')
+        await userModel.findByIdAndUpdate(userId, {
+          $push: { favorites: productId },
+        }); // add product to favorites
+        const user = await userModel
+          .findById(userId)
+          .populate("favorites")
           .exec();
         return res.status(200).send(user.favorites);
       }
     }
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 
 const removeFavorites = async (req, res, next) => {
   try {
@@ -1338,62 +1358,61 @@ const removeFavorites = async (req, res, next) => {
     const user = await userModel.findById(userId);
     const product = await productModel.findById(productId);
     if (!user || !product) {
-      return res.status(404).send({ message: 'User or product not found' });
+      return res.status(404).send({ message: "User or product not found" });
     } else {
       if (!user.favorites.includes(productId)) {
-        return res.status(400).send({ message: 'Product not in favorites' });
+        return res.status(400).send({ message: "Product not in favorites" });
       } else {
-        await userModel.findByIdAndUpdate(userId, { $pull: { favorites: productId } }); // remove product from favorites
-        const user = await userModel.findById
-          (userId)
-          .populate('favorites')
+        await userModel.findByIdAndUpdate(userId, {
+          $pull: { favorites: productId },
+        }); // remove product from favorites
+        const user = await userModel
+          .findById(userId)
+          .populate("favorites")
           .exec();
         return res.status(200).send(user.favorites);
       }
     }
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 
 const getFavorites = async (req, res, next) => {
   try {
     const userId = req.params.id;
-    const user = await userModel.findById
-      (userId)
-      .populate('favorites')
-      .exec();
+    const user = await userModel.findById(userId).populate("favorites").exec();
     if (!user) {
-      return res.status(404).send({ message: 'User not found' });
+      return res.status(404).send({ message: "User not found" });
     } else {
       return res.status(200).send(user.favorites);
     }
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 
 const getAdminByEmail = async (req, res, next) => {
   try {
     const { email } = req.params;
-    const user = await userModel.findOne({ email: email })
+    const user = await userModel.findOne({ email: email });
     if (user) {
       let userToSend = {
         id: user._id,
         email: user.email,
-        isAdmin: user.isAdmin
-      }
-      res.status(200).send(userToSend)
+        isAdmin: user.isAdmin,
+      };
+      res.status(200).send(userToSend);
     } else {
-      res.status(400).send("There's no User with that Email")
+      res.status(400).send("There's no User with that Email");
     }
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
-}
+};
 
 module.exports = {
   getAllUsers,
@@ -1411,5 +1430,5 @@ module.exports = {
   resetPassword,
   resetPasswordToken,
   getAdminByEmail,
-  getFavorites
+  getFavorites,
 };
