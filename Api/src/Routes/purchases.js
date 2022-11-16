@@ -6,7 +6,8 @@ const router = Router();
 const {
     getAllPurchases,
     getPurchasesByUser,
-    registerPurchase
+    verifyPurchase
+    // registerPurchase
 } = require('../Controllers/purchaseController')
 
 // configuramos las rutas
@@ -29,20 +30,36 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.post('/register', async (req, res) => {
+router.post('/verify', async (req, res) => {
     try {
-        const purchaseData = req.body
-        if(purchaseData) {
-            const response = await registerPurchase(purchaseData)
+        const verifyData = req.body
+        if(verifyData) {
+            const response = await verifyPurchase(verifyData)
             if(!response.msg) {
                 return res.status(200).send(response)
-            } else return res.status(400).send(response)
+            } else return res.status(400)
         }
 
     } catch (error) {
         console.error(error);
-        return res.status(400).send("Error Occured. Purchase can't be registered.")
+        return res.status(400).send("Error Occured. Can't verify purchase")
     }
 })
+
+// router.post('/register', async (req, res) => {
+//     try {
+//         const purchaseData = req.body
+//         if(purchaseData) {
+//             const response = await registerPurchase(purchaseData)
+//             if(!response.msg) {
+//                 return res.status(200).send(response)
+//             } else return res.status(400).send(response)
+//         }
+
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(400).send("Error Occured. Purchase can't be registered.")
+//     }
+// })
 
 module.exports = router;

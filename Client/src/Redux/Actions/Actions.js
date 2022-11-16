@@ -296,6 +296,19 @@ export const isAdmin = (email) => {
     }
 }
 
+export const verifyPurchase = (verifyData) => {
+  return async (dispatch) => {
+    if(verifyData) {
+      let isVerify = await axios.post(`/purchases/verify`, verifyData)
+      dispatch({
+        type: "PURCHASE_VERIFIED",
+        payload: isVerify.data
+      })
+      return isVerify.data
+    }
+  }
+}
+
 export const showBuyProduct = (array) => {
   return async (dispatch) => {
     let arreglofixed = [];
