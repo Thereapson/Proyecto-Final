@@ -8,6 +8,7 @@ import Stripe from '../Stripe/Stripe.jsx'
 import './detail.css';
 import StripeCol from '../StipeCol/StripeCol.jsx';
 import swal from 'sweetalert';
+import Reviews from '../Reviews/Reviews.jsx';
 
 
 function DetailCard() {
@@ -90,8 +91,9 @@ function DetailCard() {
                 </p>
 
               </div>
+                  <Reviews/>
 
-            </div>
+           </div>
 
           </div>
         </div>
