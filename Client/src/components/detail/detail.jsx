@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getProductById, cleanDetails } from '../../Redux/Actions/Actions.js';
+import { getProductById, cleanDetails, verifyPurchase } from '../../Redux/Actions/Actions.js';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import procesador from './procesadorimg.png'
@@ -39,6 +39,7 @@ function DetailCard() {
   useEffect(() => {
     dispatch(cleanDetails())
     dispatch(getProductById(id))
+    //dispatch(verifyPurchase({user: "636544b0a2e3341d3b17be54", product: "635d6aff6882217b05b7877c"}))
   }, [])
 
   return (
