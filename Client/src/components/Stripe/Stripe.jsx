@@ -27,12 +27,12 @@ const CheckoutForm = (props) => {
         var span = document.getElementsByClassName("close")[0];
 
         span.onclick = function () {
-            window.location.replace('https://compudevs-lne9v251e-thereapson.vercel.app/products');
+            window.location.replace('/products');
         }
 
         window.onclick = function (event) {
             if (event.target === modal) {
-                window.location.replace('https://compudevs-lne9v251e-thereapson.vercel.app/products');
+                window.location.replace('/products');
             }
         }
         const { error, paymentMethod } = await stripe.createPaymentMethod({
