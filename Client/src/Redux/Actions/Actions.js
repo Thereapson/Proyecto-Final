@@ -116,8 +116,6 @@ export const addProduct = (data) => {
     }
   };
 
-
-
 // get cart by user
 export const getCart = (id) => {
     return async (dispatch) => {

@@ -12,6 +12,9 @@ import {
         TextInput,
         Create,
         useRecordContext,
+        required,
+        minLength,
+        maxLength,
         } from 'react-admin';
 
 // const PostTitle = () => {
@@ -25,6 +28,9 @@ import {
 //     <ReferenceInput source="title" label="Title" reference="title" />
 // ]
 
+
+const validateName = [required(), minLength(5), maxLength(30)]
+const validateDescription = [required(), minLength(20), maxLength(200)]
 
 export const CategoryList = () => (
     <List>
