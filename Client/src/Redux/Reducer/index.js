@@ -54,49 +54,39 @@ const rootReducer = (state = initialState, action) => {
                 brands: brandsArray
             };
         case GET_PRODUCTS_BY_SEARCH:
-            let search = action.payload;
-            let filteredByName = state.products.filter((product) => product.name?.toLowerCase().includes(search.toLowerCase()));
-            let filteredByBrand = state.products.filter((product) => product.brand?.toLowerCase().includes(search.toLowerCase()));
-            let filteredByCategory = state.products.filter((product) => product.category?.toLowerCase().includes(search.toLowerCase()));
-
-            let filteredProducts = [...filteredByName, ...filteredByCategory, ...filteredByBrand];
-            let filteredProductsUnique = filteredProducts.filter((product, index) => filteredProducts.indexOf(product) === index);
-
-            if (filteredProducts.length > 0) {
-                return {
-                    ...state,
-                    productsRender: filteredProductsUnique,
-                    filteredBy: search
-                };
-            } else {
-                return {
-                    ...state,
-                    productsRender: ["No Products Found"],
-                };
-            }
-
-
-      let filteredProducts = [
-        ...filteredByName,
-        ...filteredByCategory,
-        ...filteredByBrand,
-      ];
-      let filteredProductsUnique = filteredProducts.filter(
-        (product, index) => filteredProducts.indexOf(product) === index
-      );
-
-      if (filteredProducts.length > 0) {
-        return {
-          ...state,
-          productsRender: filteredProductsUnique,
-          filteredBy: search,
-        };
-      } else {
-        return {
-          ...state,
-          productsRender: ["No Products Found"],
-        };
-      }
+          let search = action.payload;
+          let filteredByName = state.products.filter((product) =>
+            product.name?.toLowerCase().includes(search.toLowerCase())
+          );
+          let filteredByBrand = state.products.filter((product) =>
+            product.brand?.toLowerCase().includes(search.toLowerCase())
+          );
+          let filteredByCategory = state.products.filter((product) =>
+            product.category?.toLowerCase().includes(search.toLowerCase())
+          );
+    
+          let filteredProducts = [
+            ...filteredByName,
+            ...filteredByCategory,
+            ...filteredByBrand,
+          ];
+          let filteredProductsUnique = filteredProducts.filter(
+            (product, index) => filteredProducts.indexOf(product) === index
+          );
+    
+          if (filteredProducts.length > 0) {
+            return {
+              ...state,
+              productsRender: filteredProductsUnique,
+              filteredBy: search,
+            };
+          } else {
+            return {
+              ...state,
+              productsRender: ["No Products Found"],
+            };
+          }
+      
 
     case GET_PRODUCTS_BY_CATEGORY:
       let category = action.payload;
