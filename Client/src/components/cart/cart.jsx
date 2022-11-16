@@ -19,10 +19,10 @@ const Cart = ({ setShowCart, showCart }) => {
     }, [dispatch])
 
     useEffect(() => {
-        if (cart.products) {
-            setProducts(cart.products)
+        if (cart.products_id) {
+            setProducts(cart.products_id)
         }
-        window.sessionStorage.setItem('localCart', JSON.stringify(cart.products))
+        window.sessionStorage.setItem('localCart', JSON.stringify(cart.products_id))
     }, [cart])
 
     const URLCREATOR = function (string, cantidad) {
@@ -48,7 +48,6 @@ const Cart = ({ setShowCart, showCart }) => {
     }
 
     const handleRemoveToCartProduct = (product) => {
-        console.log(product)
         const productToRemove = {
             user_id: id,
             product_id: product.product_id._id

@@ -92,7 +92,7 @@ export const getProductsByMinMax = (min, max) => {
 export const addProduct = (data) => {
     return async (dispatch) => {
         if(data.user_id) {
-            console.log("Estoy agregando productos: ", data)
+            console.log(data)
             await axios.post("/shoppingCarts/addProductToShoppingCart", data)
             .then((response) => {
                     console.log(response.data)
@@ -109,16 +109,16 @@ export const addProduct = (data) => {
                 const product = await axios.get(`/products//detail/${product_id}`)
                 const localCart = {
                     user_id: "LocalCart",
-                    products: [{
+                    products_id: [{
                         product_id: product.data,
                         quantity: data.products_id[0].quantity
                     }]
                 }
-            dispatch({
-                type: "ADDPRODUCT_LOCALCART",
-                payload: localCart
-            })
-        }
+                dispatch({
+                    type: "ADDPRODUCT_LOCALCART",
+                    payload: localCart
+                })
+            }
     };
 }
 
@@ -141,7 +141,6 @@ export const getCart = (id) => {
 
 // delete 1 quantity of product from cart
 export const removeQuantity = (data) => {
-    console.log("Desde la action: ", data)
     return async (dispatch) => {
         if(data.user_id) {
             await axios.post("/shoppingCarts/deleteProductFromShoppingCart", data)
@@ -164,7 +163,6 @@ export const removeQuantity = (data) => {
 
 // delete product from cart
 export const removeProduct = (data) => {
-    console.log("desde la action: ", data)
     return async (dispatch) => {
         if(data.user_id) {
             await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
@@ -172,21 +170,22 @@ export const removeProduct = (data) => {
                     console.log(response.data)
                     dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
                 })
+            let id = window.localStorage.getItem("id")
+            await axios.get(`/shoppingCarts/quantity/${id}`)
+                .then((response) => {
+                    console.log("response.data: ", response.data)
+                    dispatch({ type: "GET_QUANTITY", payload: response.data })
+                })
         } else {
             const localCart = {
                 user_id: "LocalCart",
-                products: data.product_id,
+                product_id: data.product_id,
             }
             dispatch({
                 type: "REMOVEPRODUCT_LOCALCART",
                 payload: localCart
             })
-        let id = window.localStorage.getItem("id")
-        await axios.get(`/shoppingCarts/quantity/${id}`)
-            .then((response) => {
-                console.log("response.data: ", response.data)
-                dispatch({ type: "GET_QUANTITY", payload: response.data })
-            })
+        }
     };
 }
 
@@ -198,13 +197,13 @@ export const removeCart = (id) => {
                 .then((response) => {
                     dispatch({ type: "REMOVE_CART", payload: [] })
                 })
-                let quantity = { quantity: 0 }
-                dispatch({ type: "GET_QUANTITY", payload: quantity })
-                await axios.get(`/shoppingCarts/quantity/${id}`)
-                    .then((response) => {
-                console.log("response.data: ", response.data)
-                dispatch({ type: "GET_QUANTITY", payload: response.data })
-            })
+            let quantity = { quantity: 0 }
+            dispatch({ type: "GET_QUANTITY", payload: quantity })
+            await axios.get(`/shoppingCarts/quantity/${id}`)
+                .then((response) => {
+                    console.log("response.data: ", response.data)
+                    dispatch({ type: "GET_QUANTITY", payload: response.data })
+                })
         }
         dispatch({ type: "REMOVE_CART", payload: [] })
     };
@@ -299,8 +298,10 @@ export const buyAllProducts = (array) => {
 
 export const isAdmin = (email) => {
     return async (dispatch) => {
-        let admin = await axios.get(`/users/isadmin/${email}`)
-        dispatch({ type: IS_ADMIN, payload: admin.data })
+        if(email) {
+            let admin = await axios.get(`/users/isadmin/${email}`)
+            dispatch({ type: IS_ADMIN, payload: admin.data })
+        }
     }
 }
 

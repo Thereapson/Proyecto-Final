@@ -159,11 +159,10 @@ const rootReducer = (state = initialState, action) => {
 
         case "GET_QUANTITY":
             const data = action.payload
-            const productsQuant = state.cart.products
-            console.log("Quantity: ", data)
-            let quantity = {}
+            const productsQuant = state.cart.products_id
+            let quantity = 0
             !data?
-                quantity = state.cart.products.length || 0
+                quantity = productsQuant?.length || 0
             :   quantity = data.quantity
             return {
                 ...state,
@@ -172,6 +171,7 @@ const rootReducer = (state = initialState, action) => {
 
         case "GET_CART":
             let LocalCart0 = action.payload
+            console.log(LocalCart0)
             if(LocalCart0) {
                 return {
                     ...state,
@@ -185,19 +185,21 @@ const rootReducer = (state = initialState, action) => {
 
         case "ADDPRODUCT_LOCALCART":
             let localCart = state.cart;
-            const productsLocal = localCart.products
-            const products = action.payload.products
+            const productsLocal = localCart.products_id
+            const products = action.payload.products_id
             productsLocal
                 ? products.forEach(product => {
                     let found = productsLocal.find(p => p.product_id._id === product.product_id._id)
+                    console.log("coincidencias: ", found)
                     if (!found) {
-                        localCart.products.push(product)
+                        localCart.products_id.push(product)
                     }
                 })
                 : localCart = action.payload
             return {
                 ...state,
-                cart: localCart
+                cart: localCart,
+                quantityFromCart: localCart.products_id.length
             }
 
         case "REMOVEQUANTITY_LOCALCART":
@@ -218,11 +220,18 @@ const rootReducer = (state = initialState, action) => {
             let localCartc = state.cart;
             const productsLocalc = localCartc.products_id
             const productc = action.payload.product_id
-            localCartc.products_id = productsLocalc.filter(p => p.product_id !== productc)
+            localCartc.products_id = productsLocalc.filter(p => p.product_id._id !== productc)
+            return {
+                ...state,
+                cart: localCartc,
+                quantityFromCart: localCartc.products_id?.length
+            }
+
+        case "REMOVE_CART":
             return {
                 ...state,
                 cart: action.payload,
-                quantityFromCart: action.payload.products?.length
+                quantityFromCart: 0
             }
 
         case GET_ALL_PRODUCTS_BY_ID:
