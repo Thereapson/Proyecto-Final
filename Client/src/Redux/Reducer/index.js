@@ -76,27 +76,27 @@ const rootReducer = (state = initialState, action) => {
             }
 
 
-      let filteredProducts = [
-        ...filteredByName,
-        ...filteredByCategory,
-        ...filteredByBrand,
-      ];
-      let filteredProductsUnique = filteredProducts.filter(
-        (product, index) => filteredProducts.indexOf(product) === index
-      );
+      // let filteredProducts = [
+      //   ...filteredByName,
+      //   ...filteredByCategory,
+      //   ...filteredByBrand,
+      // ];
+      // let filteredProductsUnique = filteredProducts.filter(
+      //   (product, index) => filteredProducts.indexOf(product) === index
+      // );
 
-      if (filteredProducts.length > 0) {
-        return {
-          ...state,
-          productsRender: filteredProductsUnique,
-          filteredBy: search,
-        };
-      } else {
-        return {
-          ...state,
-          productsRender: ["No Products Found"],
-        };
-      }
+      // if (filteredProducts.length > 0) {
+      //   return {
+      //     ...state,
+      //     productsRender: filteredProductsUnique,
+      //     filteredBy: search,
+      //   };
+      // } else {
+      //   return {
+      //     ...state,
+      //     productsRender: ["No Products Found"],
+      //   };
+      // }
 
     case GET_PRODUCTS_BY_CATEGORY:
       let category = action.payload;
@@ -270,19 +270,6 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         cart: localCartb,
-      };
-
-    case "REMOVEPRODUCT_LOCALCART":
-      let localCartc = state.cart;
-      const productsLocalc = localCartc.products_id;
-      const productc = action.payload.product_id;
-      localCartc.products_id = productsLocalc.filter(
-        (p) => p.product_id !== productc
-      );
-      return {
-        ...state,
-        cart: action.payload,
-        quantityFromCart: action.payload.products?.length,
       };
 
     case GET_ALL_PRODUCTS_BY_ID:

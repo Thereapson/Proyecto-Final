@@ -13,6 +13,7 @@ const Cart = ({ setShowCart, showCart }) => {
     const cart = useSelector(state => state.cart);
     const id = window.localStorage.getItem('id')
     const [products, setProducts] = useState([])
+    console.log(cart)
 
     useEffect(() => {
         dispatch(getCart(id));
@@ -43,7 +44,7 @@ const Cart = ({ setShowCart, showCart }) => {
     }
 
     const handleRemoveAll = () => {
-        dispatch(removeCart(cart.user))
+        dispatch(removeCart(id))
         setProducts([])
     }
 
