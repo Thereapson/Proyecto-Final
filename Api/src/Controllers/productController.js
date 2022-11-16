@@ -187,7 +187,6 @@ const deleteProduct = async (req, res, next) => {
 
 const doPayment = async (req, res, next) => {
   //El amount debe venir por body 
-  console.log("Se está pagando algo: ", req.body)
   const { id, detail, amount, paymentMethod, email, user_id, product_id } = req.body;
   const stripe = new Stripe(process.env.PAYMENT)
   try {
@@ -215,7 +214,6 @@ const doPayment = async (req, res, next) => {
       
       //booleano que representa si la transaccion fue exitosa, no se debe hardcodear
     })
-    console.log(payment)
     if(payment) {
       const newPurchase = await purchaseModel.create({
         user_id: user_id,
@@ -223,14 +221,13 @@ const doPayment = async (req, res, next) => {
         date: new Date(),
         delivery_address: "",
         product: product_id,
-        payment_id: token,
+        payment_id: token.id,
         status: payment.status
       })
       if(newPurchase) {
         res.status(200).send({ msg: "Payment succeeded!", newPurchase })
       } else return { msg: "The Purchase can't be register", payment }
     }
-    console.log(payment)
   } catch (error) {
     res.json({ messagge: error.raw.message });
   }
