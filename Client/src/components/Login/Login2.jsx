@@ -3,10 +3,12 @@ import Navbar from '../navbar/navbar';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import swal from 'sweetalert';
+import { addProduct, removeCart } from '../../Redux/Actions/Actions'
 import { gapi } from "gapi-script"
 import LoginGoogle from "./LoginGoogle/LoginGoogle";
 import { useNavigate } from "react-router-dom";
 import { addProduct, removeCart } from '../../Redux/Actions/Actions'
+
 
 
 const clientId = "650713409200-ugee25co9jjpjkp8ufhob0odo9vdn5a9.apps.googleusercontent.com"
@@ -17,7 +19,6 @@ export const Login2 = () => {
   // const [user, userState] = useState({})
   const [user, userState] = useState({})
   const dispatch = useDispatch()
-
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const [mensaje, setMensaje] = useState();
   const [loading, setLoading] = useState(false);
@@ -72,7 +73,6 @@ export const Login2 = () => {
   // }
 
   const navigate = useNavigate();
-
   const { email, password } = inputs;
 
   const handleChange = (e) => {

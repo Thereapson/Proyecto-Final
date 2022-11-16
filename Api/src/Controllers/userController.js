@@ -1134,7 +1134,6 @@ const loginUser = async (req, res, next) => {
       });
     } else {
       const token = jwt.sign({ email: user.email }, JWT_SECRET);
-
       return res.json({ status: 'ok', data: token, id: user.id, isActive: user.status })
     }
   } catch (err) {

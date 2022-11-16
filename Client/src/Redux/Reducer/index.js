@@ -53,40 +53,51 @@ const rootReducer = (state = initialState, action) => {
                 productsRender: action.payload,
                 brands: brandsArray
             };
+
         case GET_PRODUCTS_BY_SEARCH:
-          let search = action.payload;
-          let filteredByName = state.products.filter((product) =>
-            product.name?.toLowerCase().includes(search.toLowerCase())
-          );
-          let filteredByBrand = state.products.filter((product) =>
-            product.brand?.toLowerCase().includes(search.toLowerCase())
-          );
-          let filteredByCategory = state.products.filter((product) =>
-            product.category?.toLowerCase().includes(search.toLowerCase())
-          );
-    
-          let filteredProducts = [
-            ...filteredByName,
-            ...filteredByCategory,
-            ...filteredByBrand,
-          ];
-          let filteredProductsUnique = filteredProducts.filter(
-            (product, index) => filteredProducts.indexOf(product) === index
-          );
-    
-          if (filteredProducts.length > 0) {
-            return {
-              ...state,
-              productsRender: filteredProductsUnique,
-              filteredBy: search,
-            };
-          } else {
-            return {
-              ...state,
-              productsRender: ["No Products Found"],
-            };
-          }
-      
+            let search = action.payload;
+            let filteredByName = state.products.filter((product) => product.name?.toLowerCase().includes(search.toLowerCase()));
+            let filteredByBrand = state.products.filter((product) => product.brand?.toLowerCase().includes(search.toLowerCase()));
+            let filteredByCategory = state.products.filter((product) => product.category?.toLowerCase().includes(search.toLowerCase()));
+
+            let filteredProducts = [...filteredByName, ...filteredByCategory, ...filteredByBrand];
+            let filteredProductsUnique = filteredProducts.filter((product, index) => filteredProducts.indexOf(product) === index);
+
+            if (filteredProducts.length > 0) {
+                return {
+                    ...state,
+                    productsRender: filteredProductsUnique,
+                    filteredBy: search
+                };
+            } else {
+                return {
+                    ...state,
+                    productsRender: ["No Products Found"],
+                };
+            }
+
+
+      // let filteredProducts = [
+      //   ...filteredByName,
+      //   ...filteredByCategory,
+      //   ...filteredByBrand,
+      // ];
+      // let filteredProductsUnique = filteredProducts.filter(
+      //   (product, index) => filteredProducts.indexOf(product) === index
+      // );
+
+      // if (filteredProducts.length > 0) {
+      //   return {
+      //     ...state,
+      //     productsRender: filteredProductsUnique,
+      //     filteredBy: search,
+      //   };
+      // } else {
+      //   return {
+      //     ...state,
+      //     productsRender: ["No Products Found"],
+      //   };
+      // }
 
     case GET_PRODUCTS_BY_CATEGORY:
       let category = action.payload;
@@ -170,27 +181,26 @@ const rootReducer = (state = initialState, action) => {
           ),
         };
       }
-
-    case GET_USER:
+      
+      case GET_USER:
       return {
         ...state,
         userData: action.payload,
       };
 
-    case "GET_QUANTITY":
-        const data = action.payload
-        const productsQuant = state.cart.products
-        console.log("Quantity: ", data)
-        let quantity = {}
-        !data?
-            quantity = state.cart.products.length || 0
-        :   quantity = data.quantity
-        return {
-            ...state,
-            quantityFromCart: quantity
-        }
+      case "GET_QUANTITY":
+            const data = action.payload
+            const productsQuant = state.cart.products_id
+            let quantity = 0
+            !data?
+                quantity = productsQuant?.length || 0
+            :   quantity = data.quantity
+            return {
+                ...state,
+                quantityFromCart: quantity
+            }
 
-    case "GET_CART":
+      case "GET_CART":
         let LocalCart0 = action.payload
         if(LocalCart0) {
             return {
@@ -254,6 +264,14 @@ const rootReducer = (state = initialState, action) => {
           cart: localCartc,
           quantityFromCart: localCartc.products_id?.length
       }
+
+    case "REMOVE_CART":
+      return {
+          ...state,
+          cart: action.payload,
+          quantityFromCart: 0
+      }
+
 
     case GET_ALL_PRODUCTS_BY_ID:
       return {
