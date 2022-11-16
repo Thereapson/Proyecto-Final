@@ -124,6 +124,7 @@ const getQuantityOfProductsInShoppingCart = async (req, res, next) => {
                 select: '_id name image price'
             })
         if (shoppingCartFound) {
+            console.log(shopingCartFound)
             res.status(200).send({ quantity: shoppingCartFound.products_id.length })
         } else {
             res.status(200).send({ quantity: 0 })

@@ -176,6 +176,7 @@ const Navbar = ({ setCurrentPage }) => {
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
                     {/* favorites */}
                     {user_id ?
                         <div className="flex items-center hover:cursor-pointer">
@@ -193,6 +194,8 @@ const Navbar = ({ setCurrentPage }) => {
                         </div>
                         : <></>
                     }
+=======
+>>>>>>> 5beb5556e018756714bf44825214caa6cc143c97
                 </div>
                 {/* cart */}
                 <div className="flex items-center hover:cursor-pointer">
