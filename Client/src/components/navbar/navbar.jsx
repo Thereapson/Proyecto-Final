@@ -13,6 +13,7 @@ const Navbar = ({ setCurrentPage }) => {
     const dispatch = useDispatch();
     const categories = useSelector(state => state.categories);
     const admin = useSelector(state => state.isAdmin);
+    const islogin = useSelector(state => state.userData)
 
     useEffect(() => {
         window.localStorage.getItem('id') && dispatch(getCart(window.localStorage.getItem('id')));
@@ -111,6 +112,7 @@ const Navbar = ({ setCurrentPage }) => {
         }
     }, []);
 
+
     return (
         <div className="relative overflow-hidden relative">
             <div className="flex justify-evenly items-center py-3">
@@ -202,7 +204,7 @@ const Navbar = ({ setCurrentPage }) => {
                     </div>
                 </div>
                 <div className="flex items-center">
-                    <Link to={isLogin ? "/userDetail" : "/login"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={handleLogin}>
+                    <Link to={isLogin === null || !isLogin ? "/login" : "/userDetail"} className="text-gray-700 font-bold text-lg ml-2 flex items-center" onClick={handleLogin}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-user-circle" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <circle cx="12" cy="12" r="9"></circle>
@@ -210,9 +212,10 @@ const Navbar = ({ setCurrentPage }) => {
                             <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                         </svg>
                         {
-                            isLogin
+                            isLogin === null || isLogin
                                 ? <button onClick={handleLogin}>Log In</button>
                                 : <button onClick={handleLogOut}>Log Out</button>
+
                         }
                     </Link>
                 </div>
