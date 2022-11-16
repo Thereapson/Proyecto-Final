@@ -20,76 +20,53 @@ import {
 
 const initialState = {
 
-    products: [],
-    filteredProducts: [],
-    productsRender: [],
-    DetailProduct: [],
-    categories: [],
-    lastAdd: {},
-    cart: [],
-    userData: {},
-    isAdmin: {},
-    buyproducts: [],
-    filteredBy: "",
-    userFavorites: [],
-    quantityFromCart: 0,
-    abouttobuyproducts: [],
-    brands: [],
+  products: [],
+  filteredProducts: [],
+  productsRender: [],
+  DetailProduct: [],
+  categories: [],
+  lastAdd: {},
+  cart: [],
+  userData: {},
+  isAdmin: {},
+  buyproducts: [],
+  filteredBy: "",
+  userFavorites: [],
+  quantityFromCart: 0,
+  abouttobuyproducts: [],
+  brands: [],
 
 };
 
 const rootReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case GET_PRODUCTS:
-            let brands = action.payload.map((product) => {
-                return product.brand
-            });
-            let brandsSet = new Set(brands);
-            let brandsArray = [...brandsSet];
+  switch (action.type) {
+    case GET_PRODUCTS:
+      let brands = action.payload.map((product) => {
+        return product.brand
+      });
+      let brandsSet = new Set(brands);
+      let brandsArray = [...brandsSet];
 
-            return {
-                ...state,
-                products: action.payload,
-                productsRender: action.payload,
-                brands: brandsArray
-            };
-        case GET_PRODUCTS_BY_SEARCH:
-            let search = action.payload;
-            let filteredByName = state.products.filter((product) => product.name?.toLowerCase().includes(search.toLowerCase()));
-            let filteredByBrand = state.products.filter((product) => product.brand?.toLowerCase().includes(search.toLowerCase()));
-            let filteredByCategory = state.products.filter((product) => product.category?.toLowerCase().includes(search.toLowerCase()));
+      return {
+        ...state,
+        products: action.payload,
+        productsRender: action.payload,
+        brands: brandsArray
+      };
+    case GET_PRODUCTS_BY_SEARCH:
+      let search = action.payload;
+      let filteredByName = state.products.filter((product) => product.name?.toLowerCase().includes(search.toLowerCase()));
+      let filteredByBrand = state.products.filter((product) => product.brand?.toLowerCase().includes(search.toLowerCase()));
+      let filteredByCategory = state.products.filter((product) => product.category?.toLowerCase().includes(search.toLowerCase()));
 
-            let filteredProducts = [...filteredByName, ...filteredByCategory, ...filteredByBrand];
-            let filteredProductsUnique = filteredProducts.filter((product, index) => filteredProducts.indexOf(product) === index);
-
-            if (filteredProducts.length > 0) {
-                return {
-                    ...state,
-                    productsRender: filteredProductsUnique,
-                    filteredBy: search
-                };
-            } else {
-                return {
-                    ...state,
-                    productsRender: ["No Products Found"],
-                };
-            }
-
-
-      let filteredProducts = [
-        ...filteredByName,
-        ...filteredByCategory,
-        ...filteredByBrand,
-      ];
-      let filteredProductsUnique = filteredProducts.filter(
-        (product, index) => filteredProducts.indexOf(product) === index
-      );
+      let filteredProducts = [...filteredByName, ...filteredByCategory, ...filteredByBrand];
+      let filteredProductsUnique = filteredProducts.filter((product, index) => filteredProducts.indexOf(product) === index);
 
       if (filteredProducts.length > 0) {
         return {
           ...state,
           productsRender: filteredProductsUnique,
-          filteredBy: search,
+          filteredBy: search
         };
       } else {
         return {
@@ -97,6 +74,7 @@ const rootReducer = (state = initialState, action) => {
           productsRender: ["No Products Found"],
         };
       }
+
 
     case GET_PRODUCTS_BY_CATEGORY:
       let category = action.payload;
@@ -213,13 +191,13 @@ const rootReducer = (state = initialState, action) => {
       const products = action.payload.products;
       productsLocal
         ? products.forEach((product) => {
-            let found = productsLocal.find(
-              (p) => p.product_id._id === product.product_id._id
-            );
-            if (!found) {
-              localCart.products.push(product);
-            }
-          })
+          let found = productsLocal.find(
+            (p) => p.product_id._id === product.product_id._id
+          );
+          if (!found) {
+            localCart.products.push(product);
+          }
+        })
         : (localCart = action.payload);
       return {
         ...state,
@@ -235,8 +213,8 @@ const rootReducer = (state = initialState, action) => {
       found.quantity > 1
         ? (localCartb.products_id[index].quantity = found.quantity - 1)
         : (localCartb.products_id = productsLocalb.filter(
-            (p) => p.product_id !== product
-          ));
+          (p) => p.product_id !== product
+        ));
       return {
         ...state,
         cart: localCartb,

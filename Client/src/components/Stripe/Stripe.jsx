@@ -3,7 +3,7 @@ import './Stripe.css'
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 import { CardElement, Elements, useStripe, useElements, } from '@stripe/react-stripe-js';
-import {useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { cleanDetails, getProductById, } from "../../Redux/Actions/Actions";
 import paloma from './palomita1.png';
@@ -69,7 +69,6 @@ function Stripe() {
     const { id } = useParams();
     const details = useSelector((state) => state.DetailProduct);
     const dispatch = useDispatch();
-    ;
     useEffect(() => {
         dispatch(cleanDetails())
         dispatch(getProductById(id))
