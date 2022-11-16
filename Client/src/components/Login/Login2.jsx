@@ -7,7 +7,6 @@ import { addProduct, removeCart } from '../../Redux/Actions/Actions'
 import { gapi } from "gapi-script"
 import LoginGoogle from "./LoginGoogle/LoginGoogle";
 import { useNavigate } from "react-router-dom";
-import { addProduct, removeCart } from '../../Redux/Actions/Actions'
 
 
 
