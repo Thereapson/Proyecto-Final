@@ -17,6 +17,7 @@ export const GET_USER = "GET_USER";
 export const ADD_FAVORITE = "ADD_FAVORITE";
 export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
 export const SHOW_PRODUCTS = "SHOW_PRODUCTS";
+export const GET_REVIEW = 'GET_REVIEW';
 
 export const getProducts = () => {
     return async (dispatch) => {
@@ -337,6 +338,21 @@ export const postUser = (payload) => {
       return json;
     } catch (error) {
       console.log(error);
+    }
+  };
+};
+
+//get review id
+export const getReview = (id_producto) => {
+  return async (dispatch) => {
+    try {
+      const review = await axios.get(`/reviews?product=${id_producto}`);
+      dispatch({
+        type: GET_REVIEW,
+        payload: review.data,
+      });
+    } catch (err) {
+      console.log({ error: err.message });
     }
   };
 };
