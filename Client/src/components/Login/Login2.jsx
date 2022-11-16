@@ -108,7 +108,7 @@ export const Login2 = () => {
               // funcion para guardar carrito en la db
               const localCart = window.sessionStorage.getItem('localCart')
               const id = window.localStorage.getItem('id')
-              if(localCart) {
+              if(localCart !== undefined) {
                 const newCart = {
                   "user_id": id,
                   "products_id": JSON.parse(localCart)

@@ -9,6 +9,7 @@ const Card2 = ({ product }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.userData);
     const favorites = useSelector(state => state.userFavorites);
+    const user_id = window.localStorage.getItem('id')
     const [quantity, setQuantity] = React.useState(1);
     const handleAddProduct = () => {
         swal({
@@ -110,26 +111,29 @@ const Card2 = ({ product }) => {
 
     return (
         <div className="bg-white shadow-md rounded-lg overflow-hidden relative h-96 flex flex-col justify-between">
-            <button
-                type="button"
-                className="absolute right-4 top-4 rounded-full text-white p-1 bg-red-600 hover:bg-red-700 z-10"
-                onClick={handleAddFavorite}
-            >
-                <svg
-                    className="h-5 w-5 fill-current text-white hover:text-white hover:scale-110 transition duration-300 ease-in-out"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+            {user_id?
+                <button
+                    type="button"
+                    className="absolute right-4 top-4 rounded-full text-white p-1 bg-red-600 hover:bg-red-700 z-10"
+                    onClick={handleAddFavorite}
                 >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    ></path>
-                </svg>
-            </button >
+                    <svg
+                        className="h-5 w-5 fill-current text-white hover:text-white hover:scale-110 transition duration-300 ease-in-out"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                        ></path>
+                    </svg>
+                </button >
+                : <></>
+            }
             <div className="overflow-hidden h-3/5">
                 <Link to={`/product/${product.id}`}>
                     <img src={product.image} alt="Sunset in the mountains" className="w-full h-full object-cover transform hover:scale-110 transition duration-300 ease-in-out" />

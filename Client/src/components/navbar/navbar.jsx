@@ -176,23 +176,6 @@ const Navbar = ({ setCurrentPage }) => {
                             </div>
                         </div>
                     </div>
-                    {/* favorites */}
-                    {user_id?
-                        <div className="flex items-center hover:cursor-pointer">
-                            <div className="relative">
-                                {/* favorites */}
-                                <button className="focus:outline-none focus:shadow-outline" onClick={() => handleFavorites()}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
-                                    </svg>
-                                </button>
-                                {showFavorites && <Favorites setShowFavorites={setShowFavorites} showFavorites={showFavorites} />}
-                                {quantityInFavorites > 0 && <div className="absolute bottom-5 left-3 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">{quantityInFavorites}</div>}
-                            </div>
-                        </div>
-                        : <></>
-                    }
                 </div>
                 {/* cart */}
                 <div className="flex items-center hover:cursor-pointer">
