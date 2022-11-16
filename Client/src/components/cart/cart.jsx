@@ -207,7 +207,8 @@ const Cart = ({ setShowCart, showCart }) => {
                                             </div>
                                             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                                 <p>
-                                                    or
+                                                    Or
+                                                    <span aria-hidden="true"> </span>
                                                     <button
                                                         type="button"
                                                         className="font-medium text-indigo-600 hover:text-indigo-500"
