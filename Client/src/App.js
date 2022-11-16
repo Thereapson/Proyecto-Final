@@ -21,11 +21,9 @@ import { About } from "./components/About/About";
 
 function App() {
   return (
-    <div className="App container ">
       <BrowserRouter>
         <Routes>
           {/* rutas publicas */}
-
           <Route path="/" element={<LandingPage />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<DetailCard />} />
@@ -53,7 +51,6 @@ function App() {
         </Routes>
         <Footer1/>
       </BrowserRouter>
-    </div>
   );
 }
 

@@ -53,6 +53,7 @@ const rootReducer = (state = initialState, action) => {
                 productsRender: action.payload,
                 brands: brandsArray
             };
+
         case GET_PRODUCTS_BY_SEARCH:
             let search = action.payload;
             let filteredByName = state.products.filter((product) => product.name?.toLowerCase().includes(search.toLowerCase()));
@@ -184,24 +185,80 @@ const rootReducer = (state = initialState, action) => {
             cart: action.payload,
           };
 
-        case "ADDPRODUCT_LOCALCART":
-          let localCart = state.cart;
-          const productsLocal = localCart.products;
-          const products = action.payload.products;
-          productsLocal
-            ? products.forEach((product) => {
-                let found = productsLocal.find(
-                  (p) => p.product_id._id === product.product_id._id
-                );
-                if (!found) {
-                  localCart.products.push(product);
-                }
-              })
-            : (localCart = action.payload);
-          return {
-            ...state,
-            cart: localCart,
-          };
+      case "GET_PRODUCT_BY_ORDER":
+      let order = action.payload;
+      if (order === "asc") {
+        return {
+          ...state,
+          productsRender: state.productsRender.sort(
+            (a, b) => a.price - b.price
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          productsRender: state.productsRender.sort(
+            (a, b) => b.price - a.price
+          ),
+        };
+      }
+      
+      case GET_USER:
+      return {
+        ...state,
+        userData: action.payload,
+      };
+
+      case "GET_QUANTITY":
+            const data = action.payload
+            const productsQuant = state.cart.products_id
+            let quantity = 0
+            !data?
+                quantity = productsQuant?.length || 0
+            :   quantity = data.quantity
+            return {
+                ...state,
+                quantityFromCart: quantity
+            }
+
+      case "GET_CART":
+        let LocalCart0 = action.payload
+        if(LocalCart0) {
+            return {
+                ...state,
+                cart: action.payload
+            }
+        } else {
+            return {
+                ...state,
+            }
+        }
+
+    case "ADD_PRODUCT":
+      return {
+        ...state,
+        cart: action.payload,
+      };
+
+    case "ADDPRODUCT_LOCALCART":
+      let localCart = state.cart;
+      const productsLocal = localCart.products_id
+      const products = action.payload.products_id
+      productsLocal
+          ? products.forEach(product => {
+              let found = productsLocal.find(p => p.product_id._id === product.product_id._id)
+              console.log("coincidencias: ", found)
+              if (!found) {
+                  localCart.products_id.push(product)
+              }
+          })
+          : localCart = action.payload
+      return {
+          ...state,
+          cart: localCart,
+          quantityFromCart: localCart.products_id.length
+      }
+
 
         case "REMOVEQUANTITY_LOCALCART":
           let localCartb = state.cart;
@@ -219,18 +276,23 @@ const rootReducer = (state = initialState, action) => {
             cart: localCartb,
           };
 
-        case "REMOVEPRODUCT_LOCALCART":
-          let localCartc = state.cart;
-          const productsLocalc = localCartc.products_id;
-          const productc = action.payload.product_id;
-          localCartc.products_id = productsLocalc.filter(
-            (p) => p.product_id !== productc
-          );
-          return {
-            ...state,
-            cart: action.payload,
-            quantityFromCart: action.payload.products?.length,
-          };
+    case "REMOVEPRODUCT_LOCALCART":
+      let localCartc = state.cart;
+      const productsLocalc = localCartc.products_id
+      const productc = action.payload.product_id
+      localCartc.products_id = productsLocalc.filter(p => p.product_id._id !== productc)
+      return {
+          ...state,
+          cart: localCartc,
+          quantityFromCart: localCartc.products_id?.length
+      }
+
+    case "REMOVE_CART":
+      return {
+          ...state,
+          cart: action.payload,
+          quantityFromCart: 0
+      }
 
         case GET_ALL_PRODUCTS_BY_ID:
           return {

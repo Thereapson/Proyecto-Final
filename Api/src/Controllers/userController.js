@@ -566,10 +566,6 @@ const registerUser = async (req, res, next) => {
                                               <p style="font-size: 14px; line-height: 160%">
                                                Esta al tanto de los mejores lanzamientos en tecnologia para ti
                                               </p>
-                                              <p style="font-size: 14px; line-height: 160%">
-                                             Por favor verifica tu email en el siguiente enlace
-                                              </p>
-                                              // <a href="http://${req.headers.host}/user/verify-email?token=${newUser.emailToken}">Verifica tu email</a>
                                              
                                               <p style="font-size: 14px; line-height: 160%">
                                                 <strong>Compu Devs</strong>
@@ -1065,11 +1061,11 @@ const registerUser = async (req, res, next) => {
                                             >
                                               <p style="font-size: 14px; line-height: 140%">
                                                 Recibiste este email porque te registraste
-                                                en technotrade
+                                                en compudevs
                                               </p>
             
                                               <p style="font-size: 14px; line-height: 140%">
-                                                Techno Trade 2022 All rights reserved
+                                                Compu Devs 2022 All rights reserved
                                               </p>
                                             </div>
                                           </td>
@@ -1138,8 +1134,7 @@ const loginUser = async (req, res, next) => {
       });
     } else {
       const token = jwt.sign({ email: user.email }, JWT_SECRET);
-
-      return res.json({ status: "ok", data: token, id: user.id });
+      return res.json({ status: 'ok', data: token, id: user.id, isActive: user.status })
     }
   } catch (err) {
     res.send({ error: err.message });

@@ -8,8 +8,8 @@ const getAllShoppingCarts = async (req, res, next) => {
         if (response.flat().length > 0) {
             const ShoppingCart = response?.map((s) => {
                 return {
-                    user: s.user_id,
-                    products: s.products_id
+                    user_id: s.user_id,
+                    products_id: s.products_id
                 }
             })
             res.status(200).send(ShoppingCart)
@@ -102,8 +102,8 @@ const getShoppingCartByUser = async (req, res, next) => {
         })
         if (shoppingCartFound) {
             const ShoppingCart = {
-                user: shoppingCartFound.user_id,
-                products: shoppingCartFound.products_id
+                user_id: shoppingCartFound.user_id,
+                products_id: shoppingCartFound.products_id
             }
             res.status(200).send(ShoppingCart)
         } else {
@@ -124,6 +124,7 @@ const getQuantityOfProductsInShoppingCart = async (req, res, next) => {
                 select: '_id name image price'
             })
         if (shoppingCartFound) {
+            console.log(shopingCartFound)
             res.status(200).send({ quantity: shoppingCartFound.products_id.length })
         } else {
             res.status(200).send({ quantity: 0 })
@@ -157,11 +158,11 @@ const deleteShoppingCart = async (req, res, next) => {
 const deleteProductFromShoppingCartAndDeleteShoppingCart = async (req, res, next) => {
     try {
         const { user_id, product_id } = req.body
-        console.log(req.body)
         const shoppingCartFound = await shoppingCartModel.findOne({ user_id: user_id })
         if (shoppingCartFound) {
             const productsFound = shoppingCartFound.products_id
             const productFound = productsFound.find(p => p.product_id == product_id)
+            console.log(productFound)
             if (productFound) {
                 const index = productsFound.indexOf(productFound)
                 productsFound.splice(index, 1)
@@ -200,7 +201,6 @@ const deleteProductFromShoppingCart = async (req, res, next) => {
         if (shoppingCartFound) {
             const productsFound = shoppingCartFound.products_id
             const productFound = productsFound.find(p => p.product_id == product_id)
-            console.log(productFound)
             if (productFound) {
                 if (productFound.quantity > 1) {
                     const newQuantity = productFound.quantity -= 1
@@ -217,7 +217,6 @@ const deleteProductFromShoppingCart = async (req, res, next) => {
                 } else {
                     const index = productsFound.indexOf(productFound)
                     const haveProducts = productsFound.splice(index, 1)
-                    console.log("Restan: ", haveProducts)
                     if (productsFound.length === 0) {
                         const deletedShoppingCart = await shoppingCartModel.findByIdAndDelete(shoppingCartFound._id)
                         res.status(200).send({ msg: "Shopping Cart Deleted", deletedShoppingCart });

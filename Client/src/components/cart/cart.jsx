@@ -13,17 +13,17 @@ const Cart = ({ setShowCart, showCart }) => {
     const cart = useSelector(state => state.cart);
     const id = window.localStorage.getItem('id')
     const [products, setProducts] = useState([])
+    console.log(cart)
 
     useEffect(() => {
         dispatch(getCart(id));
     }, [dispatch])
 
     useEffect(() => {
-        if (cart.products) {
-            setProducts(cart.products)
+        if (cart.products_id) {
+            setProducts(cart.products_id)
         }
-        window.localStorage.setItem('localCart', cart)
-        console.log("agregué el carrito al local: ", window.localStorage.getItem('localCart'))
+        window.sessionStorage.setItem('localCart', JSON.stringify(cart.products_id))
     }, [cart])
 
     const URLCREATOR = function (string, cantidad) {
@@ -44,13 +44,11 @@ const Cart = ({ setShowCart, showCart }) => {
     }
 
     const handleRemoveAll = () => {
-        console.log(cart)
-        dispatch(removeCart(cart.user))
+        dispatch(removeCart(id))
         setProducts([])
     }
 
     const handleRemoveToCartProduct = (product) => {
-        console.log(product)
         const productToRemove = {
             user_id: id,
             product_id: product.product_id._id
@@ -207,7 +205,8 @@ const Cart = ({ setShowCart, showCart }) => {
                                             </div>
                                             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                                 <p>
-                                                    or
+                                                    Or
+                                                    <span aria-hidden="true"> </span>
                                                     <button
                                                         type="button"
                                                         className="font-medium text-indigo-600 hover:text-indigo-500"
