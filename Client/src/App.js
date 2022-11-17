@@ -1,6 +1,6 @@
 // import './App.css';
 import Products from "./components/products/products";
-import {Login2} from "./components/Login/Login2";
+import { Login2 } from "./components/Login/Login2";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./components/Register/Register";
@@ -19,7 +19,7 @@ import AdminPage from './components/Admin/AdminPage';
 
 function App() {
   return (
-    <div className="App container">
+    <div className="flex flex-col min-h-screen justify-center items-center">
       <BrowserRouter>
         <Routes>
           {/* rutas publicas */}
@@ -43,7 +43,7 @@ function App() {
             <Route path="/checkout" element={<StripeCol />} />
 
             <Route path="/products/add" element={<Formaddcomp />} />
-            <Route path="/admin/*" element={<AdminPage/>}/>
+            <Route path="/admin/*" element={<AdminPage />} />
           </Route>
 
           {/* <Route path="/detail/:id" element={<DetailCard />} />           */}
