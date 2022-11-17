@@ -92,7 +92,7 @@ function DetailCard() {
                 </p>
 
               </div>
-                  <Reviews/>
+                  <Reviews id = {id}/>
 
            </div>
 

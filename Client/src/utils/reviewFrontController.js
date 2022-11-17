@@ -5,7 +5,7 @@ import store from "../Redux/Store";
 
 export const addReview = async (full_name, id, review, score) => {
     try {
-      await axios.post(`http://localhost:3000/reviews/add`, {
+      await axios.post(`/reviews/add`, {
         user_id: full_name,
         product_id: id,
         review: review,

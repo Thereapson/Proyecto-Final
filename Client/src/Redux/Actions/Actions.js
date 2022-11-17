@@ -346,6 +346,7 @@ export const postUser = (payload) => {
 
 //get review id
 export const getReview = (product_id) => {
+  console.log('revieeeeew',product_id)
   return async (dispatch) => {
     try {
       const review = await axios.get(`/reviews?product=${product_id}`);
@@ -372,7 +373,7 @@ export function getAllReviews() {
       });
   };
 }
-
+//admin
 export function deleteAllReviews() {
   return {
     type: DELETE_REVIEWS,
