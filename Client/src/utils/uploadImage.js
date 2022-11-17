@@ -1,6 +1,6 @@
 const FormData = require('form-data');
 
-async function uploadImage (image) {
+async function uploadImage(image) {
     const files = image.rawFile;
     const data = new FormData();
     data.append("file", files)
@@ -17,6 +17,4 @@ async function uploadImage (image) {
     return (file.secure_url)
 }
 
-module.exports = {
-    uploadImage
-}
+export default uploadImage();
