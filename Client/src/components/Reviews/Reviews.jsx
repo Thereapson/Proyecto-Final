@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addReview } from "../../utils/reviewFrontController";
 import { getReview } from "../../Redux/Actions/Actions";
 // import FormReview from "./FormReview";
-import Modal from "react-modal";
-Modal.setAppElement("#root");
+// import Modal from "react-modal";
+// Modal.setAppElement("#root");
 
 // import { Icon } from '@iconify/react';
 
@@ -47,6 +47,7 @@ const Reviews = ({ id }) => {
     } else {
       console.log("No se Pudo Enviar El Formulario");
     }
+    alert('se envio tu formulario')
   };
   // console.log(reviews.map((e) => e.full_name === userState.full_name).includes(true));
 
@@ -336,7 +337,7 @@ const Reviews = ({ id }) => {
           </form>
         ) : null}
       </div>
-      <Modal
+      {/* <Modal
         isOpen={noUser}
         onRequestClose={() => setNoUser(false)}
         overlayClassName={{
@@ -376,7 +377,7 @@ const Reviews = ({ id }) => {
             </button>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };
