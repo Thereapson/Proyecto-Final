@@ -271,7 +271,7 @@ export const buyAllProducts = (array) => {
     let arreglofixed = [];
     let arreglo = [];
     array.forEach((element) => {
-      if (element !== "") {
+      if (element != "") {
         arreglofixed.push(element);
       }
     });
@@ -316,7 +316,7 @@ export const showBuyProduct = (array) => {
     let arreglofixed = [];
     let arreglofinal = [];
     array.forEach((element) => {
-      if (element !== "") {
+      if (element != "") {
         arreglofixed.push(element);
       }
     });
