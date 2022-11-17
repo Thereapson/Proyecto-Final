@@ -1,6 +1,7 @@
 const { categoryModel } = require('../Models/index');
 const { productModel } = require("../Models/index");
 const { userModel } = require("../Models/index");
+const { purchaseModel } = require("../Models/index")
 
 // referencia a Helpers
 
@@ -416,6 +417,35 @@ const editUser = async (req, res, next) => {    // hay que ajustarlo
   }
 }
 
+const listPurchases = async (req, res, next) => {
+  const {_start, _end, _sort, _order, _q} = req.query
+  try {
+      const response = await purchaseModel.find({})
+      console.log("response_listPurchases", response)
+      if (response.flat().length > 0) {
+        const purchases = response?.map((p) => {
+          return {
+              id: p._id && p._id,
+              user: p.user_id && p.user_id,
+              ammount: p.ammount && p.ammount,
+              date: p.date && p.date ,
+              address: p.delivery_address && p.delivery_address,
+              product: p.product && p.product,
+              payment: p.payment_id && p.payment_id,
+              status: p.status && p.status
+          }
+      })
+      res.status(200)
+      .header( 'Access-Control-Expose-Headers','X-Total-Count')
+      .header('x-total-count', response?.length)
+      .send(products?.slice(_start,_end));
+    }
+  } catch (error) {
+      console.error(error);
+      res.status(400).send({error: error.message})
+  }
+}
+
 
 
 
@@ -475,5 +505,6 @@ module.exports = {
     deleteUser,
     getUserById,
     editUser,
+    listPurchases,
   
 }

@@ -1,7 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
 import { useController } from 'react-hook-form';
-import CloudinaryUploadWidget from "../CloudinaryUploadWidget/CloudinaryUploadWidget";
 // import {uploadImage} from "../../../utils/utils"
 import { useInput } from 'react-admin';
 import { 
@@ -143,8 +142,6 @@ const PictureInputA = ({source, label}) => {
         </label>
     )
 }
-
-
 
 
 const productFilters = [
