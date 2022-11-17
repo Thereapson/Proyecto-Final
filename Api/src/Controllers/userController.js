@@ -1140,9 +1140,10 @@ const loginUser = async (req, res, next) => {
   }
 };
 //olvidar contraseñaa
+const FRONT_URL = 'http://localhost:3000'
 const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
-
+console.log(email)
   try {
     const oldUser = await userModel.findOne({
       email: email,
@@ -1161,7 +1162,7 @@ const forgotPassword = async (req, res, next) => {
         expiresIn: "5m",
       }
     );
-    const link = `http://localhost:3000/resetPassword/${oldUser._id}/${token}`;
+    const link = `${FRONT_URL}/resetPassword/${oldUser._id}/${token}`;
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
