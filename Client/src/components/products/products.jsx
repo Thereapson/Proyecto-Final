@@ -92,7 +92,7 @@ const Products = () => {
     }
 
     return (
-        <div className="container min-h-screen">
+        <div className=" min-h-screen">
 
             <Navbar setCurrentPage={setCurrentPage} />
 

@@ -19,6 +19,10 @@ const reviewSchema = new Schema({
     },
     date: {
         type: Date
+    },
+    ///////
+    hidden: {
+        type: Boolean
     }
 }, 
 {

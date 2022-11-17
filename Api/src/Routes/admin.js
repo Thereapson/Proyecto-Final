@@ -16,6 +16,7 @@ const {
     deleteUser,
     getUserById,
     editUser,
+    addProduct,
 } = require('../Controllers/adminController')
 
 // configuramos las rutas
@@ -26,6 +27,8 @@ router.get('/products/:id', getProductById)  // ok
 router.put('/products/update/:id', editProduct) //ok
 
 router.get('/products/delete/:id', deleteProduct)   //
+
+router.post('/products/add', addProduct) 
 
 router.get('/category', listCategory)  // ok (revisar filtros)
 
@@ -41,7 +44,7 @@ router.get('/users/:id', getUserById)  // ok
 
 router.post('/users/add', addUser)   // ok
 
-router.post('/users/update/:id', editUser)
+router.put('/users/update/:id', editUser)
 
 router.get('users/delete/:id', deleteUser)
 

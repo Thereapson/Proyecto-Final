@@ -1,4 +1,4 @@
-// import './App.css';
+import './App.css';
 import Products from "./components/products/products";
 import { Login2 } from "./components/Login/Login2";
 import React from "react";
@@ -8,13 +8,14 @@ import DetailCard from "./components/detail/detail";
 import Stripe from "./components/Stripe/Stripe";
 import Formaddcomp from "./components/Formaddcomp/Formaddcomp";
 import { LandingPage } from "./components/Landing/landing";
-import Cart from "./components/cart/cart";
 import UserDetail from "./components/Register/userDetail";
 import ForgotPassword from "./components/Login/ForgotPassword";
 import Resetpassword from "./components/Login/ResetPassword";
 import ProtectedRouter from "./components/router/ProtectedRouter";
 import StripeCol from "./components/StipeCol/StripeCol";
 import AdminPage from './components/Admin/AdminPage';
+import Footer1 from "./components/Footer/Footer";
+import { About } from "./components/About/About";
 
 
 function App() {
@@ -23,7 +24,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* rutas publicas */}
-
           <Route path="/" element={<LandingPage />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<DetailCard />} />
@@ -35,6 +35,7 @@ function App() {
             path="/resetPassword/:id/:token"
             element={<Resetpassword />}
           />
+          <Route path="/about" element={<About />} />
           {/* rutas privadas */}
           <Route element={<ProtectedRouter />}>
             <Route path="/userDetail" element={<UserDetail />} />
@@ -48,9 +49,9 @@ function App() {
 
           {/* <Route path="/detail/:id" element={<DetailCard />} />           */}
         </Routes>
+        <Footer1 />
       </BrowserRouter>
-    </div>
-  );
+      );
 }
 
-export default App;
+      export default App;

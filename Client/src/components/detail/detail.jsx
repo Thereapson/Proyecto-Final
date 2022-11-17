@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getProductById, cleanDetails } from '../../Redux/Actions/Actions.js';
+import { getProductById, cleanDetails, verifyPurchase } from '../../Redux/Actions/Actions.js';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import procesador from './procesadorimg.png'
@@ -8,9 +8,13 @@ import Stripe from '../Stripe/Stripe.jsx'
 import './detail.css';
 import StripeCol from '../StipeCol/StripeCol.jsx';
 import swal from 'sweetalert';
+import Reviews from '../Reviews/Reviews.jsx';
+import FormReview from '../Reviews/FormReview.jsx';
 
 
 function DetailCard() {
+  const user_id = window.localStorage.getItem("id");
+
   function getRandomArbitrary(min, max) {
     let numero = Math.random() * (max - min) + min;
     return Math.round(numero)
@@ -39,13 +43,14 @@ function DetailCard() {
   useEffect(() => {
     dispatch(cleanDetails())
     dispatch(getProductById(id))
+    //dispatch(verifyPurchase({user: "636544b0a2e3341d3b17be54", product: "635d6aff6882217b05b7877c"}))
   }, [])
 
   return (
     <div className="DetailCard">
       <Navbar />
-      <section className="bg-white dark:bg-gray-900">
-        <div className="container px-6 py-10 mx-auto">
+      <section className="bg-white dark:bg-gray-900  bg-lightMode min-h-screen">
+        <div className=" container px-6 py-10 mx-auto">
           <div className="lg:-mx-6 lg:flex lg:items-center">
             <img className="espaciado object-cover object-center lg:h-[31rem]" src={details.image} alt="NOIMG" />
 
@@ -90,8 +95,9 @@ function DetailCard() {
                 </p>
 
               </div>
+                  <Reviews id = {id} user_id = {user_id}/>
 
-            </div>
+           </div>
 
           </div>
         </div>

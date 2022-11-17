@@ -7,9 +7,9 @@ import store from "./Redux/Store";
 import axios from 'axios';
 
 
-axios.defaults.baseURL = "http://localhost:3001" || "https://compudevs.herokuapp.com"
-
+axios.defaults.baseURL = 
 // "https://compudevs.herokuapp.com" || 
+                          "http://localhost:3001" 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -2,56 +2,55 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // import { toast } from "react-toastify";
+const BACK_URL = "https://compudevs.herokuapp.com"
 
 function Resetpassword() {
+  const { id, token } = useParams();
+  const history = useNavigate();
 
-const {id, token} = useParams();
-const history = useNavigate();
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-const [password, setPassword] = useState(""); 
-const [message, setMessage] = useState(""); 
+  const userValid = async () => {
+    const res = await fetch(`${BACK_URL}/users/resetPassword/${id}/${token}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
 
-const userValid = async() => {
-  const res = await fetch(`/users/resetPassword/${id}/${token}`, {
-    method :"GET",
-    headers: {
-      "Content-Type": "application/json"
+    if (data.status == 201) {
+      console.log("usuario valido");
+    } else {
+      alert("!el token expiro");
     }
-  });
-  const data = await res.json()
+  };
 
-  if (data.status == 201){
-    console.log('usuario valido')
-  }else{
-    alert('!el token expiro')
-  }
-}  
-
-const sendPassword = async(e) => {
-  e.preventDefault();
-fetch(`/users/resetPassword/${id}/${token}`, {
-    method :"POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify({password})
-    // body: password
-  })
- .then((res) => res.json())
- .then((data) => {
-  console.log(data, 'reset password')
-  alert(data.status)
- })
+  const sendPassword = async (e) => {
+    e.preventDefault();
+    fetch(`${BACK_URL}/users/resetPassword/${id}/${token}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ password }),
+      // body: password
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data, "reset password");
+        alert(data.status);
+      });
     // setMessage(true)
-    alert('tu contraseña fue cambiada con exito')
-    history('/')
- 
-}
+    alert("tu contraseña fue cambiada con exito");
+    history("/");
+  };
 
-useEffect(() => {
-  userValid()
-})
+  useEffect(() => {
+    userValid();
+  });
   return (
     <form form onSubmit={sendPassword}>
       <div className="min-h-screen bg-blue-400 flex justify-center items-center">
@@ -72,14 +71,16 @@ useEffect(() => {
               placeholder="Nueva contraseña"
               className="block text-sm py-3 px-4 rounded-lg w-full border outline-none"
               id="password"
-              value = {password}
-              onChange = {(e) => setPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-            
           </div>
-          
+
           <div className="text-center mt-6">
-            <button className="py-3 w-64 text-xl text-white bg-blue-400 rounded-2xl" type="submit">
+            <button
+              className="py-3 w-64 text-xl text-white bg-blue-400 rounded-2xl"
+              type="submit"
+            >
               Enviar
             </button>
           </div>

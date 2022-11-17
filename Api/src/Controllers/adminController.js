@@ -2,6 +2,9 @@ const { categoryModel } = require('../Models/index');
 const { productModel } = require("../Models/index");
 const { userModel } = require("../Models/index");
 
+// referencia a Helpers
+
+const {uploadImage} = require("../Helpers/cloudinary")
 
 // funciones que son exclusivas para Admin
 
@@ -103,11 +106,12 @@ const deleteCategory = async (req, res, next) => {
  
 // Product
 const listProducts = async (req, res, next) => {
-    const {_start, _end, _sort, _order, q} = req.query
+    const {_start, _end, _sort, _order, q, category} = req.query
     console.log(_start, _end, _sort, _order, q)
     try {
         if (!q) {
             const response = await productModel.find({}).populate("category");
+            console.log(response)
             if (response.flat().length > 0) {
                 const products = response?.map((p) => {return formatProduct(p)})
                 res.status(200)
@@ -118,7 +122,8 @@ const listProducts = async (req, res, next) => {
             return console.log("No arrojo resultados")
         }
         if (q) {
-            const response = await productModel.find({}).populate("category");
+            const response = await productModel.find({'name': new RegExp(q, 'i')}).populate("category");
+            console.log(response)
             if (response.flat().length > 0) {
                 const products = response?.map((p) => {return formatProduct(p)})
                 res.status(200)
@@ -149,7 +154,7 @@ const listProducts = async (req, res, next) => {
     const id = req.params.id;
     try {
       const response = await productModel.findByIdAndDelete(id);  
-      res.status(200).json({ deleted: product });
+      res.status(200).json({ deleted: response });
       next();
     } catch (error) {
       console.log(error);
@@ -165,6 +170,7 @@ const listProducts = async (req, res, next) => {
         sku,
         name,
         price,
+        lastPrice,
         weight,
         description,
         status,
@@ -180,6 +186,7 @@ const listProducts = async (req, res, next) => {
           sku,
           name,
           price,
+          lastPrice,
           weight,
           description,
           status,
@@ -196,6 +203,7 @@ const listProducts = async (req, res, next) => {
         sku: editProduct.sku,
         name: editProduct.name,
         price: editProduct.price,
+        lastPrice: editProduct.lastPrice,
         weight: editProduct.weight,
         description: editProduct.description,
         image: editProduct.image,
@@ -223,10 +231,68 @@ const listProducts = async (req, res, next) => {
     }
   };
 
+  const addProduct = async (req, res, next) => {
+    console.log("body", req.body)
+    try {
+      const productData = req.body;
+      const {
+        sku,
+        name,
+        price,
+        lastPrice,
+        weight,
+        description,
+        image,
+        brand,
+        benchmark,
+        category,
+        stock,
+      } = productData;
+      console.log("image",image)
+      const foundProduct = await productModel.findOne({ sku: sku });
+      if (foundProduct) {
+        res
+          .status(400)
+          .send("The New Product can't be created, it SKU already exists");
+      } else if (sku && name && price && image && brand && category && stock) {
+        const newProduct = await productModel.create({
+          sku,
+          name,
+          price,
+          lastPrice,
+          weight: weight || 0,
+          description: description || name,
+          status: true,
+          image,
+          brand,
+          benchmark: benchmark || 0,
+          category,
+          create_date: new Date(),
+          stock,
+        });
+  
+        if (!newProduct) {
+          res.status(400).send("The New Product can't be created");
+        } else {
+          res.status(200).send({id: newProduct._id});
+        }
+      } else {
+        res
+          .status(400)
+          .send("The New Product can't be created. Missing required data");
+      }
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  };
+
+
 // Users
 const listUsers = async (req, res, next) => {
-  const {_start, _end, _sort, _order} = req.query
+  const {_start, _end, _sort, _order, q} = req.query
   try {
+    if (!q) {
       const response = await userModel.find({})
       if(response.flat().length > 0) {
           const users = response?.map(c => {
@@ -245,11 +311,33 @@ const listUsers = async (req, res, next) => {
       } else {
           res.status(400).send("There's no Users to show right now")
       }
+    }
+    if (q) {
+      const response = await userModel.find({'full_name': new RegExp(q, 'i')})
+      if(response.flat().length > 0) {
+          const users = response?.map(c => {
+              return {
+                  id: c._id,
+                  full_name: c.full_name,
+                  email: c.email,
+                  status: c.status,
+                  isAdmin: c.isAdmin,
+              }
+          })
+          res.status(200)
+          .header( 'Access-Control-Expose-Headers','X-Total-Count')
+          .header('x-total-count', response?.length)  
+          .send(users?.slice(_start,_end))
+      } else {
+          res.status(400).send("There's no Users to show right now")
+      }
+    }
   } catch (error) {
       console.error(error);
       next(error)
   }
 }
+
 
 const addUser = async (req, res, next) => {
   try {
@@ -283,7 +371,7 @@ const deleteUser = async (req, res, next) => {
   const id = req.params.id;
   try {
     const response = await userModel.findByIdAndDelete(id);  
-    res.status(200).json({ deleted: product });
+    res.status(200).json({ deleted: response });
     next();
   } catch (error) {
     console.log(error);
@@ -338,6 +426,7 @@ const editUser = async (req, res, next) => {    // hay que ajustarlo
         sku: p.sku,
         name: p.name,
         price: p.price,
+        lastPrice: p.lastPrice,
         weight: p.weight,
         description: p.description,
         image: p.image,
@@ -374,6 +463,7 @@ module.exports = {
     getProductById,
     editProduct,
     deleteProduct,
+    addProduct,
     listProducts,
     listCategory,
     getCategoryById,
@@ -385,4 +475,5 @@ module.exports = {
     deleteUser,
     getUserById,
     editUser,
+  
 }

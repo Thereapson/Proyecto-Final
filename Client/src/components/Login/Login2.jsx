@@ -1,67 +1,161 @@
-import React, { Component, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from '../navbar/navbar';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import swal from 'sweetalert';
+import { addProduct, removeCart } from '../../Redux/Actions/Actions'
+import { gapi } from "gapi-script"
+import LoginGoogle from "./LoginGoogle/LoginGoogle";
+import { useNavigate } from "react-router-dom";
 
+
+
+const clientId = "650713409200-ugee25co9jjpjkp8ufhob0odo9vdn5a9.apps.googleusercontent.com"
 
 
 export const Login2 = () => {
 
+  // const [user, userState] = useState({})
   const [user, userState] = useState({})
+  const dispatch = useDispatch()
+  const [inputs, setInputs] = useState({ email: "", password: "" });
+  const [mensaje, setMensaje] = useState();
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    let email = user?.email
-    let password = user?.password
-    console.log(user?.email, user?.password)
-    fetch('https://compudevs.herokuapp.com/users/login', {
-      method: 'POST',
-      crossDomain: true,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({
+  // async function handleSubmit(e) {
+  //   e.preventDefault()
+  //   let email = user?.email
+  //   let password = user?.password
+  //   console.log(user?.email, user?.password)
+  //   await axios('/users/login', {
+  //     method: 'POST',
+  //     crossDomain: true,
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Accept: 'application/json',
+  //       'Access-Control-Allow-Origin': '*'
+  //     },
+  //     body: JSON.stringify({
+  //       email,
+  //       password
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data, 'login')
+  //       window.localStorage.setItem('token', data.data);
+  //       window.localStorage.setItem('isLogged', true);
+  //       window.localStorage.setItem('id', data.id);
+  //       window.localStorage.setItem('email', email)
+  //       if (data.status === 'ok') {
+
+  //         setTimeout(() => {
+  //           swal({
+  //             title: "Login successful",
+  //             icon: "success",
+  //             button: "Ok",
+  //           });
+  //           window.location.href = '/userDetail'
+  //         }, 2000)
+  //       } else {
+  //         alert('invalid email or password ')
+
+  //       }
+  //     })
+  // }
+
+
+  // function handleChange(e) {
+  //   userState({ ...user, [e.target.name]: e.target.value })
+  //   // console.log(user)
+  //   // console.log(user)
+  // }
+
+  const navigate = useNavigate();
+  const { email, password } = inputs;
+
+  const handleChange = (e) => {
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (email !== "" && password !== "") {
+      const Usuario = {
         email,
         password
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data, 'login')
-        window.localStorage.setItem('token', data.data);
-        window.localStorage.setItem('isLogged', true);
-        window.localStorage.setItem('id', data.id);
-        window.localStorage.setItem('email', email)
-        if (data.status === 'ok') {
-          swal({
-            title: "Login successful",
-            icon: "success",
-            button: "Ok",
-          });
+      }
+      setLoading(true)
+      await axios.post("/users/login", Usuario)
+        .then((res) => {
+          const { data } = res;
+          setMensaje(data.mensaje);
+          console.log(data.isActive)
+
+          if(data.isActive === false){
+            swal({
+              title: "Sorry. Your User is Banned",
+              icon: "error",
+              button: "Ok",
+            });
+            navigate('/login')
+          } else {
+            setTimeout(() => {
+              setMensaje("")
+              console.log(data, 'login')
+              localStorage.setItem('token', data.data);
+              localStorage.setItem('isLogged', true);
+              localStorage.setItem('id', data.id);
+              localStorage.setItem('email', email)
+              // funcion para guardar carrito en la db
+              const localCart = window.sessionStorage.getItem('localCart')
+              const id = window.localStorage.getItem('id')
+              console.log(localCart)
+              if(localCart) {
+                const newCart = {
+                  "user_id": id,
+                  "products_id": JSON.parse(localCart)
+                }
+                dispatch(addProduct(newCart))
+                dispatch(removeCart)
+                window.sessionStorage.removeItem('localCart')
+              }
+              swal({
+                title: "Login successful",
+                icon: "success",
+                button: "Ok",
+              });
+              navigate('/userDetail')
+            }, 2000)
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          setMensaje("Correo u contraseña incorreta")
           setTimeout(() => {
-            window.location.href = '/userDetail'
+            setMensaje("")
           }, 2000)
-        } else {
-          alert('invalid email or password ')
+        })
+      setInputs({ email: "", password: "" })
+      setLoading(false)
+    }
+  }
 
-        }
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: clientId,
+        scope: ""
       })
-  }
+    }
 
-  function handleChange(e) {
-    userState({ ...user, [e.target.name]: e.target.value })
-    console.log(user)
-    console.log(user)
-  }
+    gapi.load("client:auth2", start)
+  }, [])
 
   return (
     <div>
       <Navbar />
       <form >
-
 
         <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl my-40">
           <div
@@ -80,7 +174,7 @@ export const Login2 = () => {
               Bienvenido de vuelta!
             </p>
 
-            <a
+            {/* <a
               href="#"
               className="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
@@ -108,7 +202,13 @@ export const Login2 = () => {
               <span className="w-5/6 px-4 py-3 font-bold text-center">
                 Ingresa con Google
               </span>
-            </a>
+            </a> */}
+
+            <div>
+              <span className="w-5/6 px-4 py-3 font-bold text-center">
+                <LoginGoogle />
+              </span>
+            </div>
 
             <div className="flex items-center justify-between mt-4">
               <span className="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>

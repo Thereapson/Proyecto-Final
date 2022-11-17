@@ -32,12 +32,14 @@ const getReviewByProduct = async (product) => {
             product_id: product,
         }).populate({
             path: 'user_id',
-            select: 'id full_name'
+            select: '_id full_name'
         })
         const reviews = response?.map(r => {
+
             const re = {
                 id: r._id,
-                user: r.user_id,
+                user: r.user_id._id,
+                full_name: r.user_id.full_name,
                 product: r.product_id,
                 score: r.score,
                 review: r.review,
@@ -45,6 +47,7 @@ const getReviewByProduct = async (product) => {
             }
             return re
         })
+        console.log('back reweisdxj', reviews)
         if (reviews.length > 0) {
             return reviews
         } else {
@@ -87,6 +90,7 @@ const getReviewByUser = async (user) => {
 const addReview = async (reviewData) => {
     try {
         const { user, product, score, review } = reviewData
+        console.log(reviewData)
         const newReview = await reviewModel.create({
             user_id: user,
             product_id: product,
@@ -94,6 +98,7 @@ const addReview = async (reviewData) => {
             review,
             date: new Date(),
         })
+        console.log('nueva review', newReview)
         const productReviews = await reviewModel.find({
             product_id: product
         })

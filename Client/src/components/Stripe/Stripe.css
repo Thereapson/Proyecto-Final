@@ -58,7 +58,7 @@
   align-content: space-around;
   align-items: center;
   justify-content: space-around;
-  height: 400px;
+  height: 100%;
 
 }
 
@@ -117,14 +117,11 @@ h1 {
   font-weight: bold;
   color: rgb(30, 209, 45);
 }
-
-.arreglotitulo {
-
-  margin-top: 225px;
-
-}
 .margenorgan{
   
   margin-bottom: 30px;
 
+}
+.espaciado2{
+margin-top: 25px;
 }

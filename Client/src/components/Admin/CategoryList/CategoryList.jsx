@@ -1,18 +1,18 @@
 
 import * as React from "react";
-import { 
-        List,
-        Datagrid,
-        TextField,
-        ReferenceField,
-        EditButton,
-        Edit,
-        SimpleForm,
-        ReferenceInput,
-        TextInput,
-        Create,
-        useRecordContext,
-        } from 'react-admin';
+import {
+    List,
+    Datagrid,
+    TextField,
+    EditButton,
+    Edit,
+    SimpleForm,
+    TextInput,
+    Create,
+    required,
+    minLength,
+    maxLength,
+} from 'react-admin';
 
 // const PostTitle = () => {
 //     const record = useRecordContext()
@@ -26,13 +26,16 @@ import {
 // ]
 
 
+const validateName = [required(), minLength(5), maxLength(30)]
+const validateDescription = [required(), minLength(20), maxLength(200)]
+
 export const CategoryList = () => (
     <List>
         <Datagrid >
             <TextField source="id" />
             <TextField source="name" />
             <TextField source="description" />
-            <EditButton/>
+            <EditButton />
         </Datagrid>
     </List>
 );
@@ -47,7 +50,7 @@ export const CategoryEdit = () => (
     </Edit>
 );
 
-export const CategoryCreate= (props) => (
+export const CategoryCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
             <TextInput source="name" />

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './Stripe.css'
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 import { CardElement, Elements, useStripe, useElements, } from '@stripe/react-stripe-js';
-import { Link, useParams } from 'react-router-dom';
+import {useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { cleanDetails, getProductById, } from "../../Redux/Actions/Actions";
 import paloma from './palomita1.png';
@@ -27,26 +27,26 @@ const CheckoutForm = (props) => {
         var span = document.getElementsByClassName("close")[0];
 
         span.onclick = function () {
-            window.location.replace('https://compudevs-lne9v251e-thereapson.vercel.app/products');
+            window.location.replace('/products');
         }
 
         window.onclick = function (event) {
-            if (event.target == modal) {
-                window.location.replace('https://compudevs-lne9v251e-thereapson.vercel.app/products');
+            if (event.target === modal) {
+                window.location.replace('/products');
             }
         }
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card: elements.getElement(CardElement)
         })
-
         if (!error) {
             const { data } = await axios.post('products/payment', {
                 id: paymentMethod.id,
                 amount: props.amount,
                 detail: props.detail,
-                email: useremail || "alternativemail@hotmail.com"
-
+                email: useremail || "alternativemail@hotmail.com",
+                user_id: props.user,
+                product_id: props.product
             })
             modal.style.display = "block"
             console.log(data)
@@ -56,8 +56,9 @@ const CheckoutForm = (props) => {
         }
     }
 
-    return <form onSubmit={handleSubmit} >
+    return <form className='bg-lightMode espaciado2' onSubmit={handleSubmit} >
         <CardElement />
+
         <button className='margenorgan px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
             Pay
         </button>
@@ -65,7 +66,6 @@ const CheckoutForm = (props) => {
 }
 function Stripe() {
 
-    const [bandera, setBandera] = useState(false)
     const { id } = useParams();
     const details = useSelector((state) => state.DetailProduct);
     const dispatch = useDispatch();
