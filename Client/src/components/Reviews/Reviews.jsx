@@ -2,7 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addReview } from "../../utils/reviewFrontController";
-import { getReview } from "../../Redux/Actions/Actions";
+import { cleanReview, getReview } from "../../Redux/Actions/Actions";
+import swal from 'sweetalert';
+
 // import FormReview from "./FormReview";
 // import Modal from "react-modal";
 // Modal.setAppElement("#root");
@@ -24,6 +26,7 @@ const Reviews = ({ id }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(cleanReview())
     dispatch(getReview(id));
   }, [dispatch, id]);
 
@@ -47,7 +50,11 @@ const Reviews = ({ id }) => {
     } else {
       console.log("No se Pudo Enviar El Formulario");
     }
-    alert('se envio tu formulario')
+    swal({
+      title: "Se envio tu comentario con exito",
+      icon: "success",
+      button: "Ok",
+    });
   };
   // console.log(reviews.map((e) => e.full_name === userState.full_name).includes(true));
 

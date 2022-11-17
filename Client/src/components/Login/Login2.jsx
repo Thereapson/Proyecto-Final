@@ -91,7 +91,7 @@ export const Login2 = () => {
           const { data } = res;
           setMensaje(data.mensaje);
           console.log(data.isActive)
-
+        
           if(data.isActive === false){
             swal({
               title: "Sorry. Your User is Banned",

@@ -324,6 +324,11 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         allReviews: action.payload,
       };
+      case 'CLEAN_REVIEW':
+        return {
+          ...state,
+          review: action.payload,
+        }
     default:
       return { ...state };
   }
