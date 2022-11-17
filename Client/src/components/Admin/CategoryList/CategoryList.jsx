@@ -1,21 +1,18 @@
 
 import * as React from "react";
-import { 
-        List,
-        Datagrid,
-        TextField,
-        ReferenceField,
-        EditButton,
-        Edit,
-        SimpleForm,
-        ReferenceInput,
-        TextInput,
-        Create,
-        useRecordContext,
-        required,
-        minLength,
-        maxLength,
-        } from 'react-admin';
+import {
+    List,
+    Datagrid,
+    TextField,
+    EditButton,
+    Edit,
+    SimpleForm,
+    TextInput,
+    Create,
+    required,
+    minLength,
+    maxLength,
+} from 'react-admin';
 
 // const PostTitle = () => {
 //     const record = useRecordContext()
@@ -38,7 +35,7 @@ export const CategoryList = () => (
             <TextField source="id" />
             <TextField source="name" />
             <TextField source="description" />
-            <EditButton/>
+            <EditButton />
         </Datagrid>
     </List>
 );
@@ -53,7 +50,7 @@ export const CategoryEdit = () => (
     </Edit>
 );
 
-export const CategoryCreate= (props) => (
+export const CategoryCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
             <TextInput source="name" />
