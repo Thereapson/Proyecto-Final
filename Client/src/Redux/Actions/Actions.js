@@ -141,7 +141,8 @@ export const removeQuantity = (data) => {
     return async (dispatch) => {
         if(data.user_id) {
             console.log(data)
-            await axios.post("/shoppingCarts/addProductToShoppingCart", data)
+            ///////////cambiar
+            await axios.post("/shopingCarts/deleteProductFromShoppingCart", data)
             .then((response) => {
                     console.log(response.data)
                     dispatch({ type: "REMOVE_QUANTITY", payload: response.data })

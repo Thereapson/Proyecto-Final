@@ -7,8 +7,6 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const JWT_SECRET = "asjkdnajksfndjaksndasknd12123()239883smlkdsmad?)==(23";
 const nodemailer = require("nodemailer");
-const config = require("config");
-// const register = require('../MailTemplates/Register')
 //NOTIFICACIONES POR MAIL
 
 var transporter = nodemailer.createTransport({
