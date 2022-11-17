@@ -128,6 +128,11 @@ const Register = () => {
         .catch((error) => {
           console.error(error)
           setMensaje("Hubo un error")
+          swal({
+            title: "It was an  error",
+            icon: "error",
+            button: "Ok",
+          });
           setTimeout(() => {
             setMensaje("")
           }, 2000)

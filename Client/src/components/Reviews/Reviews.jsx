@@ -52,9 +52,13 @@ const Reviews = ({ id }) => {
     }
     swal({
       title: "Se envio tu comentario con exito",
-      icon: "success",
-      button: "Ok",
+      icon: "loading",
     });
+    setTimeout(() => {
+      
+      window.location.reload()
+    },2000)
+
   };
   // console.log(reviews.map((e) => e.full_name === userState.full_name).includes(true));
 

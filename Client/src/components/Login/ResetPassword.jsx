@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import swal from "sweetalert";
+
 // import { toast } from "react-toastify";
 const BACK_URL = "https://compudevs.herokuapp.com"
 
@@ -41,10 +43,14 @@ function Resetpassword() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data, "reset password");
-        alert(data.status);
+        // alert(data.status);
       });
     // setMessage(true)
-    alert("tu contraseña fue cambiada con exito");
+    swal({
+      title: "your password was successfully changed ",
+      icon: "success",
+      button: "Ok",
+    });
     history("/");
   };
 

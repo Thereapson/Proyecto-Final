@@ -38,7 +38,7 @@ function ForgotPassword() {
         alert(data.status)
        })
     swal({
-      title: "Te enviamos las instrucciones a tu correo electronico",
+      title: "We send you the instructions to your email",
       icon: "success",
       button: "Ok",
     });

@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Navbar from '../navbar/navbar';
-import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux'
-import swal from 'sweetalert';
-import { addProduct, removeCart } from '../../Redux/Actions/Actions'
-import { gapi } from "gapi-script"
+import Navbar from "../navbar/navbar";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import swal from "sweetalert";
+import { addProduct, removeCart } from "../../Redux/Actions/Actions";
+import { gapi } from "gapi-script";
 import LoginGoogle from "./LoginGoogle/LoginGoogle";
 import { useNavigate } from "react-router-dom";
 
-
-
-const clientId = "650713409200-ugee25co9jjpjkp8ufhob0odo9vdn5a9.apps.googleusercontent.com"
-
+const clientId =
+  "650713409200-ugee25co9jjpjkp8ufhob0odo9vdn5a9.apps.googleusercontent.com";
 
 export const Login2 = () => {
-
   // const [user, userState] = useState({})
-  const [user, userState] = useState({})
-  const dispatch = useDispatch()
+  const [user, userState] = useState({});
+  const dispatch = useDispatch();
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const [mensaje, setMensaje] = useState();
   const [loading, setLoading] = useState(false);
@@ -64,7 +61,6 @@ export const Login2 = () => {
   //     })
   // }
 
-
   // function handleChange(e) {
   //   userState({ ...user, [e.target.name]: e.target.value })
   //   // console.log(user)
@@ -83,85 +79,88 @@ export const Login2 = () => {
     if (email !== "" && password !== "") {
       const Usuario = {
         email,
-        password
-      }
-      setLoading(true)
-      await axios.post("/users/login", Usuario)
+        password,
+      };
+      setLoading(true);
+      await axios
+        .post("/users/login", Usuario)
         .then((res) => {
           const { data } = res;
           setMensaje(data.mensaje);
-          console.log(data.isActive)
-        
-          if(data.isActive === false){
+          console.log(data.isActive);
+
+          if (data.isActive === false) {
             swal({
               title: "Sorry. Your User is Banned",
               icon: "error",
               button: "Ok",
             });
-            navigate('/login')
+            navigate("/login");
           } else {
+            setMensaje("");
+            console.log(data, "login");
+            localStorage.setItem("token", data.data);
+            localStorage.setItem("isLogged", true);
+            localStorage.setItem("id", data.id);
+            localStorage.setItem("email", email);
+            // funcion para guardar carrito en la db
+            const localCart = window.sessionStorage.getItem("localCart");
+            const id = window.localStorage.getItem("id");
+            console.log(localCart);
+            if (localCart) {
+              const newCart = {
+                user_id: id,
+                products_id: JSON.parse(localCart),
+              };
+              dispatch(addProduct(newCart));
+              dispatch(removeCart);
+              window.sessionStorage.removeItem("localCart");
+            }
             setTimeout(() => {
-              setMensaje("")
-              console.log(data, 'login')
-              localStorage.setItem('token', data.data);
-              localStorage.setItem('isLogged', true);
-              localStorage.setItem('id', data.id);
-              localStorage.setItem('email', email)
-              // funcion para guardar carrito en la db
-              const localCart = window.sessionStorage.getItem('localCart')
-              const id = window.localStorage.getItem('id')
-              console.log(localCart)
-              if(localCart) {
-                const newCart = {
-                  "user_id": id,
-                  "products_id": JSON.parse(localCart)
-                }
-                dispatch(addProduct(newCart))
-                dispatch(removeCart)
-                window.sessionStorage.removeItem('localCart')
-              }
               swal({
                 title: "Login successful",
                 icon: "success",
                 button: "Ok",
               });
-              navigate('/userDetail')
-            }, 2000)
+              navigate("/userDetail");
+            }, 2000);
           }
         })
         .catch((error) => {
           console.error(error);
-          setMensaje("Correo u contraseña incorreta")
-          setTimeout(() => {
-            setMensaje("")
-          }, 2000)
-        })
-      setInputs({ email: "", password: "" })
-      setLoading(false)
+          setMensaje("Correo u contraseña incorreta");
+            setMensaje("");
+            swal({
+              title: "email or password invalid",
+              icon: "error",
+              button: "Ok",
+            });
+        });
+      setInputs({ email: "", password: "" });
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     function start() {
       gapi.client.init({
         clientId: clientId,
-        scope: ""
-      })
+        scope: "",
+      });
     }
 
-    gapi.load("client:auth2", start)
-  }, [])
+    gapi.load("client:auth2", start);
+  }, []);
 
   return (
     <div>
       <Navbar />
-      <form >
-
+      <form>
         <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl my-40">
           <div
             className="hidden bg-cover lg:block lg:w-1/2"
             style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1606660265514-358ebbadc80d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1575&q=80')`
+              backgroundImage: `url('https://images.unsplash.com/photo-1606660265514-358ebbadc80d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1575&q=80')`,
             }}
           ></div>
 
@@ -262,12 +261,15 @@ export const Login2 = () => {
                 className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
                 type="password"
                 onChange={(e) => handleChange(e)}
-
               />
             </div>
 
             <div className="mt-8">
-              <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600" type="submit" onClick={(e) => handleSubmit(e)}>
+              <button
+                className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-300 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+                type="submit"
+                onClick={(e) => handleSubmit(e)}
+              >
                 Inicia sesión
               </button>
             </div>
@@ -289,4 +291,4 @@ export const Login2 = () => {
       </form>
     </div>
   );
-}
+};
