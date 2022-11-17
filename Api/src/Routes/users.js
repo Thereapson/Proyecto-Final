@@ -6,7 +6,7 @@ const router = Router();
 const {
     getAllUsers,
     getUserById,
-    createUser,
+    // createUser,
     editUser,
     blockUser,
     addFavorites,
@@ -27,7 +27,7 @@ router.get("/", getAllUsers);
 
 router.get("/detail/:id", getUserById);
 
-router.post("/create", createUser);
+// router.post("/create", createUser);
 
 router.post("/register", registerUser);
 

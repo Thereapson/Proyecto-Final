@@ -84,40 +84,40 @@ const getUserByEmail = async (req, res, next) => {
   }
 };
 
-const createUser = async (req, res, next) => {
-  try {
-    const userData = req.body;
-    const { full_name, email, password, isAdmin } = userData;
-    const foundUser = await userModel.findOne({ email: email });
-    if (foundUser) {
-      res.status(400).send("The User email already exists");
-    } else if (full_name && email && password && isAdmin) {
-      const newUser = await userModel.create({
-        full_name,
-        email,
-        password,
-        favorites: [],
-        address: "",
-        phone: "",
-        status: true,
-        isAdmin: isAdmin || false,
-      });
+// const createUser = async (req, res, next) => {
+//   try {
+//     const userData = req.body;
+//     const { full_name, email, password, isAdmin } = userData;
+//     const foundUser = await userModel.findOne({ email: email });
+//     if (foundUser) {
+//       res.status(400).send("The User email already exists");
+//     } else if (full_name && email && password && isAdmin) {
+//       const newUser = await userModel.create({
+//         full_name,
+//         email,
+//         password,
+//         favorites: [],
+//         address: "",
+//         phone: "",
+//         status: true,
+//         isAdmin: isAdmin || false,
+//       });
 
-      if (!newUser) {
-        res.status(400).send("The new User can't be created");
-      } else {
-        res.status(200).send({ msg: "New User created", newUser });
-      }
-    } else {
-      res
-        .status(400)
-        .send("The new User can't be created. Missing required Data");
-    }
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-};
+//       if (!newUser) {
+//         res.status(400).send("The new User can't be created");
+//       } else {
+//         res.status(200).send({ msg: "New User created", newUser });
+//       }
+//     } else {
+//       res
+//         .status(400)
+//         .send("The new User can't be created. Missing required Data");
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// };
 ////////////////////autenticacion
 
 const createToken = (id) => {
@@ -128,51 +128,50 @@ const createToken = (id) => {
 const registerUser = async (req, res, next) => {
   const { full_name, email, password, confirmPassword } = req.body;
 
-  // const salt = await bcrypt.genSalt(10);
-  // const encryptedPassword = await bcrypt.hash(password, salt);
+  const salt = await bcrypt.genSalt(10);
+  const encryptedPassword = await bcrypt.hash(password, salt);
   try {
-    // const oldUser = await userModel.findOne({ email })
-    // if (oldUser) {
-    //   return res.json({ error: 'User Exists' })
-    // }
-    // const newUser = await userModel.create({
-    //   full_name,
-    //   email,
-    //   password: encryptedPassword,
-    //   confirmPassword
-    // });
-
-    if (
-      full_name === "" ||
-      email === "" ||
-      password === "" ||
-      (password === confirmPassword && password.length >= 4)
-    ) {
-      const existinUser = await userModel.findOne({ email });
-
-      if (existinUser)
-        return res.status(400).json({ message: "User already exist!" });
-
-      const hashedPassword = await bcrypt.hash(password, 12);
-
-      const result = await userModel.create({
-        full_name,
-        email,
-        password: hashedPassword,
-      });
-
-      const token = jwt.sign(
-        {
-          email: result,
-          email,
-          id: result._id,
-        },
-        config.get("JWT_SECRET"),
-        { expiresIn: "1d" }
-      );
-
-      res.status(200).json({ result, token });
+    const oldUser = await userModel.findOne({ email })
+    if (oldUser) {
+      return res.json({ error: 'User Exists' })
     }
+    const newUser = await userModel.create({
+      full_name,
+      email,
+      password: encryptedPassword,
+    });
+
+    // if (
+    //   full_name === "" ||
+    //   email === "" ||
+    //   password === "" ||
+    //   (password === confirmPassword && password.length >= 4)
+    // ) {
+    //   const existinUser = await userModel.findOne({ email });
+
+    //   if (existinUser)
+    //     return res.status(400).json({ message: "User already exist!" });
+
+    //   const hashedPassword = await bcrypt.hash(password, 12);
+
+    //   const result = await userModel.create({
+    //     full_name,
+    //     email,
+    //     password: hashedPassword,
+    //   });
+
+    //   const token = jwt.sign(
+    //     {
+    //       email: result,
+    //       email,
+    //       id: result._id,
+    //     },
+    //     config.get("JWT_SECRET"),
+    //     { expiresIn: "1d" }
+    //   );
+
+    //   res.status(200).json({ result, token });
+    // // }
 
     var register = {
       from: '"Bienvenido a CompuDevs" <CompuDevs2022@gmail.com>',
@@ -1414,7 +1413,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   getUserByEmail,
-  createUser,
+  // createUser,
   editUser,
   blockUser,
   addFavorites,
