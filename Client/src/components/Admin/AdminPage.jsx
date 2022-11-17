@@ -1,5 +1,6 @@
 // in src/App.js
 import * as React from "react";
+import { Admin, Resource } from 'react-admin';
 import { ProductList, ProductEdit, ProductCreate } from "./ProductList/ProductList"
 import { CategoryList, CategoryEdit, CategoryCreate } from "./CategoryList/CategoryList";
 import { UsersList, UsersEdit } from "./UsersList/UsersList";
