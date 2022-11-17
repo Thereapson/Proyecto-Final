@@ -21,6 +21,7 @@ export const GET_REVIEW = 'GET_REVIEW';
 export const FETCH_ALL_REVIEWS = 'FETCH_ALL_REVIEWS'
 export const DELETE_REVIEWS = 'DELETE_REVIEWS'
 
+
 export const getProducts = () => {
     return async (dispatch) => {
         const response = await axios.get("/products");
@@ -380,4 +381,11 @@ export function deleteAllReviews() {
     type: DELETE_REVIEWS,
     payload: [],
   };
+}
+
+export function cleanReview(){
+  return {
+    type: "CLEAN_REVIEW",
+    payload: []
+  }
 }

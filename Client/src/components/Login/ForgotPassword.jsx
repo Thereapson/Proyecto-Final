@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios'
+import swal from 'sweetalert';
+
 
 const BACK_URL  = 'https://compudevs.herokuapp.com'
 
@@ -35,8 +37,11 @@ function ForgotPassword() {
         console.log(data, "userRegister")
         alert(data.status)
        })
-    //    toast('Te enviamos las instrucciones a tu correo electronico')
-      alert('hola')
+    swal({
+      title: "We send you the instructions to your email",
+      icon: "success",
+      button: "Ok",
+    });
        history('/')
       }
   return (

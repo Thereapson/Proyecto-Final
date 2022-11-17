@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Card2 from "../Card/Card2";
 import Navbar from "../navbar/navbar";
+import Landing from "./Landing1";
 
 export function LandingPage() {
   const productsSlider = useSelector((state) => state.productsRender);
@@ -24,7 +25,7 @@ export function LandingPage() {
     <div className={style.app}>
       <div>
         <Navbar />
-        <h1>Bienvenido a CompuDevs</h1>
+       <Landing/>
         <div className={style.container}>
           <div className={style.swiperContainer}>
             <Swiper

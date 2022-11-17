@@ -17,7 +17,6 @@ function Login() {
     const dispatch = useDispatch();
     const userId = useSelector(state => state.userData)
 
-    console.log(userId.id)
 
 
     const navigate = useNavigate()
