@@ -20,10 +20,10 @@ const Cart = ({ setShowCart, showCart }) => {
     }, [dispatch])
 
     useEffect(() => {
-        if (cart.products_id) {
-            setProducts(cart.products_id)
+        if (cart?.products_id) {
+            setProducts(cart?.products_id)
         }
-        window.sessionStorage.setItem('localCart', JSON.stringify(cart.products_id))
+        window.sessionStorage.setItem('localCart', JSON.stringify(cart?.products_id))
     }, [cart])
 
     const URLCREATOR = function (string, cantidad) {
