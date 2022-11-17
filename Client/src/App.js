@@ -51,7 +51,8 @@ function App() {
         </Routes>
         <Footer1 />
       </BrowserRouter>
-      );
+    </div>
+  );
 }
 
-      export default App;
+export default App;
