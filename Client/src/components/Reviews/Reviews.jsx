@@ -1,9 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { BACK_URL } from "../../../constantes";
-// import { addReview, updateReview } from "../../../Controllers/review";
-// import { getReview } from "../../../redux/action";
+import { addReview } from "../../utils/reviewFrontController";
+import { getReview } from "../../Redux/Actions/Actions";
 // import { Icon } from '@iconify/react';
 
 const Reviews = ({ id }) => {
@@ -14,52 +13,55 @@ const Reviews = ({ id }) => {
   const [eDescription, setEdescription] = useState("");
   const [eStars, setEstars] = useState(0);
   const [active, setActive] = useState(false);
-
+  const user_id = window.localStorage.getItem("id");
   const reviews = useSelector((state) => state.review);
   const userState = useSelector((state) => state.userData);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(getReview(id));
+    dispatch(getReview(id));
   }, [dispatch, id]);
 
   const modifyStars = (star, edit) => {
     if (edit) return setEstars(star);
     setStars(star);
   };
-
-//   const handleOnSubmit = (e) => {
-//     e.preventDefault();
-//     if (reviews.map((e) => userState.full_name === e.full_name).includes(true)) {
-//       setNoUser(true);
-//       setStars(0);
-//       setDescription("");
-//     } else if (stars > 0 && description.length > 3) {
-//     //   addReview(userState.userName, id, description, stars);
-//       setStars(0);
-//       setDescription("");
-//     } else {
-//       console.log("No se Pudo Enviar El Formulario");
-//     }
-//   };
+  console.log("userstate", description);
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    console.log("revieew front", e.target.value);
+    if (
+      reviews.map((e) => userState.full_name === e.full_name).includes(true)
+    ) {
+      setNoUser(true);
+      setStars(0);
+      setDescription("");
+    } else if (stars > 0 && description.length > 3) {
+      addReview(userState.full_name, id, description, stars);
+      setStars(0);
+      setDescription("");
+    } else {
+      console.log("No se Pudo Enviar El Formulario");
+    }
+  };
   // console.log(reviews.map((e) => e.full_name === userState.full_name).includes(true));
 
-//   const OnSubmit = (e) => {
-//     e.preventDefault();
-//     if (eStars > 0 && eDescription.length > 3) {
-//     //   updateReview(userState.full_name, id, eDescription, eStars);
-//       setEstars(0);
-//       setEdescription("");
-//       setActive(false);
-//     } else {
-//       console.log("No se Pudo Enviar El Formulario");
-//     }
-//   };
-//   const onEdit = (e) => {
-//     e.preventDefault();
-//     setNoUser(false);
-//     setActive(true);
-//   };
+  //   const OnSubmit = (e) => {
+  //     e.preventDefault();
+  //     if (eStars > 0 && eDescription.length > 3) {
+  //     //   updateReview(userState.full_name, id, eDescription, eStars);
+  //       setEstars(0);
+  //       setEdescription("");
+  //       setActive(false);
+  //     } else {
+  //       console.log("No se Pudo Enviar El Formulario");
+  //     }
+  //   };
+  //   const onEdit = (e) => {
+  //     e.preventDefault();
+  //     setNoUser(false);
+  //     setActive(true);
+  //   };
 
   const stars5 = [1, 2, 3, 4, 5];
 
@@ -117,8 +119,9 @@ const Reviews = ({ id }) => {
                             </li>
                           </ul>
                         </div>
-                      ) : userState.logged  ? (
-                        <button class="inline-flex items-center px-2 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md"
+                      ) : user_id ? (
+                        <button
+                          class="inline-flex items-center px-2 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md"
                           onClick={async () => {
                             try {
                               await axios.put(`backurl/review/flagReview`, {
@@ -131,7 +134,7 @@ const Reviews = ({ id }) => {
                           }}
                         >
                           {/* <Icon icon="ic:round-report" class="mr-1" color="#f3f4f7" width="20" height="20"/> */}
-                          Denunciar 
+                          Denunciar
                         </button>
                       ) : null}
                     </div>
@@ -181,8 +184,8 @@ const Reviews = ({ id }) => {
         {/* Editcion de el comentario del producto */}
 
         {active === true ? (
-            <form>
-          {/* <form onSubmit={OnSubmit}> */}
+          <form>
+            {/* <form onSubmit={OnSubmit}> */}
             <label className="flex flex-col-reverse relative focus group mb-4">
               <input
                 onChange={(e) => setEdescription(e.target.value)}
@@ -265,9 +268,8 @@ const Reviews = ({ id }) => {
 
         {/* creacion de el comentario del producto */}
 
-        {/* {userState.logged && !userState.mute && userState.verified ? ( */}
-          <form >
-            {/* <form onSubmit={handleOnSubmit}></form> */}
+        {user_id ? (
+          <form onSubmit={(e) => handleOnSubmit(e)}>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -325,9 +327,8 @@ const Reviews = ({ id }) => {
               </button>
             </div>
           </form>
-        {/* ) : null} */}
+        ) : null}
       </div>
-      
     </div>
   );
 };
