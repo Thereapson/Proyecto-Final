@@ -7,7 +7,7 @@ import FormData from 'form-data'
 const apiUrl = '/admin';
 const httpClient = fetchUtils.fetchJson;
 console.log("httpClient",httpClient)
-const baseUrl = //"https://compudevs.herokuapp.com" || 
+const baseUrl = "https://compudevs.herokuapp.com" || 
 "http://localhost:3001";
 
 
