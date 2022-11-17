@@ -5,20 +5,15 @@ import {
   GET_PRODUCT_BY_ID,
   GET_PRODUCTS_BY_SEARCH,
   GET_CATEGORIES,
-  ADD_PRODUCT,
   CLEAN_DETAILS,
   GET_PRODUCTS_BY_MIN_MAX,
   GET_USER,
-  GET_CART,
-  REMOVE_FROM_CART,
-  CLEAN_PRODUCTS,
-  CLEAN_PRODUCTS_RENDER,
   GET_ALL_PRODUCTS_BY_ID,
   IS_ADMIN,
   SHOW_PRODUCTS,
   GET_REVIEW,
   DELETE_REVIEWS,
-  FETCH_ALL_REVIEWS
+  FETCH_ALL_REVIEWS,
 } from "../Actions/Actions";
 
 const initialState = {
@@ -188,17 +183,28 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case "GET_QUANTITY":
+      const data = action.payload;
+      const productsQuant = state.cart.products_id;
+      let quantity = 0;
+      !data
+        ? (quantity = productsQuant?.length || 0)
+        : (quantity = data.quantity);
       return {
         ...state,
-        quantityFromCart: action.payload.quantity,
+        quantityFromCart: quantity,
       };
-
     case "GET_CART":
-      console.log("GET_CART: ", action.payload);
-      return {
-        ...state,
-        cart: action.payload,
-      };
+      let LocalCart0 = action.payload;
+      if (LocalCart0) {
+        return {
+          ...state,
+          cart: action.payload,
+        };
+      } else {
+        return {
+          ...state,
+        };
+      }
 
     case "ADDPRODUCT_LOCALCART":
       let localCart = state.cart;
@@ -209,12 +215,11 @@ const rootReducer = (state = initialState, action) => {
             let found = productsLocal.find(
               (p) => p.product_id._id === product.product_id._id
             );
-            console.log("coincidencias: ", found);
             if (!found) {
               localCart.products_id.push(product);
             }
           })
-        : (localCart = action.payload);
+        : localCart = action.payload;
       return {
         ...state,
         cart: localCart,
