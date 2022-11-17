@@ -87,6 +87,7 @@ const getReviewByUser = async (user) => {
 const addReview = async (reviewData) => {
     try {
         const { user, product, score, review } = reviewData
+        console.log(reviewData)
         const newReview = await reviewModel.create({
             user_id: user,
             product_id: product,

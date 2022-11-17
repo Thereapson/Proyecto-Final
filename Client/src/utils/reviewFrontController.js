@@ -3,15 +3,16 @@ import { getReview } from "../Redux/Actions/Actions";
 import store from "../Redux/Store";
 
 
-export const addReview = async (full_name, id, review, score) => {
+export const addReview = async (product, review, score, user) => {
+  console.log('controllerrr', product, review, score, user)
     try {
       await axios.post(`/reviews/add`, {
-        user_id: full_name,
-        product_id: id,
+        product: product,
         review: review,
         score: score,
+        user: user
       });
-      store.dispatch(getReview(id));
+      store.dispatch(getReview(product));
     } catch (err) {
       console.log(err);
     }

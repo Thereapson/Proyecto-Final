@@ -9,9 +9,12 @@ import './detail.css';
 import StripeCol from '../StipeCol/StripeCol.jsx';
 import swal from 'sweetalert';
 import Reviews from '../Reviews/Reviews.jsx';
+import FormReview from '../Reviews/FormReview.jsx';
 
 
 function DetailCard() {
+  const user_id = window.localStorage.getItem("id");
+
   function getRandomArbitrary(min, max) {
     let numero = Math.random() * (max - min) + min;
     return Math.round(numero)
@@ -92,7 +95,7 @@ function DetailCard() {
                 </p>
 
               </div>
-                  <Reviews id = {id}/>
+                  <Reviews id = {id} user_id = {user_id}/>
 
            </div>
 
