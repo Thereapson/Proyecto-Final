@@ -3,6 +3,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios'
+
+const BACK_URL  = 'http://localhost:3001'
+
+
 function ForgotPassword() {
     const [email, setEmail] = useState("");
     const history = useNavigate();
@@ -13,7 +17,7 @@ function ForgotPassword() {
         //   email:email
         // }
         console.log(email)
-       fetch('/users/forgotPassword', {
+       fetch(`${BACK_URL}/users/forgotPassword`, {
         method: "POST",
         crossDomain: true,
         headers: {
@@ -32,7 +36,7 @@ function ForgotPassword() {
         alert(data.status)
        })
     //    toast('Te enviamos las instrucciones a tu correo electronico')
-      // // alert('hola')
+      alert('hola')
        history('/')
       }
   return (
