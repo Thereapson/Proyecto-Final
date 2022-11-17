@@ -195,7 +195,7 @@ const Navbar = ({ setCurrentPage }) => {
                     </div>
                 </div>
                 {/* favorites */}
-                {user_id?
+                {user_id ?
                     <div className="flex items-center hover:cursor-pointer">
                         <div className="relative">
                             {/* favorites */}
@@ -221,7 +221,7 @@ const Navbar = ({ setCurrentPage }) => {
                             <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"></path>
                         </svg>
                         {
-                            !isLogin
+                            isLogin === null || !isLogin
                                 ? <button onClick={handleLogin}>Log In</button>
                                 : <button onClick={handleLogOut}>Log Out</button>
 
