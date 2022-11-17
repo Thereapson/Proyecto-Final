@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios'
 
-const BACK_URL  = 'https://compudevs.herokuapp.com/'
+const BACK_URL  = 'https://compudevs.herokuapp.com'
 
 
 function ForgotPassword() {
@@ -17,7 +17,7 @@ function ForgotPassword() {
         //   email:email
         // }
         console.log(email)
-       fetch(`${BACK_URL}users/forgotPassword`, {
+       fetch(`${BACK_URL}/users/forgotPassword`, {
         method: "POST",
         crossDomain: true,
         headers: {
