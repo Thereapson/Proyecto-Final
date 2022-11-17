@@ -97,7 +97,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (full_name !== "", email !== "", password !== "", confirmPassword === password) {
+    if (full_name !== "" && email !== "" && password !== "" && confirmPassword === password) {
       const Usuario = {
         full_name,
         email,
@@ -138,6 +138,12 @@ const Register = () => {
           }, 2000)
         })
       setLoading(false)
+    }else{
+      swal({
+        title: "It was an  error",
+        icon: "error",
+        button: "Ok",
+      });
     }
 
 
