@@ -1,95 +1,391 @@
 import axios from "axios";
 
 export const GET_PRODUCTS = "GET_PRODUCTS";
+export const GET_PRODUCTS_BY_CATEGORY = "GET_PRODUCTS_BY_CATEGORY";
 export const GET_PRODUCTS_BY_SEARCH = "GET_PRODUCTS_BY_SEARCH";
+export const SHORT_BY_PRICE = "SHORT_BY_PRICE";
+export const GET_PRODUCT_BY_ID = "GER_PRODUCT_BY_ID";
+export const GET_CATEGORIES = "GET_CATEGORIES";
+export const CLEAN_DETAILS = "CLEAN _DETAILS";
+export const GET_PRODUCTS_BY_MIN_MAX = "GET_PRODUCTS_BY_MIN_MAX";
+export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
+export const ADD_PRODUCT = "ADD_PRODUCT";
+export const GET_CART = "GET_CART";
+export const GET_ALL_PRODUCTS_BY_ID = "GET_ALL_PRODUCTS_BY_ID";
+export const IS_ADMIN = "IS_ADMIN";
+export const GET_USER = "GET_USER";
+export const ADD_FAVORITE = "ADD_FAVORITE";
+export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
+export const SHOW_PRODUCTS = "SHOW_PRODUCTS";
+export const GET_REVIEW = 'GET_REVIEW';
+export const FETCH_ALL_REVIEWS = 'FETCH_ALL_REVIEWS'
+export const DELETE_REVIEWS = 'DELETE_REVIEWS'
 
-const apiFake = [
-    {
-        id: 1,
-        name: "AMD Ryzen 5 3600",
-        price: 200,
-        image: "https://www.amd.com/system/files/2018-11/10788-ryzen-chip-left-angle-960x548.png",
-        category: "cpu",
-        brand: "amd",
-    },
-    {
-        id: 2,
-        name: "AMD Ryzen 5 5600X",
-        price: 300,
-        image: "https://www.amd.com/system/files/2018-11/10788-ryzen-chip-left-angle-960x548.png",
-        category: "cpu",
-        brand: "amd",
-    },
-    {
-        id: 3,
-        name: "AMD Ryzen 7 5800X",
-        price: 400,
-        image: "https://www.amd.com/system/files/2018-11/10788-ryzen-chip-left-angle-960x548.png",
-        category: "cpu",
-        brand: "amd",
-    },
-    {
-        id: 4,
-        name: "AMD Ryzen 9 5900X",
-        price: 500,
-        image: "https://www.amd.com/system/files/2018-11/10788-ryzen-chip-left-angle-960x548.png",
-        category: "cpu",
-        brand: "amd",
-    },
-    {
-        id: 5,
-        name: "Intel Core i3 10100",
-        price: 200,
-        image: "https://www.enfasys.net/wp-content/uploads/2021/10/Intel-Overcluster.jpg",
-        category: "cpu",
-        brand: "intel",
-    },
-    {
-        id: 6,
-        name: "Intel Core i5 10400",
-        price: 300,
-        image: "https://www.enfasys.net/wp-content/uploads/2021/10/Intel-Overcluster.jpg",
-        category: "cpu",
-        brand: "intel",
-    },
-    {
-        id: 7,
-        name: "Intel Core i7 10700",
-        price: 400,
-        image: "https://www.enfasys.net/wp-content/uploads/2021/10/Intel-Overcluster.jpg",
-        category: "cpu",
-        brand: "intel",
-    },
-    {
-        id: 8,
-        name: "Intel Core i9 10900",
-        price: 500,
-        image: "https://www.enfasys.net/wp-content/uploads/2021/10/Intel-Overcluster.jpg",
-        category: "cpu",
-        brand: "intel",
-    },
-    {
-        id: 9,
-        name: "AMD Radeon RX 5500 XT",
-        price: 200,
-        image: "https://http2.mlstatic.com/D_NQ_NP_614255-MLA42737554766_072020-O.webp",
-        category: "gpu",
-    }
-];
 
 export const getProducts = () => {
     return async (dispatch) => {
-        const response = apiFake;
+        const response = await axios.get("/products");
+        const products = response.data?.filter(p => p.status !== false)
         return dispatch({
             type: GET_PRODUCTS,
-            payload: response,
+            payload: products,
         });
     };
 };
 
+export const getProductsByCategory = (category) => {
+  return {
+    type: GET_PRODUCTS_BY_CATEGORY,
+    payload: category,
+  };
+};
+
 export const getProductsBySearch = (search) => {
-    return {
-        type: GET_PRODUCTS_BY_SEARCH,
-        payload: search,
+  return {
+    type: GET_PRODUCTS_BY_SEARCH,
+    payload: search,
+  };
+};
+
+export const shortOrderFilter = (order) => {
+  return {
+    type: SHORT_BY_PRICE,
+    payload: order,
+  };
+};
+
+export const getProductById = (id) => {
+  return async (dispatch) => {
+    await axios.get(`/products/detail/${id}`).then((response) => {
+      let respuesta = response.data;
+      dispatch({ type: GET_PRODUCT_BY_ID, payload: respuesta });
+    });
+  };
+};
+
+export const getCategories = () => {
+    return async (dispatch) => {
+        const response = await axios.get("/categorys");
+        return dispatch({
+            type: GET_CATEGORIES,
+            payload: response.data,
+        });
     };
 };
+
+export const cleanDetails = () => {
+  return {
+    type: CLEAN_DETAILS,
+  };
+};
+
+export const getProductsByMinMax = (min, max) => {
+  return {
+    type: GET_PRODUCTS_BY_MIN_MAX,
+    payload: { min, max },
+  };
+};
+
+// add product to cart, if the product is already in the cart, increase the quantity by +1
+export const addProduct = (data) => {
+    return async (dispatch) => {
+        if(data.user_id) {
+          console.log("Estoy agregando productos: ", data)
+          await axios.post("/shoppingCarts/addProductToShoppingCart", data)
+              .then((response) => {
+                  console.log(response.data)
+                  dispatch({ type: "ADD_PRODUCT", payload: response.data })
+              })
+          let id = window.localStorage.getItem("id")
+          await axios.get(`/shoppingCarts/quantity/${id}`)
+              .then((response) => {
+                  console.log("response.data: ", response.data)
+                  dispatch({ type: "GET_QUANTITY", payload: response.data })
+              })
+        }else {
+          const product_id = data.products_id[0].product_id
+          const product = await axios.get(`/products//detail/${product_id}`)
+          const localCart = {
+              user_id: "LocalCart",
+              products_id: [{
+                  product_id: product.data,
+                  quantity: data.products_id[0].quantity
+              }]
+          }
+          dispatch({
+              type: "ADDPRODUCT_LOCALCART",
+              payload: localCart
+          })
+      }
+    }
+  };
+
+// get cart by user
+export const getCart = (id) => {
+    return async (dispatch) => {
+        if(id) {
+            await axios.get(`/shoppingCarts/detail/${id}`)
+                .then((response) => {
+                    console.log("response.data: ", response.data)
+                    dispatch({ type: "GET_CART", payload: response.data })
+                })
+        } else {
+            dispatch({
+                type: "GET_CART"
+            })
+        }
+    };
+}
+
+// delete 1 quantity of product from cart
+export const removeQuantity = (data) => {
+    return async (dispatch) => {
+        if(data.user_id) {
+            console.log(data)
+            ///////////cambiar
+            await axios.post("/shopingCarts/deleteProductFromShoppingCart", data)
+            .then((response) => {
+                    console.log(response.data)
+                    dispatch({ type: "REMOVE_QUANTITY", payload: response.data })
+                })
+        } else {
+            const localCart = {
+                user_id: "LocalCart",
+                product_id: data.product_id,
+            }
+            dispatch({
+                type: "REMOVEQUANTITY_LOCALCART",
+                payload: localCart
+            })
+        }
+    };
+}
+
+
+// delete product from cart
+export const removeProduct = (data) => {
+    return async (dispatch) => {
+        if(data.user_id) {
+            await axios.post("/shoppingCarts/deleteProductFromShoppingCartAndDeleteShoppingCart", data)
+                .then((response) => {
+                    console.log(response.data)
+                    dispatch({ type: "REMOVE_PRODUCT", payload: response.data })
+                })
+            let id = window.localStorage.getItem("id")
+            await axios.get(`/shoppingCarts/quantity/${id}`)
+                .then((response) => {
+                    console.log("response.data: ", response.data)
+                    dispatch({ type: "GET_QUANTITY", payload: response.data })
+                })
+        } else {
+            const localCart = {
+                user_id: "LocalCart",
+                product_id: data.product_id,
+            }
+            dispatch({
+                type: "REMOVEPRODUCT_LOCALCART",
+                payload: localCart
+            })
+        }
+    };
+}
+
+// delete cart
+export const removeCart = (id) => {
+    return async (dispatch) => {
+        if(id) {
+            await axios.delete(`/shoppingCarts/deleteShoppingCart/${id}`)
+                .then((response) => {
+                    dispatch({ type: "REMOVE_CART", payload: [] })
+                })
+            let quantity = { quantity: 0 }
+            dispatch({ type: "GET_QUANTITY", payload: quantity })
+            await axios.get(`/shoppingCarts/quantity/${id}`)
+                .then((response) => {
+                    console.log("response.data: ", response.data)
+                    dispatch({ type: "GET_QUANTITY", payload: response.data })
+                })
+        }
+        dispatch({ type: "REMOVE_CART", payload: [] })
+    };
+}
+
+// get quantity of products in cart
+export const getQuantity = (id) => {
+    return async (dispatch) => {
+        if(id) {
+            await axios.get(`/shoppingCarts/quantity/${id}`)
+            .then((response) => {
+                dispatch({ type: "GET_QUANTITY", payload: response.data })
+                })
+        } else {
+            dispatch({ type: "GET_QUANTITY" })
+        }
+    };
+}
+
+// get favorites
+export const getFavorites = (id) => {
+    return async (dispatch) => {
+        if(id) {
+            await axios.get(`/users/favorites/${id}`)
+                .then((response) => {
+                    dispatch({ type: "GET_FAVORITES", payload: response.data })
+                })
+        }
+    };
+}
+
+
+// add favorite
+export const addFavorite = (data) => {
+    return async (dispatch) => {
+        if(data) {
+            await axios.post("/users/favorites", data)
+                .then((response) => {
+                    dispatch({ type: "ADD_FAVORITE", payload: response.data })
+                })
+        }
+    };
+}
+
+// remove favorite
+export const removeFavorite = (body) => {
+  return async (dispatch) => {
+    await axios.post("/users/favorites/delete", body).then((response) => {
+      dispatch({ type: "REMOVE_FAVORITE", payload: response.data });
+    });
+  };
+};
+
+// get user
+export const getUser = (email) => {
+  return async (dispatch) => {
+    await axios.get(`/users/email/${email}`).then((response) => {
+      dispatch({ type: GET_USER, payload: response.data });
+    });
+  };
+};
+
+export const buyAllProducts = (array) => {
+  return async (dispatch) => {
+    let arreglofixed = [];
+    let arreglo = [];
+    array.forEach((element) => {
+      if (element != "") {
+        arreglofixed.push(element);
+      }
+    });
+
+    for (let i = 0; i < arreglofixed.length; i++) {
+      await axios
+        .get(`/products/detail/${arreglofixed[i]}`)
+        .then((response) => {
+          let respuesta = response.data;
+          arreglo.push(respuesta);
+        });
+    }
+
+    dispatch({ type: GET_ALL_PRODUCTS_BY_ID, payload: arreglo });
+  };
+};
+
+export const isAdmin = (email) => {
+    return async (dispatch) => {
+        if(email) {
+            let admin = await axios.get(`/users/isadmin/${email}`)
+            dispatch({ type: IS_ADMIN, payload: admin.data })
+        }
+    }
+}
+
+export const verifyPurchase = (verifyData) => {
+  return async (dispatch) => {
+    if(verifyData) {
+      let isVerify = await axios.post(`/purchases/verify`, verifyData)
+      dispatch({
+        type: "PURCHASE_VERIFIED",
+        payload: isVerify.data
+      })
+      return isVerify.data
+    }
+  }
+}
+
+export const showBuyProduct = (array) => {
+  return async (dispatch) => {
+    let arreglofixed = [];
+    let arreglofinal = [];
+    array.forEach((element) => {
+      if (element != "") {
+        arreglofixed.push(element);
+      }
+    });
+    let dataArr = [...new Set(arreglofixed)];
+
+    for (let i = 0; i < dataArr.length; i++) {
+      await axios.get(`/products/detail/${dataArr[i]}`).then((response) => {
+        console.log("resultado de la busqueda filtrada: ", response);
+        let respuesta = response.data;
+        arreglofinal.push(respuesta);
+      });
+    }
+
+    dispatch({ type: SHOW_PRODUCTS, payload: arreglofinal });
+  };
+};
+
+export const postUser = (payload) => {
+  return async () => {
+    try {
+      let json = await axios.post("/users/register", payload);
+      return json;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+//get review id
+export const getReview = (product_id) => {
+  console.log('revieeeeew',product_id)
+  return async (dispatch) => {
+    try {
+      const review = await axios.get(`/reviews?product=${product_id}`);
+      dispatch({
+        type: GET_REVIEW,
+        payload: review.data,
+      });
+    } catch (err) {
+      console.log({ error: err.message });
+    }
+  };
+};
+
+
+export function getAllReviews() {
+  return async (dispatch) => {
+    fetch(`/reviews`)
+      .then((response) => response.json())
+      .then((reviews) => {
+        dispatch({
+          type: FETCH_ALL_REVIEWS,
+          payload: reviews,
+        });
+      });
+  };
+}
+//admin
+export function deleteAllReviews() {
+  return {
+    type: DELETE_REVIEWS,
+    payload: [],
+  };
+}
+
+export function cleanReview(){
+  return {
+    type: "CLEAN_REVIEW",
+    payload: []
+  }
+}

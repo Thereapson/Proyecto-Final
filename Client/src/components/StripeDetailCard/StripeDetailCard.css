@@ -1,0 +1,19 @@
+.imagen {
+    width: 384px;
+
+}
+
+.card {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 150px;
+
+}
+
+.titulo {
+    text-transform: uppercase;
+}

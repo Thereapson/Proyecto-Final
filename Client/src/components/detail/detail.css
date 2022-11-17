@@ -1,0 +1,37 @@
+.espacio {
+    margin-right: 150px;
+}
+
+.padding {
+    margin-bottom: 25px;
+}
+
+.espaciado {
+    margin-right: 100px;
+}
+
+.padd {
+    margin-left: 25px;
+    color: black;
+}
+
+.cap {
+    text-transform: capitalize;
+}
+
+.formtemp {
+
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-content: space-around;
+    height: 500px;
+    width: 1200px;
+
+}
+
+.padd {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}

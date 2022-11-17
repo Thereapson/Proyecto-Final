@@ -1,0 +1,55 @@
+.imagen {
+    width: 384px;
+
+}
+
+.card {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 150px;
+
+}
+
+.titulo {
+    text-transform: uppercase;
+}
+
+.pruebita {
+    border: 1px solid #c9dae1;
+    /* border: 230px; */
+    border-radius: 10px;
+}
+
+.organhoriz {
+
+    display: flex;
+    flex-direction: row;
+
+    padding-bottom: 10px;
+
+    width: 450px;
+
+
+}
+
+.imagecontainer {
+
+    height: 210px;
+
+}
+
+.textos {
+
+    display: flex;
+    width: 150px;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: space-between;
+    justify-content: center;
+    align-items: center;
+
+}

@@ -13,17 +13,26 @@ const productSchema = new Schema({
     price: {
         type: Number,
     },
+    lastPrice: {
+        type: Number,
+    },
     weight: {
         type: Number,
     },
     description: {
         type: String,
     },
-    thumbnail: {
-        type: Boolean,
-    },
     image: {
         type: String,
+    },
+    brand:  {
+        type: String,
+    },
+    benchmark: {
+        type: Number,
+    },
+    score: {
+        type: Number
     },
     category: {
         type: Schema.Types.ObjectId,
@@ -34,6 +43,9 @@ const productSchema = new Schema({
     },
     stock: {
         type: Number
+    },
+    status: {
+        type: Boolean,
     }
 }, 
 {
