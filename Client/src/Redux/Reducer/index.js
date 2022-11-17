@@ -16,6 +16,9 @@ import {
   GET_ALL_PRODUCTS_BY_ID,
   IS_ADMIN,
   SHOW_PRODUCTS,
+  GET_REVIEW,
+  DELETE_REVIEWS,
+  FETCH_ALL_REVIEWS
 } from "../Actions/Actions";
 
 const initialState = {
@@ -34,6 +37,8 @@ const initialState = {
   quantityFromCart: 0,
   abouttobuyproducts: [],
   brands: [],
+  allReviews: [],
+  review: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -298,6 +303,21 @@ const rootReducer = (state = initialState, action) => {
     case "POST_USER":
       return {
         ...state,
+      };
+    case GET_REVIEW:
+      return {
+        ...state,
+        review: action.payload,
+      };
+    case DELETE_REVIEWS:
+      return {
+        ...state,
+        allReviews: action.payload,
+      };
+    case FETCH_ALL_REVIEWS:
+      return {
+        ...state,
+        allReviews: action.payload,
       };
     default:
       return { ...state };

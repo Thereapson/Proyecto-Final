@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { BACK_URL } from "../../../constantes";
-// import { addReview, updateReview } from "../../../Controllers/review";
-// import { getReview } from "../../../redux/action";
+import { addReview,  } from "../../utils/reviewFrontController";
+import { getReview } from "../../Redux/Actions/Actions";
 // import { Icon } from '@iconify/react';
 
 const Reviews = ({ id }) => {
@@ -20,7 +20,7 @@ const Reviews = ({ id }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(getReview(id));
+    dispatch(getReview(id));
   }, [dispatch, id]);
 
   const modifyStars = (star, edit) => {

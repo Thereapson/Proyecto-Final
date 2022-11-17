@@ -18,6 +18,8 @@ export const ADD_FAVORITE = "ADD_FAVORITE";
 export const REMOVE_FAVORITE = "REMOVE_FAVORITE";
 export const SHOW_PRODUCTS = "SHOW_PRODUCTS";
 export const GET_REVIEW = 'GET_REVIEW';
+export const FETCH_ALL_REVIEWS = 'FETCH_ALL_REVIEWS'
+export const DELETE_REVIEWS = 'DELETE_REVIEWS'
 
 export const getProducts = () => {
     return async (dispatch) => {
@@ -343,10 +345,10 @@ export const postUser = (payload) => {
 };
 
 //get review id
-export const getReview = (id_producto) => {
+export const getReview = (product_id) => {
   return async (dispatch) => {
     try {
-      const review = await axios.get(`/reviews?product=${id_producto}`);
+      const review = await axios.get(`/reviews?product=${product_id}`);
       dispatch({
         type: GET_REVIEW,
         payload: review.data,
@@ -356,3 +358,24 @@ export const getReview = (id_producto) => {
     }
   };
 };
+
+
+export function getAllReviews() {
+  return async (dispatch) => {
+    fetch(`/reviews`)
+      .then((response) => response.json())
+      .then((reviews) => {
+        dispatch({
+          type: FETCH_ALL_REVIEWS,
+          payload: reviews,
+        });
+      });
+  };
+}
+
+export function deleteAllReviews() {
+  return {
+    type: DELETE_REVIEWS,
+    payload: [],
+  };
+}
