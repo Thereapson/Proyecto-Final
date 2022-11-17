@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // import { toast } from "react-toastify";
-const BACK_URL = "http://localhost:3001/";
+const BACK_URL = "https://compudevs.herokuapp.com"
 
 function Resetpassword() {
   const { id, token } = useParams();
@@ -12,7 +12,7 @@ function Resetpassword() {
   const [message, setMessage] = useState("");
 
   const userValid = async () => {
-    const res = await fetch(`${BACK_URL}users/resetPassword/${id}/${token}`, {
+    const res = await fetch(`${BACK_URL}/users/resetPassword/${id}/${token}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ function Resetpassword() {
 
   const sendPassword = async (e) => {
     e.preventDefault();
-    fetch(`${BACK_URL}users/resetPassword/${id}/${token}`, {
+    fetch(`${BACK_URL}/users/resetPassword/${id}/${token}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
