@@ -137,6 +137,8 @@ const registerUser = async (req, res, next) => {
       full_name,
       email,
       password: encryptedPassword,
+      status: true,
+      isAdmin: false
     });
 
     // if (

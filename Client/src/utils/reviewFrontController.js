@@ -2,13 +2,30 @@ import axios from "axios";
 import { getReview } from "../Redux/Actions/Actions";
 import store from "../Redux/Store";
 
+const BACK_URL = 'http://localhost:3001'
+// export const addReview = async (product, review, score, user) => {
+//   console.log('controllerrr', product, review, score, user)
+//     try {
+//       await axios.post(`/reviews/add`, {
+//         product: product,
+//         review: review,
+//         score: score,
+//         user: user
+//       });
+//       store.dispatch(getReview(product));
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
 
-export const addReview = async (full_name, id, review, score) => {
+
+  export const addReview = async (user, id, description, score) => {
     try {
-      await axios.post(`/reviews/add`, {
-        user_id: full_name,
-        product_id: id,
-        review: review,
+      console.log('pase por aca', description)
+      await axios.post(`${BACK_URL}/reviews/add`, {
+        user: user,
+        product: id,
+        review: description,
         score: score,
       });
       store.dispatch(getReview(id));
@@ -16,3 +33,4 @@ export const addReview = async (full_name, id, review, score) => {
       console.log(err);
     }
   };
+  

@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addReview } from "../../utils/reviewFrontController";
 import { getReview } from "../../Redux/Actions/Actions";
+// import FormReview from "./FormReview";
+// import Modal from "react-modal";
+// Modal.setAppElement("#root");
+
 // import { Icon } from '@iconify/react';
 
 const Reviews = ({ id }) => {
@@ -10,11 +14,12 @@ const Reviews = ({ id }) => {
   const [stars, setStars] = useState(0);
   const [noUser, setNoUser] = React.useState(false);
 
-  const [eDescription, setEdescription] = useState("");
+  const [, setEdescription] = useState("");
   const [eStars, setEstars] = useState(0);
   const [active, setActive] = useState(false);
   const user_id = window.localStorage.getItem("id");
   const reviews = useSelector((state) => state.review);
+  console.log('prueba', reviews)
   const userState = useSelector((state) => state.userData);
   const dispatch = useDispatch();
 
@@ -29,7 +34,6 @@ const Reviews = ({ id }) => {
   console.log("userstate", description);
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    console.log("revieew front", e.target.value);
     if (
       reviews.map((e) => userState.full_name === e.full_name).includes(true)
     ) {
@@ -37,12 +41,13 @@ const Reviews = ({ id }) => {
       setStars(0);
       setDescription("");
     } else if (stars > 0 && description.length > 3) {
-      addReview(userState.full_name, id, description, stars);
+      addReview(user_id, id, description, stars);
       setStars(0);
       setDescription("");
     } else {
       console.log("No se Pudo Enviar El Formulario");
     }
+    alert('se envio tu formulario')
   };
   // console.log(reviews.map((e) => e.full_name === userState.full_name).includes(true));
 
@@ -82,66 +87,68 @@ const Reviews = ({ id }) => {
                         {e.full_name}
                       </h1>
                       {userState.full_name === e.full_name ? (
-                        <div className="dropdown relative mr-5 flex justify-end">
-                          <a
-                            className="dropdown-toggle flex items-center hidden-arrow"
-                            href="#"
-                            id="dropdownMenuButton2"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="w-5 h-5"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                            </svg>
-                          </a>
-                          <ul
-                            className="dropdown-menu min-w-max absolute hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 m-0 bg-clip-padding border-none left-auto right-0"
-                            aria-labelledby="dropdownMenuButton2"
-                          >
-                            <li>
-                              <a
-                                onClick={() => setActive(true)}
-                                className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100"
-                              >
-                                Editar
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100">
-                                Borrar
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
+                        // <div className="dropdown relative mr-5 flex justify-end">
+                        //   <a
+                        //     className="dropdown-toggle flex items-center hidden-arrow"
+                        //     href="#"
+                        //     id="dropdownMenuButton2"
+                        //     role="button"
+                        //     data-bs-toggle="dropdown"
+                        //     aria-expanded="false"
+                        //   >
+                        //     <svg
+                        //       xmlns="http://www.w3.org/2000/svg"
+                        //       className="w-5 h-5"
+                        //       viewBox="0 0 20 20"
+                        //       fill="currentColor"
+                        //     >
+                        //       <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                        //     </svg>
+                        //   </a>
+                        //   {/* <ul
+                        //     className="dropdown-menu min-w-max absolute hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded-lg shadow-lg mt-1 m-0 bg-clip-padding border-none left-auto right-0"
+                        //     aria-labelledby="dropdownMenuButton2"
+                        //   >
+                        //     <li>
+                        //       <a
+                        //         onClick={() => setActive(true)}
+                        //         className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100"
+                        //       >
+                        //         Editar
+                        //       </a>
+                        //     </li>
+                        //     <li>
+                        //       <a className="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100">
+                        //         Borrar
+                        //       </a>
+                        //     </li>
+                        //   </ul> */}
+                        // </div>
+                        <></>
                       ) : user_id ? (
-                        <button
-                          class="inline-flex items-center px-2 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md"
-                          onClick={async () => {
-                            try {
-                              await axios.put(`backurl/review/flagReview`, {
-                                userName: e.full_name,
-                                productId: e.productId,
-                              });
-                            } catch (err) {
-                              console.log({ error: err.message });
-                            }
-                          }}
-                        >
-                          {/* <Icon icon="ic:round-report" class="mr-1" color="#f3f4f7" width="20" height="20"/> */}
-                          Denunciar
-                        </button>
+                        // <button
+                        //   class="inline-flex items-center px-2 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md"
+                        //   onClick={async () => {
+                        //     try {
+                        //       await axios.put(`backurl/review/flagReview`, {
+                        //         userName: e.full_name,
+                        //         productId: e.productId,
+                        //       });
+                        //     } catch (err) {
+                        //       console.log({ error: err.message });
+                        //     }
+                        //   }}
+                        // >
+                        //   {/* <Icon icon="ic:round-report" class="mr-1" color="#f3f4f7" width="20" height="20"/> */}
+                        //   Denunciar
+                        // </button>
+                        <></>
                       ) : null}
                     </div>
                     <div className="flex ml-0 mt-2">
                       <div className="flex items-center">
                         {stars5.map((star) => {
-                          return e.stars >= star ? (
+                          return e.score >= star ? (
                             <svg
                               key={`reviewStar ${e.full_name} ${star}`}
                               aria-hidden="true"
@@ -171,7 +178,7 @@ const Reviews = ({ id }) => {
                     </div>
 
                     <p className="mt-4 text-md text-gray-600">
-                      {e.description}
+                      {e.review}
                     </p>
                   </div>
                 </div>
@@ -269,6 +276,7 @@ const Reviews = ({ id }) => {
         {/* creacion de el comentario del producto */}
 
         {user_id ? (
+          // <FormReview/>
           <form onSubmit={(e) => handleOnSubmit(e)}>
             <textarea
               value={description}
@@ -329,6 +337,47 @@ const Reviews = ({ id }) => {
           </form>
         ) : null}
       </div>
+      {/* <Modal
+        isOpen={noUser}
+        onRequestClose={() => setNoUser(false)}
+        overlayClassName={{
+          base: "overlay-base",
+          afterOpen: "overlay-after",
+          beforeClose: "overlay-before",
+        }}
+        className={{
+          base: "content-base",
+          afterOpen: "content-box",
+          beforeClose: "content-before",
+        }}
+        closeTimeoutMS={500}
+      >
+        <div
+          v-if="showModal"
+          className="w-11/12 lg:w-full max-w-xl z-20 mx-auto bg-white flex flex-col relative self-center shadow-2xl rounded-md "
+        >
+          <div className="p-6 border-b-4 border-gray-200 text-lg font-bold text-indigo-400">
+            Tu opinion ya esta publicada
+          </div>
+          <div className="p-6">
+            Si quieres editar tu opinion presione en el boton de editar
+          </div>
+          <div className="border-t-4 border-gray-200 p-6 flex justify-between">
+            <button
+              onClick={() => setNoUser(false)}
+              className="bg-[#4F46E5] focus:outline-none transition px-4 py-2 rounded-md text-white transition duration-500 ease-in-out"
+            >
+              Cerrar
+            </button>
+            <button
+              // onClick={onEdit}
+              className="bg-[#4F46E5]  focus:outline-none transition px-4 py-2 rounded-md text-white transition duration-500 ease-in-out"
+            >
+              Editar
+            </button>
+          </div>
+        </div>
+      </Modal> */}
     </div>
   );
 };

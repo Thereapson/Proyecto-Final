@@ -1,40 +1,30 @@
 import * as React from "react";
-import {useState} from "react";
+import { useState } from "react";
 import { useController } from 'react-hook-form';
-// import {uploadImage} from "../../../utils/utils"
 import { useInput } from 'react-admin';
-import { 
-        List,
-        Datagrid,
-        TextField,
-        ReferenceField,
-        EditButton,
-        Edit,
-        SimpleForm,
-        ReferenceInput,
-        TextInput,
-        Create,
-        useRecordContext,
-        UrlField,
-        BooleanField,
-        BooleanInput,
-        NumberInput,
-        ImageInput,
-        required,
-        minLength,
-        maxLength,
-        minValue,
-        maxValue,
-        number,
-        regex,
-        email,
-        choices,
-        Box
-
-        } from 'react-admin';
+import {
+    List,
+    Datagrid,
+    TextField,
+    ReferenceField,
+    EditButton,
+    Edit,
+    SimpleForm,
+    ReferenceInput,
+    TextInput,
+    Create,
+    UrlField,
+    BooleanField,
+    BooleanInput,
+    NumberInput,
+    required,
+    minLength,
+    maxLength,
+    minValue,
+} from 'react-admin';
 
 
-    const CloudyInput = ({ source, label }) => {
+const CloudyInput = ({ source, label }) => {
 
     const { id, field, fieldState } = useInput({ source });
     const [image, setImage] = useState("");
@@ -58,27 +48,26 @@ import {
         const file = await res.json()
         setImage(file.secure_url)
         console.log("cloudinary", file.secure_url)
-        field.value = file.secure_url  
-        console.log("field", field)     
+        field.value = file.secure_url
+        console.log("field", field)
     }
-     
+
     return (
         <>
-        <label htmlFor={id}>
-            {label}
+            <label htmlFor={id}>
+                {label}
+                <input
+                    id={id}
+                    type="url"
+                    {...field}
+                />
+                {fieldState.error && <span>{fieldState.error.message}</span>}
+            </label>
             <input
-                id={id} 
-                type="url"
-                {...field}                
+                type="file"
+                onChange={e => uploadImage(e)}
             />
-            {fieldState.error && <span>{fieldState.error.message}</span>}
-        </label> 
-        <input
-                type="file" 
-                onChange={e => uploadImage(e)}  
-            />
-        <p> {image} </p>
-            {/* {image && <span>{image}</span>} */}        
+            <p> {image} </p>
         </>
     );
 };
@@ -86,23 +75,22 @@ import {
 
 const PictureInput = ({ source, label }) => {
     const { id, field, fieldState } = useInput({ source });
-    // field.value = "otro archivo"
     console.log("field", field)
     return (
         <label htmlFor={id}>
             {label}
-            <input 
-            id={id} 
-            {...field} />
+            <input
+                id={id}
+                {...field} />
             {fieldState.error && <span>{fieldState.error.message}</span>}
         </label>
     );
 };
 
 
-const PictureInputA = ({source, label}) => {
-    const input1 = useController({name: source, defaultValue: ''})
-    const input2 = useController({name: "cloudinary", defaultValue: ''})
+const PictureInputA = ({ source, label }) => {
+    const input1 = useController({ name: source, defaultValue: '' })
+    const input2 = useController({ name: "cloudinary", defaultValue: '' })
 
     const { id, field, fieldState } = useInput({ source });
     const [image, setImage] = useState("");
@@ -127,17 +115,17 @@ const PictureInputA = ({source, label}) => {
         const file = await res.json()
         setImage(file.secure_url)
         console.log("cloudinary", file.secure_url)
-        field.value = file.secure_url  
-        console.log("field", field)     
+        field.value = file.secure_url
+        console.log("field", field)
     }
 
     return (
         <label>
             <input
-            {...input1.field}  
-            type="file"
-            onChange={e => uploadImage(e)}          
-            
+                {...input1.field}
+                type="file"
+                onChange={e => uploadImage(e)}
+
             />
         </label>
     )
@@ -147,7 +135,7 @@ const PictureInputA = ({source, label}) => {
 const productFilters = [
     <TextInput source="q" label="Search" alwaysOn />,
     <ReferenceInput source="category" label="Category" reference="category" />,
-    <ReferenceInput source="name" label="Name" reference="name"/>
+    <ReferenceInput source="name" label="Name" reference="name" />
 ]
 
 const validateSku = [required(), minLength(10), maxLength(25)]
@@ -162,16 +150,16 @@ const validateCategory = [required()]
 
 export const ProductList = () => (
     <List perPage={5}
-          sort={{field: 'name', order: 'desc'}}
-          filters={productFilters}
-          >
-        <Datagrid 
-                sx={{
-                '& .column-id': {letterSpacing:1, maxWidth: 100, textOverflow: 'ellipsis | ', overflow: 'hidden'},
-                '& .column-image': { maxWidth: 200, textOverflow: 'ellipsis', overflow: 'hidden'},
+        sort={{ field: 'name', order: 'desc' }}
+        filters={productFilters}
+    >
+        <Datagrid
+            sx={{
+                '& .column-id': { letterSpacing: 1, maxWidth: 100, textOverflow: 'ellipsis | ', overflow: 'hidden' },
+                '& .column-image': { maxWidth: 200, textOverflow: 'ellipsis', overflow: 'hidden' },
                 '& .column-description': { maxWidth: 200, textOverflow: 'ellipsis', overflow: 'hidden', }
             }}
-            >
+        >
             <TextField source="id" />
             {/* <TextField source="id" /> */}
             <TextField source="sku" />
@@ -179,15 +167,15 @@ export const ProductList = () => (
             <TextField source="price" />
             <TextField source="lastPrice" />
             <TextField source="weight" />
-            <TextField source="description"/>
-            <UrlField source="image"/>
+            <TextField source="description" />
+            <UrlField source="image" />
             <BooleanField source="status" />
             <TextField source="brand" />
             <TextField source="benchmark" />
-            <ReferenceField source="category" reference="category" link="show"/>
+            <ReferenceField source="category" reference="category" link="show" />
             {/* <TextField source="category" /> */}
             <TextField source="stock" />
-            <EditButton/>
+            <EditButton />
         </Datagrid>
     </List>
 );
@@ -196,9 +184,9 @@ export const ProductEdit = () => (
     <Edit>
         <SimpleForm>
             <TextInput disabled source="id" />
-            <TextInput source="sku" validate={validateSku}/>
-            <TextInput source="name" validate={validateName}/>
-            <NumberInput source="price" validate={validatePrice}/>
+            <TextInput source="sku" validate={validateSku} />
+            <TextInput source="name" validate={validateName} />
+            <NumberInput source="price" validate={validatePrice} />
             <NumberInput source="lastPrice" />
             <NumberInput source="weight" />
             <TextInput source="description" />
@@ -207,9 +195,9 @@ export const ProductEdit = () => (
             <BooleanInput source="status" />
             <TextInput source="brand" />
             <NumberInput source="benchmark" />
-            <ReferenceInput source="category" reference="category" validate={validateCategory}/>
+            <ReferenceInput source="category" reference="category" validate={validateCategory} />
             {/* <TextInput source="category" /> */}
-            <NumberInput source="stock" validate={validateStock}/>
+            <NumberInput source="stock" validate={validateStock} />
             {/* <ReferenceInput source="userId" reference="users" /> */}
             {/* <TextInput source="id" /> */}
             {/* <TextInput disabled source="title" /> */}
@@ -220,27 +208,27 @@ export const ProductEdit = () => (
     </Edit>
 );
 
-export const ProductCreate= (props) => (
+export const ProductCreate = (props) => (
 
     <Create {...props}>
         <SimpleForm>
             <TextInput disabled source="id" />
-            <TextInput source="sku" validate={validateSku}/>
-            <TextInput source="name" validate={validateName}/>
-            <NumberInput source="price" validate={validatePrice}/>
+            <TextInput source="sku" validate={validateSku} />
+            <TextInput source="name" validate={validateName} />
+            <NumberInput source="price" validate={validatePrice} />
             <NumberInput source="lastPrice" />
             <NumberInput source="weight" />
             <TextInput source="description" />
             {/* <PictureInputA source="image" label="image"/>
             <PictureInput source="image" label="image"/> */}
-            <CloudyInput source="image"/>
+            <CloudyInput source="image" />
             {/* <ImageInput source="image" /> */}
             <BooleanInput source="status" />
             <TextInput source="brand" />
             <NumberInput source="benchmark" />
-            <ReferenceInput source="category" reference="category" validate={validateCategory} defaultValue={0}/>
+            <ReferenceInput source="category" reference="category" validate={validateCategory} defaultValue={0} />
             {/* <TextInput source="category" /> */}
-            <NumberInput source="stock" validate={validateStock}/>
+            <NumberInput source="stock" validate={validateStock} />
 
             {/* <ReferenceInput source="userId" reference="users" /> */}
             {/* <TextInput source="id" /> */}

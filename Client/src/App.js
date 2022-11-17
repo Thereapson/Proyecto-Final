@@ -8,7 +8,6 @@ import DetailCard from "./components/detail/detail";
 import Stripe from "./components/Stripe/Stripe";
 import Formaddcomp from "./components/Formaddcomp/Formaddcomp";
 import { LandingPage } from "./components/Landing/landing";
-import Cart from "./components/cart/cart";
 import UserDetail from "./components/Register/userDetail";
 import ForgotPassword from "./components/Login/ForgotPassword";
 import Resetpassword from "./components/Login/ResetPassword";

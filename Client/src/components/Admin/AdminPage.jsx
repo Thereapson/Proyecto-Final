@@ -15,9 +15,9 @@ import UserIcon from '@mui/icons-material/Group';
 import PeopleIcon from '@mui/icons-material/People';
 import ClassIcon from '@mui/icons-material/Class';
 import InventoryIcon from '@mui/icons-material/Inventory';
-import {Dashboard} from './Dashboard/index'
-import {LayoutM} from './LayoutM/LayoutM'
-import { lightTheme, darkTheme } from "./layout/themes";
+import { Dashboard } from './Dashboard/index'
+import { LayoutM } from './LayoutM/LayoutM'
+import { lightTheme } from "./layout/themes";
 
 import dataProvider from "../../utils/dataProvider"
 
@@ -35,5 +35,4 @@ const AdminPage = () => (
                 <Resource name="purchases" list={OrderList}/>            
             </Admin> 
         )
-
 export default AdminPage;
