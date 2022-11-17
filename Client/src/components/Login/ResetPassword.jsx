@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 // import { toast } from "react-toastify";
-const BACK_URL = "https://compudevs.herokuapp.com/";
+const BACK_URL = "http://localhost:3001";
 
 function Resetpassword() {
   const { id, token } = useParams();

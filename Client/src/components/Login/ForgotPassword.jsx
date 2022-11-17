@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios'
 
-const BACK_URL  = 'https://compudevs.herokuapp.com/'
+const BACK_URL  = 'http://localhost:3001'
 
 
 function ForgotPassword() {
