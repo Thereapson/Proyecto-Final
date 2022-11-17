@@ -141,25 +141,6 @@ const rootReducer = (state = initialState, action) => {
             }
           }
 
-        case "GET_PRODUCT_BY_ORDER":
-          let order = action.payload;
-
-          if (order === "asc") {
-            return {
-              ...state,
-              productsRender: state.productsRender.sort(
-                (a, b) => a.price - b.price
-              ),
-            };
-          } else {
-            return {
-              ...state,
-              productsRender: state.productsRender.sort(
-                (a, b) => b.price - a.price
-              ),
-            };
-          }
-
         case GET_USER:
           return {
             ...state,
@@ -203,42 +184,6 @@ const rootReducer = (state = initialState, action) => {
         };
       }
       
-      case GET_USER:
-      return {
-        ...state,
-        userData: action.payload,
-      };
-
-      case "GET_QUANTITY":
-            const data = action.payload
-            const productsQuant = state.cart.products_id
-            let quantity = 0
-            !data?
-                quantity = productsQuant?.length || 0
-            :   quantity = data.quantity
-            return {
-                ...state,
-                quantityFromCart: quantity
-            }
-
-      case "GET_CART":
-        let LocalCart0 = action.payload
-        if(LocalCart0) {
-            return {
-                ...state,
-                cart: action.payload
-            }
-        } else {
-            return {
-                ...state,
-            }
-        }
-
-    case "ADD_PRODUCT":
-      return {
-        ...state,
-        cart: action.payload,
-      };
 
     case "ADDPRODUCT_LOCALCART":
       let localCart = state.cart;

@@ -1,6 +1,8 @@
 import { fetchUtils } from 'react-admin';
 import { stringify } from 'query-string';
 import axios from "axios"
+import uploadImage from "../utils/uploadImage"
+import FormData from 'form-data'
 
 const apiUrl = '/admin';
 const httpClient = fetchUtils.fetchJson;
@@ -208,6 +210,19 @@ const dataProvider = {
             body: JSON.stringify(params.data),
         }).then(({ json }) => ({ data: json }));
     },
+
+    getCloudinary: (image) => {
+        let url = uploadImage(image)
+        if (url) {
+            return (url)
+        } else {
+            return null
+        }
+    },
+
+
 };
+
+
 
 export default dataProvider;

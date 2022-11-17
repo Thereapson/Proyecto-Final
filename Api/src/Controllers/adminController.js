@@ -106,11 +106,12 @@ const deleteCategory = async (req, res, next) => {
  
 // Product
 const listProducts = async (req, res, next) => {
-    const {_start, _end, _sort, _order, q} = req.query
+    const {_start, _end, _sort, _order, q, category} = req.query
     console.log(_start, _end, _sort, _order, q)
     try {
         if (!q) {
             const response = await productModel.find({}).populate("category");
+            console.log(response)
             if (response.flat().length > 0) {
                 const products = response?.map((p) => {return formatProduct(p)})
                 res.status(200)
@@ -122,6 +123,7 @@ const listProducts = async (req, res, next) => {
         }
         if (q) {
             const response = await productModel.find({'name': new RegExp(q, 'i')}).populate("category");
+            console.log(response)
             if (response.flat().length > 0) {
                 const products = response?.map((p) => {return formatProduct(p)})
                 res.status(200)
@@ -168,6 +170,7 @@ const listProducts = async (req, res, next) => {
         sku,
         name,
         price,
+        lastPrice,
         weight,
         description,
         status,
@@ -183,6 +186,7 @@ const listProducts = async (req, res, next) => {
           sku,
           name,
           price,
+          lastPrice,
           weight,
           description,
           status,
@@ -199,6 +203,7 @@ const listProducts = async (req, res, next) => {
         sku: editProduct.sku,
         name: editProduct.name,
         price: editProduct.price,
+        lastPrice: editProduct.lastPrice,
         weight: editProduct.weight,
         description: editProduct.description,
         image: editProduct.image,
@@ -234,6 +239,7 @@ const listProducts = async (req, res, next) => {
         sku,
         name,
         price,
+        lastPrice,
         weight,
         description,
         image,
@@ -253,10 +259,11 @@ const listProducts = async (req, res, next) => {
           sku,
           name,
           price,
+          lastPrice,
           weight: weight || 0,
           description: description || name,
           status: true,
-          image: await uploadImage(image.rawFile),
+          image,
           brand,
           benchmark: benchmark || 0,
           category,
@@ -419,6 +426,7 @@ const editUser = async (req, res, next) => {    // hay que ajustarlo
         sku: p.sku,
         name: p.name,
         price: p.price,
+        lastPrice: p.lastPrice,
         weight: p.weight,
         description: p.description,
         image: p.image,
