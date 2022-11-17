@@ -1140,7 +1140,8 @@ const loginUser = async (req, res, next) => {
   }
 };
 //olvidar contraseñaa
-const FRONT_URL = 'http://localhost:3000'
+// const FRONT_URL = 'http://localhost:3000'
+const FRONT_URL = 'https://compudevs.vercel.app/'
 const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
 console.log(email)
