@@ -17,9 +17,15 @@ import {
         export const OrderList = () => (
             <List>
                 <Datagrid >
-                    <TextField source="user_id" />
-                    <TextField source="Products_id" />
-                    <EditButton/>
+                    <TextField source="id" />
+                    <TextField source="user" />
+                    <TextField source="ammount" />
+                    <TextField source="date" />
+                    {/* <TextField source="address" /> */}
+                    <TextField source="product" />
+                    <TextField source="payment" />
+                    <TextField source="status" />
+
                 </Datagrid>
             </List>
         );    

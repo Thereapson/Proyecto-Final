@@ -46,7 +46,7 @@ export const UsersEdit = () => (
         <SimpleForm>
             <TextInput disabled source="id" />
             <TextInput source="full_name" />
-            <TextInput source="email" />
+            <TextInput source="email" type="email" disabled/>
             <BooleanInput source="status" />
             <BooleanInput source="isAdmin" />
         </SimpleForm>

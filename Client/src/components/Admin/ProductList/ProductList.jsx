@@ -132,8 +132,6 @@ const PictureInputA = ({ source, label }) => {
 }
 
 
-
-
 const productFilters = [
     <TextInput source="q" label="Search" alwaysOn />,
     <ReferenceInput source="category" label="Category" reference="category" />,

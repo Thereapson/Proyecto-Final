@@ -17,7 +17,9 @@ const {
     getUserById,
     editUser,
     addProduct,
+    listPurchases,
 } = require('../Controllers/adminController')
+const {getAllPurchases} = require('../Controllers/purchaseController')
 
 // configuramos las rutas
 router.get('/products', listProducts)  // ok (revisar filtros)
@@ -46,7 +48,35 @@ router.post('/users/add', addUser)   // ok
 
 router.put('/users/update/:id', editUser)
 
-router.get('users/delete/:id', deleteUser)
+router.get('/users/delete/:id', deleteUser)
+
+// router.get('/purchases', listPurchases)
+
+router.get('/purchases', async (req, res) => {
+    const {_start, _end, _sort, _order, q} = req.query
+    try {
+        const { user } = req.query
+        if(!user) {
+            const response = await getAllPurchases()
+            return res.status(200)
+            .header( 'Access-Control-Expose-Headers','X-Total-Count')
+            .header('x-total-count', response?.length) 
+            .send(response.slice(_start, _end))
+        } else {
+            const response = await getPurchasesByUser(user)
+            if(response.length > 0) {
+                return res.status(200)
+                .header( 'Access-Control-Expose-Headers','X-Total-Count')
+                .header('x-total-count', response?.length) 
+                .send(response.slice(_start, _end))
+            }
+        }
+
+    } catch (error) {
+        console.error(error);
+        return res.status(400).send("Error Occured. Purchases can't be showed.")
+    }
+})
 
 
 module.exports = router;

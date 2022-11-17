@@ -2,15 +2,22 @@ const { purchaseModel } = require('../Models/index')
 
 const getAllPurchases = async () => {
     try {
-        const response = await purchaseModel.find({})
+        const response = await purchaseModel.find({}).populate({
+            path: "product", 
+            select: "name"
+        }).populate({
+            path: "user_id",
+            select: "full_name"
+        })
+        console.log(response)
         const purchases = response?.map(p => {
             return {
                 id: p._id,
-                user: p.user_id,
+                user: p.user_id?.full_name,
                 ammount: p.ammount,
                 date: p.date,
                 address: p.delivery_address,
-                product: p.product,
+                product: p.product?.name,
                 payment: p.payment_id,
                 status: p.status
             }
