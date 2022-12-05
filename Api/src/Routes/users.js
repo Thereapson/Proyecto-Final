@@ -6,7 +6,6 @@ const router = Router();
 const {
     getAllUsers,
     getUserById,
-    // createUser,
     editUser,
     blockUser,
     addFavorites,
