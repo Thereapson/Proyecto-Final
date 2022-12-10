@@ -6,7 +6,7 @@ import axios from 'axios'
 import swal from 'sweetalert';
 
 
-const BACK_URL  = 'https://compudevs.herokuapp.com'
+const BACK_URL  = 'https://back-production-final.up.railway.app'
 
 
 function ForgotPassword() {

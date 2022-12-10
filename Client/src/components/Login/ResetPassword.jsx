@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import swal from "sweetalert";
 
 // import { toast } from "react-toastify";
-const BACK_URL = "https://compudevs.herokuapp.com"
+const BACK_URL = "https://back-production-final.up.railway.app"
 
 function Resetpassword() {
   const { id, token } = useParams();

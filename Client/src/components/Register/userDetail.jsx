@@ -18,7 +18,7 @@ const userDetail = () => {
 
     useEffect(() => {
         // const token = this.state
-        fetch('https://compudevs.herokuapp.com/users/userData', {
+        fetch('https://back-production-final.up.railway.app/users/userData', {
             method: 'POST',
             crossDomain: true,
             headers: {
