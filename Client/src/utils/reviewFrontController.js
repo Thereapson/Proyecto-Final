@@ -3,7 +3,7 @@ import { getReview } from "../Redux/Actions/Actions";
 import store from "../Redux/Store";
 
 // const BACK_URL = 'http://localhost:3001'
-const BACK_URL = 'https://compudevs.herokuapp.com/'
+const BACK_URL = 'https://back-production-final.up.railway.app'
 // export const addReview = async (product, review, score, user) => {
 //   console.log('controllerrr', product, review, score, user)
 //     try {

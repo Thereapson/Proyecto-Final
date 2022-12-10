@@ -8,7 +8,7 @@ import axios from 'axios';
 
 
 axios.defaults.baseURL = 
-"https://compudevs.herokuapp.com" || 
+"https://back-production-final.up.railway.app" || 
                           "http://localhost:3001" 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
